@@ -64,6 +64,12 @@ public class OpenScene extends Scene {
             if (state==null){
                 return;
             }
+            if (popUpCreateRoom.isShow()){
+                popUpCreateRoom.mouseListener().mouseTrig(e,state,trigTime);
+            }
+            if (popUpConnect.isShow()){
+                popUpConnect.mouseListener().mouseTrig(e,state,trigTime);
+            }
             switch (state){
                 case CLICKED:
                     if (creatRoomButton.state(e.getPoint())){
@@ -71,7 +77,6 @@ public class OpenScene extends Scene {
                     }
                     if (inputButton.state(e.getPoint())){
                         popUpConnect.sceneBegin();
-
                     }
                     break;
             }
@@ -83,7 +88,8 @@ public class OpenScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                Scanner sc=new Scanner(System.in);
+                popUpConnect.keyListener().keyPressed(commandCode,trigTime);
+                /*Scanner sc=new Scanner(System.in);
                     if ( commandCode == 0) {
                         Server s=Server.instance();
                         s.create(12345);
@@ -104,7 +110,7 @@ public class OpenScene extends Scene {
                             e.printStackTrace();
                         }
                     }
-                SceneController.getInstance().changeScene(new MapScene());
+                SceneController.getInstance().changeScene(new MapScene());*/
                 }
             @Override
             public void keyReleased(int commandCode, long trigTime) {
@@ -112,6 +118,7 @@ public class OpenScene extends Scene {
             }
             @Override
             public void keyTyped(char c, long trigTime) {
+                popUpConnect.keyListener().keyTyped(c,trigTime);
 
             }
         };

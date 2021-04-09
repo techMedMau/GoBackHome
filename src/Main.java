@@ -36,6 +36,7 @@ public class Main {
                         .add(KeyEvent.VK_X,4)
                         .add(KeyEvent.VK_SPACE,5)
                         .add(KeyEvent.VK_A,6)
+                        .add(KeyEvent.VK_BACK_SPACE,7)
                         .next().trackChar().subscribe(sceneController)
         ).paint(sceneController).update(sceneController).gen();
         jframe.setSize(Global.WINDOW_WIDTH,Global.WINDOW_HEIGHT);
