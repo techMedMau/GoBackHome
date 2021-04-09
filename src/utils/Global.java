@@ -43,12 +43,15 @@ public class Global {
     public static final int UNIT_X = 32;
     public static final int UNIT_Y = 32;
     // 視窗大小
-    public static final int WINDOW_WIDTH = 800;
-    public static final int WINDOW_HEIGHT = 600;
+    public static final int WINDOW_WIDTH = 960;
+    public static final int WINDOW_HEIGHT = 640;
     public static final int MAP_WIDTH = 1280;
     public static final int MAP_HEIGHT = 1280;
     public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
+    //彈跳視窗大小
+    public static final int POPUP_WIDTH = 640;
+    public static final int POPUP_HEIGHT = 320;
     // 資料刷新時間
     public static final int UPDATE_TIMES_PER_SEC = 60;// 每秒更新60次遊戲邏輯
     public static final int NANOSECOND_PER_UPDATE = 1000000000 / UPDATE_TIMES_PER_SEC;// 每一次要花費的奈秒數

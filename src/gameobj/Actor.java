@@ -12,7 +12,7 @@ public class Actor extends GameObject{
     private ActorAnimal actorAnimal;
     private Global.Direction dir;
     public Actor(int x, int y,int num) {
-        super(x+Global.UNIT_X/2, y+Global.UNIT_Y/2, Global.UNIT_X, Global.UNIT_Y);
+        super(x, y, Global.UNIT_X, Global.UNIT_Y);
         this.num=num;
         actorAnimal=new ActorAnimal();
         dir= Global.Direction.NO_DIR;
@@ -70,6 +70,7 @@ public class Actor extends GameObject{
             g.drawImage(img,left,top,right,bottom, tx+Global.UNIT_X*ACTOR_WALK[count],
                     ty, tx+Global.UNIT_X*ACTOR_WALK[count]+Global.UNIT_X, ty+Global.UNIT_Y,null);
         }
+
 
     }
 }

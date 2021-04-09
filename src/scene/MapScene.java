@@ -22,23 +22,26 @@ public class MapScene extends Scene {
     private ArrayList<Actor> actor;
     private Map map;
     private int num;
-
+    private ArrayList<GameObject> gameObjectArr1 ;
     private ArrayList<GameObject> gameObjectArr ;
-    public MapScene(int num){
-        this.num=num;
+    public MapScene(){
     }
 
     @Override
     public void sceneBegin() {
         map=new Map();
         gameObjectArr = new ArrayList();
+        gameObjectArr1 = new ArrayList();
         actor=new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        //______________
-        //System.out.print("輸入0~7決定角色: ");
-        //this.num = sc.nextInt();
-        //______________
-        actor.add(new Actor(100,100,num));
+        ArrayList<String> str=new ArrayList<>();
+        str.add("200");
+        str.add("200");
+        System.out.print("輸入0~7決定角色: ");
+        int num = sc.nextInt();
+        str.add(num+"");
+        actor.add(new Actor(Integer.valueOf(str.get(0)),Integer.valueOf(str.get(1)),num));
+        ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
         actor.get(0).setId(ClientClass.getInstance().getID());
         cam= new Camera.Builder(1000,1000).setChaseObj(actor.get(0),1,1)
                 .setCameraStartLocation(actor.get(0).painter().left(),actor.get(0).painter().top()).gen();
@@ -69,51 +72,21 @@ public class MapScene extends Scene {
                         }
                     }
             ));
-            /*this.gameObjectArr.addAll(mapLoader.creatObjectArray("P3", 32, test, new MapLoader.CompareClass() {
+            this.gameObjectArr1 = mapLoader.creatObjectArray("grass", 128, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new TestObject3(mapInfo.getX() * size, mapInfo.getY() * size);
+                                tmp = new TestObject1(mapInfo.getX() * size, mapInfo.getY() * size);
                                 return tmp;
                             }
                             return null;
                         }
                     }
-                    )
             );
-            this.gameObjectArr.addAll(mapLoader.creatObjectArray("P3", 32, test, new MapLoader.CompareClass() {
-                        @Override
-                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
-                            GameObject tmp = null;
-                            if (gameObject.equals(name)) {
-                                tmp = new TestObject3(mapInfo.getX() * size, mapInfo.getY() * size);
-                                return tmp;
-                            }
-                            return null;
-                        }
-                    }
-                    )
-            );*/
-//            for (int i = 0; i < test.size(); i++) {    //  這邊可以看array內容  {String name ,int x, int y, int xSize, int ySize}
-//                System.out.println(test.get(i).getName());
-//                System.out.println(test.get(i).getX());
-//                System.out.println(test.get(i).getY());
-//                System.out.println(test.get(i).getSizeX());
-//                System.out.println(test.get(i).getSizeY());
-//            }
         } catch (IOException ex) {
             Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        Server.instance().create(12345); //建立連接埠
-//        Server.instance().start();
-//        System.out.println(Server.instance().getLocalAddress()[0]); //印出host IP
-//        try{
-////            //連接("host IP:127.0.0.1", port)
-////            ClientClass.getInstance().connect("127.0.0.1", 12345);
-//        }catch(IOException ex){
-//            Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
     }
     @Override
@@ -131,29 +104,57 @@ public class MapScene extends Scene {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
                 Global.Direction dir=Global.Direction.getDirection(commandCode);
-                    actor.get(0).walk(dir);
-                    if(commandCode==6){  //角色斷線時發送斷線訊息
-                        ArrayList<String> strs = new ArrayList<String>();
-                        strs.add(String.valueOf(ClientClass.getInstance().getID()));
-                        ClientClass.getInstance().sent(Global.InternetCommand.DISCONNECT,strs);
-                        ClientClass.getInstance().disConnect();
-                        System.exit(0);
-                    }
+                if(commandCode==6){  //角色斷線時發送斷線訊息
+                    ArrayList<String> strs = new ArrayList<String>();
+                    strs.add(String.valueOf(ClientClass.getInstance().getID()));
+                    ClientClass.getInstance().sent(Global.InternetCommand.DISCONNECT,strs);
+                    ClientClass.getInstance().disConnect();
+                    System.exit(0);
+                }
+                actor.get(0).walk(dir);
                 switch (dir){
                     case DOWN:
+                        for (int i=0;i<gameObjectArr1.size();i++){
+                            if (actor.get(0).isCollision(gameObjectArr.get(i))&&
+                                    actor.get(0).bottomIsCollision(gameObjectArr.get(i))){
+                                actor.get(0).translateY(-1);
+                                break;
+                            }
+                        }
                         actor.get(0).translateY(1);
                         break;
                     case UP:
+                        for (int i=0;i<gameObjectArr1.size();i++){
+                            if (actor.get(0).isCollision(gameObjectArr.get(i))&&
+                                    actor.get(0).topIsCollision(gameObjectArr.get(i))){
+                                actor.get(0).translateY(1);
+                                break;
+                            }
+                        }
                         actor.get(0).translateY(-1);
                         break;
                     case LEFT:
+                        for (int i=0;i<gameObjectArr1.size();i++){
+                            if (actor.get(0).isCollision(gameObjectArr.get(i))
+                                    &&actor.get(0).leftIsCollision(gameObjectArr.get(i))){
+                                actor.get(0).translateX(1);
+                                break;
+                            }
+                        }
                         actor.get(0).translateX(-1);
                         break;
                     case RIGHT:
+                        for (int i=0;i<gameObjectArr1.size();i++){
+                            if (actor.get(0).isCollision(gameObjectArr.get(i))&&
+                                    actor.get(0).rightIsCollision(gameObjectArr.get(i))){
+                                actor.get(0).translateX(-1);
+                                break;
+                            }
+                        }
                         actor.get(0).translateX(1);
                         break;
-                }
-            }
+                }}
+
             @Override
             public void keyReleased(int commandCode, long trigTime) {
             }
@@ -173,6 +174,7 @@ public class MapScene extends Scene {
         }
         for(int i=0;i<actor.size();i++){
             actor.get(i).paint(g);
+            System.out.println(actor.size());
         }
 //        this.actor.get(0).paint(g); //自己決角色
         cam.end(g);
@@ -212,7 +214,8 @@ public class MapScene extends Scene {
                             }
                         }
                         if(!isburn) {
-                            actor.add(new Actor(100, 100, Integer.valueOf(strs.get(2))));
+                            actor.add(new Actor(Integer.valueOf(strs.get(0)),Integer.valueOf(strs.get(1)), Integer.valueOf(strs.get(2))));
+                            System.out.println("!!!!!!!!!!!!!!!!!!!!");
                             actor.get(actor.size() - 1).setId(serialNum);
                             ArrayList<String> str=new ArrayList<>();
                             str.add(actor.get(0).painter().centerX()+"");
@@ -224,19 +227,19 @@ public class MapScene extends Scene {
                     case Global.InternetCommand.MOVE:
                         for(int i=1;i<actor.size();i++) {
                             if(actor.get(i).getId()==Integer.valueOf(strs.get(0))) {
-                               actor.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
-                               actor.get(i).walk(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                               break;
+                                actor.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
+                                actor.get(i).walk(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
+                                break;
                             }
                         }
                         break;
-                        case Global.InternetCommand.DISCONNECT:
-                            for(int i=0;i<actor.size();i++){
-                                if(actor.get(i).getId()==Integer.valueOf(strs.get(0))){
-                                    actor.remove(i);
-                                }
+                    case Global.InternetCommand.DISCONNECT:
+                        for(int i=0;i<actor.size();i++){
+                            if(actor.get(i).getId()==Integer.valueOf(strs.get(0))){
+                                actor.remove(i);
                             }
-                            break;
+                        }
+                        break;
                 }
             }
         });

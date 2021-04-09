@@ -1,34 +1,56 @@
 package scene;
 
-import camera.Camera;
 import controllers.ImageController;
 import controllers.SceneController;
+import gameobj.button.Button;
 import internet.server.ClientClass;
 import internet.server.Server;
+import scene.popupwindow.PopUpConnect;
+import scene.popupwindow.PopUpCreateRoom;
 import utils.CommandSolver;
-import utils.Global;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OpenScene extends Scene {
     private Image image;
+    private Image titleImg;
+    private Button creatRoomButton;
+    private Button inputButton;
+    private PopUpConnect popUpConnect;
+    private PopUpCreateRoom popUpCreateRoom;
     @Override
     public void paint(Graphics g) {
         g.drawImage(image,0,0,null);
+        g.drawImage(titleImg,100,150,null);
+        creatRoomButton.paint(g);
+        inputButton.paint(g);
+        if (popUpConnect.isShow()){
+            popUpConnect.paint(g);
+        }
+        if (popUpCreateRoom.isShow()){
+            popUpCreateRoom.paint(g);
+        }
     }
 
     @Override
     public void update() {
 
+
     }
 
     @Override
     public void sceneBegin() {
-        image= ImageController.getInstance().tryGet("/aa.jpg");
+        image= ImageController.getInstance().tryGet("/mainmenu.jpg");
+        titleImg= ImageController.getInstance().tryGet("/title.png");
+        creatRoomButton=new Button(270,300,359,113,ImageController.getInstance()
+                .tryGet("/creatRoom.png"));
+        inputButton=new Button(370,450,180,96,ImageController.getInstance()
+                .tryGet("/inputNum.png"));
+        popUpConnect=new PopUpConnect();
+        popUpCreateRoom=new PopUpCreateRoom();
     }
 
     @Override
@@ -38,7 +60,22 @@ public class OpenScene extends Scene {
 
     @Override
     public CommandSolver.MouseListener mouseListener() {
-        return null;
+        return (MouseEvent e, CommandSolver.MouseState state, long trigTime)->{
+            if (state==null){
+                return;
+            }
+            switch (state){
+                case CLICKED:
+                    if (creatRoomButton.state(e.getPoint())){
+                        popUpCreateRoom.sceneBegin();
+                    }
+                    if (inputButton.state(e.getPoint())){
+                        popUpConnect.sceneBegin();
+
+                    }
+                    break;
+            }
+        };
     }
 
     @Override
@@ -67,22 +104,12 @@ public class OpenScene extends Scene {
                             e.printStackTrace();
                         }
                     }
-                ArrayList<String> str=new ArrayList<>();
-                    str.add("100");
-                    str.add("100");
-                //______________
-                System.out.print("輸入0~7決定角色: ");
-                String num = sc.next();
-                str.add(num);
-                //______________
-                SceneController.getInstance().changeScene(new MapScene(Integer.valueOf(num)));
-                ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+                SceneController.getInstance().changeScene(new MapScene());
                 }
             @Override
             public void keyReleased(int commandCode, long trigTime) {
 
             }
-
             @Override
             public void keyTyped(char c, long trigTime) {
 

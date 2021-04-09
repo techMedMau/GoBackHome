@@ -36,10 +36,10 @@ public class Main {
                         .add(KeyEvent.VK_X,4)
                         .add(KeyEvent.VK_SPACE,5)
                         .add(KeyEvent.VK_A,6)
-                        .next().subscribe(sceneController)
+                        .next().trackChar().subscribe(sceneController)
         ).paint(sceneController).update(sceneController).gen();
-        jframe.setSize(1000,1000);
-        jframe.setTitle("打飛機遊戲");
+        jframe.setSize(Global.WINDOW_WIDTH,Global.WINDOW_HEIGHT);
+        jframe.setTitle("Return Home");
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //設置關閉時結束程式
         jframe.add(gameKernel);
         jframe.setVisible(true);

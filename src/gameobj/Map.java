@@ -8,7 +8,7 @@ import java.awt.*;
 public class Map extends GameObject{
     private Image img;
     public Map() {
-        super(640, 640, 1280, 1280);
+        super(0, 0, 1280, 1280);
         img= ImageController.getInstance().tryGet("/genMap.bmp");
         MapInformation.setMapInfo(0,0, 1280,1280); //地圖大小(自行調整)
     }

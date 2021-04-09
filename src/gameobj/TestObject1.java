@@ -9,7 +9,7 @@ public  class TestObject1 extends GameObject {
 
 
     public TestObject1(int x, int y) {
-        super(x+128/2, y+128/2, 128, 128);
+        super(x, y, 128, 128);
         this.img = ImageController.getInstance().tryGet("/grass.png");
 
     }

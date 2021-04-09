@@ -1,10 +1,14 @@
 package controllers;
 
 import scene.Scene;
+import scene.popupwindow.PopUpWindows;
 import utils.CommandSolver;
 import utils.GameKernel;
+import utils.Global;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 //單例模式的控場類
 public class SceneController implements GameKernel.UpdateInterface,GameKernel.PaintInterface, CommandSolver.MouseListener,CommandSolver.KeyListener{
