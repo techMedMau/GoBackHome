@@ -51,6 +51,18 @@ public class OpenScene extends Scene {
                 .tryGet("/inputNum.png"));
         popUpConnect=new PopUpConnect();
         popUpCreateRoom=new PopUpCreateRoom();
+        Server s=Server.instance();
+        System.out.println(s.getLocalAddress()[0]);
+        if (s.getLocalAddress()[0].equals("192.168.43.69")){
+            s.create(12345);
+            s.start();
+            System.out.println(s.getLocalAddress()[0]);
+        }
+        try {
+            ClientClass.getInstance().connect(s.getLocalAddress()[0],12345);
+        } catch (IOException ee) {
+            ee.printStackTrace();
+        }
     }
 
     @Override
@@ -90,27 +102,27 @@ public class OpenScene extends Scene {
             public void keyPressed(int commandCode, long trigTime) {
                 popUpConnect.keyListener().keyPressed(commandCode,trigTime);
                 /*Scanner sc=new Scanner(System.in);
-                    if ( commandCode == 0) {
-                        Server s=Server.instance();
-                        s.create(12345);
-                        s.start();
-                        try {
-                            ClientClass.getInstance().connect("127.0.0.1",12345);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if ( commandCode == 0) {
+                            Server s=Server.instance();
+                            s.create(12345);
+                            s.start();
+                            try {
+                                ClientClass.getInstance().connect("127.0.0.1",12345);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println("主機IP：" + Server.instance().getLocalAddress()[0] +
+                                    "\n主機PORT：" + Server.instance().getLocalAddress()[1]);
+                        }else if(commandCode==5){
+                            System.out.println("請輸入IP:");
+                            String str=sc.next();
+                            try {
+                                ClientClass.getInstance().connect(str,12345);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        System.out.println("主機IP：" + Server.instance().getLocalAddress()[0] +
-                                "\n主機PORT：" + Server.instance().getLocalAddress()[1]);
-                    }else if(commandCode==5){
-                        System.out.println("請輸入IP:");
-                        String str=sc.next();
-                        try {
-                            ClientClass.getInstance().connect(str,12345);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                SceneController.getInstance().changeScene(new MapScene());*/
+                        SceneController.getInstance().changeScene(new MapScene());*/
                 }
             @Override
             public void keyReleased(int commandCode, long trigTime) {

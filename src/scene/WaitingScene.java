@@ -1,4 +1,5 @@
 package scene;
+
 import camera.Camera;
 import camera.MapInformation;
 import controllers.ImageController;
@@ -23,7 +24,7 @@ public class WaitingScene extends Scene {
     private int num;
     private Camera cam;
     private Map map;
-    private ArrayList<GameObject> forWaitingRoom ;
+    private ArrayList<GameObject> forWaitingRoom;
     private ArrayList<GameObject> forGame;
     private MapLoader mapLoader;
     private Image img;
@@ -43,9 +44,9 @@ public class WaitingScene extends Scene {
                 alien = new Alien(450, 300, 72, 97, Alien.AlienType.C);
                 break;
         }
-        startButton = new Button(300,100,300,300, ImageController.getInstance()
+        startButton = new Button(300, 100, 300, 300, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
-        cam = new Camera.Builder(Global.WINDOW_WIDTH,Global.WINDOW_HEIGHT).setChaseObj(alien).gen();
+        cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(alien).gen();
         mapLoader = MapGameGen();
         img = ImageController.getInstance().tryGet("/waitingRoomBackGround.jpg");
     }
@@ -61,8 +62,18 @@ public class WaitingScene extends Scene {
             public void keyPressed(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
-                    case LEFT, RIGHT -> alien.setHorizontalDir(direction);
-                    case UP, DOWN -> alien.setVerticalDir(direction);
+                    case LEFT:
+                        alien.setHorizontalDir(direction);
+                        break;
+                    case RIGHT:
+                        alien.setHorizontalDir(direction);
+                        break;
+                    case UP:
+                        alien.setVerticalDir(direction);
+                        break;
+                    case DOWN:
+                        alien.setVerticalDir(direction);
+                        break;
                 }
             }
 
@@ -70,8 +81,18 @@ public class WaitingScene extends Scene {
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
-                    case LEFT, RIGHT -> alien.setHorizontalDir(Global.Direction.NO_DIR);
-                    case UP, DOWN -> alien.setVerticalDir(Global.Direction.NO_DIR);
+                    case LEFT:
+                        alien.setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                        case RIGHT :
+                        alien.setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case UP:
+                        alien.setVerticalDir(Global.Direction.NO_DIR);
+                        break;
+                    case DOWN :
+                        alien.setVerticalDir(Global.Direction.NO_DIR);
+                        break;
                 }
             }
 
@@ -87,7 +108,7 @@ public class WaitingScene extends Scene {
         return new CommandSolver.MouseListener() {
             @Override
             public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-                if(state == CommandSolver.MouseState.CLICKED){
+                if (state == CommandSolver.MouseState.CLICKED) {
                     mapLoader = MapGameGen();
                 }
             }
@@ -97,10 +118,10 @@ public class WaitingScene extends Scene {
     @Override
     public void paint(Graphics g) {
         cam.start(g);
-        for (int i=0;i<forGame.size();i++){
+        for (int i = 0; i < forGame.size(); i++) {
             forGame.get(i).paint(g);
         }
-        g.drawImage(img,0,0, 960, 640, null);
+        g.drawImage(img, 0, 0, 960, 640, null);
         startButton.paint(g);
         alien.paint(g);
 //        cam.paint(g);
@@ -113,7 +134,7 @@ public class WaitingScene extends Scene {
         cam.update();
     }
 
-    public MapLoader MapWaitGen(){
+    public MapLoader MapWaitGen() {
         try {
             mapLoader = new MapLoader("/genMap_wait.bmp", "/genMap_wait.txt");
             ArrayList<MapInfo> test = mapLoader.combineInfo();
@@ -131,13 +152,13 @@ public class WaitingScene extends Scene {
                     }
             );
 
-        }catch(IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mapLoader;
     }
 
-    public MapLoader MapGameGen(){
+    public MapLoader MapGameGen() {
         try {
             mapLoader = new MapLoader("/genMap.bmp", "/genMap.txt");
             ArrayList<MapInfo> test = mapLoader.combineInfo();
@@ -148,7 +169,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/coal.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/coal.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -160,7 +181,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/brown.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/brown.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -172,7 +193,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/diamond.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/diamond.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -184,7 +205,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/gold.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/gold.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -196,7 +217,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/gravel.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/gravel.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -208,7 +229,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/iron.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/iron.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -220,7 +241,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/ruby.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/ruby.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -232,7 +253,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/silver.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/silver.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -244,7 +265,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/dirt32.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/dirt32.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -256,7 +277,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/dirt64.png",mapInfo.getX() * size, mapInfo.getY() * size,64,64);
+                                tmp = new GameObjectForMap("/dirt64.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
@@ -268,7 +289,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/dirt96.png",mapInfo.getX() * size, mapInfo.getY() * size,96,96);
+                                tmp = new GameObjectForMap("/dirt96.png", mapInfo.getX() * size, mapInfo.getY() * size, 96, 96);
                                 return tmp;
                             }
                             return null;
@@ -280,7 +301,7 @@ public class WaitingScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/dirt128.png",mapInfo.getX() * size, mapInfo.getY() * size,128,128);
+                                tmp = new GameObjectForMap("/dirt128.png", mapInfo.getX() * size, mapInfo.getY() * size, 128, 128);
                                 return tmp;
                             }
                             return null;
@@ -288,7 +309,7 @@ public class WaitingScene extends Scene {
                     }
             ));
 
-        }catch(IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mapLoader;
