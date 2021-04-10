@@ -43,7 +43,7 @@ public class MapScene extends Scene {
         actor.add(new Actor(Integer.valueOf(str.get(0)),Integer.valueOf(str.get(1)),num));
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
         actor.get(0).setId(ClientClass.getInstance().getID());
-        cam= new Camera.Builder(1000,1000).setChaseObj(actor.get(0),1,1)
+        cam = new Camera.Builder(1000,1000).setChaseObj(actor.get(0),1,1)
                 .setCameraStartLocation(actor.get(0).painter().left(),actor.get(0).painter().top()).gen();
         try {
             MapLoader mapLoader = new MapLoader("/genMap.bmp", "/genMap.txt");
@@ -243,5 +243,53 @@ public class MapScene extends Scene {
                 }
             }
         });
+    }
+
+    public void MapGen(){
+        map=new Map();
+        gameObjectArr = new ArrayList();
+        gameObjectArr1 = new ArrayList();
+        try {
+            MapLoader mapLoader = new MapLoader("/genMap.bmp", "/genMap.txt");
+            ArrayList<MapInfo> test = mapLoader.combineInfo();
+            this.gameObjectArr = mapLoader.creatObjectArray("grass", 128, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new TestObject1(mapInfo.getX() * size, mapInfo.getY() * size);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            );
+            this.gameObjectArr.addAll(mapLoader.creatObjectArray("sand", 128, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new TestObject2(mapInfo.getX() * size, mapInfo.getY() * size);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            ));
+            this.gameObjectArr1 = mapLoader.creatObjectArray("grass", 128, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new TestObject1(mapInfo.getX() * size, mapInfo.getY() * size);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            );
+        } catch (IOException ex) {
+            Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

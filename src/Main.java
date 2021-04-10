@@ -1,7 +1,5 @@
-import camera.MapInformation;
 import controllers.SceneController;
-import scene.MapScene;
-import scene.OpenScene;
+import scene.WaitingScene;
 import utils.CommandSolver;
 import utils.GameKernel;
 import utils.Global;
@@ -25,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         JFrame jframe=new JFrame();
         SceneController sceneController=SceneController.getInstance(); //取得單例模式的控場實體
-        sceneController.changeScene(new OpenScene()); //一開始使用開場畫面
+        sceneController.changeScene(new WaitingScene()); //一開始使用開場畫面
         GameKernel gameKernel = new GameKernel.Builder().input(  //創建遊戲核心
                 new CommandSolver.BuildStream().mouseTrack().subscribe(sceneController).keyboardTrack()
                         .add(KeyEvent.VK_ENTER, 0) //設置ENTER按鍵為 -1
@@ -37,7 +35,7 @@ public class Main {
                         .add(KeyEvent.VK_SPACE,5)
                         .add(KeyEvent.VK_A,6)
                         .add(KeyEvent.VK_BACK_SPACE,7)
-                        .next().trackChar().subscribe(sceneController)
+                        .next().keyCleanMode().trackChar().subscribe(sceneController)
         ).paint(sceneController).update(sceneController).gen();
         jframe.setSize(Global.WINDOW_WIDTH,Global.WINDOW_HEIGHT);
         jframe.setTitle("Return Home");

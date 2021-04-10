@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class OpenScene extends Scene {
     private Image image;
     private Image titleImg;
-    private Button creatRoomButton;
+    private Button createRoomButton;
     private Button inputButton;
     private PopUpConnect popUpConnect;
     private PopUpCreateRoom popUpCreateRoom;
@@ -25,7 +25,7 @@ public class OpenScene extends Scene {
     public void paint(Graphics g) {
         g.drawImage(image,0,0,null);
         g.drawImage(titleImg,100,150,null);
-        creatRoomButton.paint(g);
+        createRoomButton.paint(g);
         inputButton.paint(g);
         if (popUpConnect.isShow()){
             popUpConnect.paint(g);
@@ -45,7 +45,7 @@ public class OpenScene extends Scene {
     public void sceneBegin() {
         image= ImageController.getInstance().tryGet("/mainmenu.jpg");
         titleImg= ImageController.getInstance().tryGet("/title.png");
-        creatRoomButton=new Button(270,300,359,113,ImageController.getInstance()
+        createRoomButton=new Button(270,300,359,113,ImageController.getInstance()
                 .tryGet("/creatRoom.png"));
         inputButton=new Button(370,450,180,96,ImageController.getInstance()
                 .tryGet("/inputNum.png"));
@@ -72,7 +72,7 @@ public class OpenScene extends Scene {
             }
             switch (state){
                 case CLICKED:
-                    if (creatRoomButton.state(e.getPoint())){
+                    if (createRoomButton.state(e.getPoint())){
                         popUpCreateRoom.sceneBegin();
                     }
                     if (inputButton.state(e.getPoint())){

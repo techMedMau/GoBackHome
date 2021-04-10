@@ -8,9 +8,9 @@ import java.awt.*;
 public class Map extends GameObject{
     private Image img;
     public Map() {
-        super(0, 0, 1280, 1280);
+        super(0, 0, 960, 640);
         img= ImageController.getInstance().tryGet("/genMap.bmp");
-        MapInformation.setMapInfo(0,0, 1280,1280); //地圖大小(自行調整)
+        MapInformation.setMapInfo(0,0, 960,640); //地圖大小(自行調整)
     }
 
     @Override
