@@ -89,7 +89,9 @@ public class Server extends Thread {
         String strs[] = new String[2];
         try {
             strs[0] = InetAddress.getLocalHost().getHostAddress();
-            strs[1] = "" + ss.getLocalPort();
+            if (ss!=null){
+                strs[1] = "" + ss.getLocalPort();
+            }
         } catch (UnknownHostException ex) {
         }
         return strs;

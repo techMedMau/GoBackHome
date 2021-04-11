@@ -1,4 +1,5 @@
 package scene;
+
 import camera.Camera;
 import camera.MapInformation;
 import camera.SmallMap;
@@ -20,9 +21,8 @@ import java.util.logging.Logger;
 
 public class WaitingScene extends Scene {
     private Button startButton;
-
     private int num;
-    private ArrayList<GameObject> forWaitingRoom ;
+    private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Location> location;
     private Alien a;
@@ -30,8 +30,7 @@ public class WaitingScene extends Scene {
 
     @Override
     public void sceneBegin() {
-      
-        location = new ArrayList<>();
+                location = new ArrayList<>();
 //        num = (int) (Math.random() * 3 + 1);
 //        switch (num) {
 //            case 1:
@@ -46,9 +45,9 @@ public class WaitingScene extends Scene {
 //        }
         a = new Alien(450, 300, 54, 73, Alien.AlienType.A);
         b = new Alien(500, 200, 54, 73, Alien.AlienType.B);
-        location.add(new Location(a,a.painter().left(),a.painter().top()));
-        location.add(new Location(b,b.painter().left(), b.painter().top()));
-        startButton = new Button(400,500,300,300, ImageController.getInstance()
+        location.add(new Location(a, a.painter().left(), a.painter().top()));
+        location.add(new Location(b, b.painter().left(), b.painter().top()));
+        startButton = new Button(400, 500, 300, 300, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
         mapLoader = MapWaitGen();
     }
@@ -65,12 +64,32 @@ public class WaitingScene extends Scene {
             public void keyPressed(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
-                    case LEFT, RIGHT -> location.get(0).alien.setHorizontalDir(direction);
-                    case UP, DOWN -> location.get(0).alien.setVerticalDir(direction);
+                    case LEFT:
+                        location.get(0).alien.setHorizontalDir(direction);
+                        break;
+                    case RIGHT:
+                        location.get(0).alien.setHorizontalDir(direction);
+                        break;
+                    case UP:
+                        location.get(0).alien.setVerticalDir(direction);
+                        break;
+                    case DOWN:
+                        location.get(0).alien.setVerticalDir(direction);
+                        break;
                 }
                 switch (direction) {
-                    case LEFT, RIGHT -> location.get(1).alien.setHorizontalDir(direction);
-                    case UP, DOWN -> location.get(1).alien.setVerticalDir(direction);
+                    case LEFT:
+                        location.get(1).alien.setHorizontalDir(direction);
+                        break;
+                    case RIGHT:
+                        location.get(1).alien.setHorizontalDir(direction);
+                        break;
+                    case UP:
+                        location.get(1).alien.setVerticalDir(direction);
+                        break;
+                    case DOWN:
+                        location.get(1).alien.setVerticalDir(direction);
+                        break;
                 }
 
             }
@@ -79,12 +98,34 @@ public class WaitingScene extends Scene {
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
-                    case LEFT, RIGHT -> location.get(0).alien.setHorizontalDir(Global.Direction.NO_DIR);
-                    case UP, DOWN -> location.get(0).alien.setVerticalDir(Global.Direction.NO_DIR);
+
+                    case LEFT:
+                        location.get(0).alien.setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case RIGHT:
+                        location.get(0).alien.setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case UP:
+                        location.get(0).alien.setVerticalDir(Global.Direction.NO_DIR);
+                        break;
+                    case DOWN:
+                        location.get(0).alien.setVerticalDir(Global.Direction.NO_DIR);
+                        break;
                 }
                 switch (direction) {
-                    case LEFT, RIGHT -> location.get(1).alien.setHorizontalDir(Global.Direction.NO_DIR);
-                    case UP, DOWN -> location.get(1).alien.setVerticalDir(Global.Direction.NO_DIR);
+
+                    case LEFT:
+                        location.get(1).alien.setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case RIGHT:
+                        location.get(1).alien.setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case UP:
+                        location.get(1).alien.setVerticalDir(Global.Direction.NO_DIR);
+                        break;
+                    case DOWN:
+                        location.get(1).alien.setVerticalDir(Global.Direction.NO_DIR);
+                        break;
                 }
             }
 
@@ -100,90 +141,87 @@ public class WaitingScene extends Scene {
         return new CommandSolver.MouseListener() {
             @Override
             public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-                if(state == CommandSolver.MouseState.CLICKED){
-                    if(startButton.state(e.getPoint())) {
+                if (state == CommandSolver.MouseState.CLICKED) {
+                    if (startButton.state(e.getPoint())) {
 
                         SceneController.getInstance().changeScene(new GameScene(location));
-//
-//                        cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(alien).gen();
                     }
                 }
             }
         };
     }
 
-    @Override
-    public void paint(Graphics g) {
-
+        @Override
+        public void paint (Graphics g){
             for (int i = 0; i < forWaitingRoom.size(); i++) {
                 forWaitingRoom.get(i).paint(g);
             }
             startButton.paint(g);
 
-        for(int i = 0; i < location.size(); i++) {
-            location.get(i).alien.paint(g);
+            for (int i = 0; i < location.size(); i++) {
+                location.get(i).alien.paint(g);
+            }
         }
 
-    }
+        @Override
+        public void update () {
+            for (int i = 0; i < location.size(); i++) {
+                if (location.get(i).alien.painter().left() <= 0) {
+                    location.get(i).alien.translateX(2);
+                    return;
+                }
+                if (location.get(i).alien.painter().top() <= 0) {
+                    location.get(i).alien.translateY(2);
+                    return;
+                }
+                if (location.get(i).alien.painter().top() >= Global.SCREEN_Y) {
+                    location.get(i).alien.translateY(-2);
+                    return;
+                }
+                if (location.get(i).alien.painter().right() >= Global.SCREEN_X) {
+                    location.get(i).alien.translateX(-2);
+                    return;
+                }
 
-    @Override
-    public void update() {
-        for(int i = 0; i < location.size(); i++) {
-            if (location.get(i).alien.painter().left() <= 0) {
-                location.get(i).alien.translateX(2);
-                return;
+                location.get(i).alien.update();
             }
-            if (location.get(i).alien.painter().top() <= 0) {
-                location.get(i).alien.translateY(2);
-                return;
-            }
-            if (location.get(i).alien.painter().top() >= Global.SCREEN_Y) {
-                location.get(i).alien.translateY(-2);
-                return;
-            }
-            if (location.get(i).alien.painter().right() >= Global.SCREEN_X) {
-                location.get(i).alien.translateX(-2);
-                return;
-            }
-
-            location.get(i).alien.update();
         }
-    }
 
-    public MapLoader MapWaitGen(){
-        try {
-            mapLoader = new MapLoader("/genMap_wait.bmp", "/genMap_wait.txt");
-            ArrayList<MapInfo> test = mapLoader.combineInfo();
-            forWaitingRoom = new ArrayList<>();
-            this.forWaitingRoom = mapLoader.creatObjectArray("Name", 32, test, new MapLoader.CompareClass() {
-                        @Override
-                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
-                            GameObject tmp = null;
-                            if (gameObject.equals(name)) {
-                                tmp = new tile(mapInfo.getX() * size, mapInfo.getY() * size);
-                                return tmp;
+        public MapLoader MapWaitGen () {
+            try {
+                mapLoader = new MapLoader("/genMap_wait.bmp", "/genMap_wait.txt");
+                ArrayList<MapInfo> test = mapLoader.combineInfo();
+                forWaitingRoom = new ArrayList<>();
+                this.forWaitingRoom = mapLoader.creatObjectArray("Name", 32, test, new MapLoader.CompareClass() {
+                            @Override
+                            public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                                GameObject tmp = null;
+                                if (gameObject.equals(name)) {
+                                    tmp = new tile(mapInfo.getX() * size, mapInfo.getY() * size);
+                                    return tmp;
+                                }
+                                return null;
                             }
-                            return null;
                         }
-                    }
-            );
+                );
 
-        }catch(IOException ex) {
-            Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return mapLoader;
         }
-        return mapLoader;
-    }
 
-    public static class Location{ //私有的靜態內部類
+
+    public static class Location { //私有的靜態內部類
         private Alien alien;
         private int x;
         private int y;
 
-        public Location(Alien alien,int x, int y){
+        public Location(Alien alien, int x, int y) {
             this.alien = alien;
             this.x = x;
             this.y = y;
         }
-
     }
+
 }

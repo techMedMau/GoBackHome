@@ -17,7 +17,7 @@ public class Alien extends GameObject {
 
     private static HashMap<State, Animator> getAnimator(AlienType type){
         switch (type){
-            case A -> {
+            case A :
                 HashMap<State, Animator> map = new HashMap<>();
                 map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p3_walk04r.png"))));
@@ -32,42 +32,38 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p3_walk05.png")
                 )));
                 return map;
-            }
-            case B -> {
-                HashMap<State, Animator> map = new HashMap<>();
-                map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+            case B :
+                HashMap<State, Animator> map1 = new HashMap<>();
+                map1.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p2_walk05r.png"))));
-                map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                map1.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p2_walk05.png"))));
-                map.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                map1.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/p2_walk06r.png"),
                         ImageController.getInstance().tryGet("/p2_walk05r.png")
                 )));
-                map.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                map1.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/p2_walk06.png"),
                         ImageController.getInstance().tryGet("/p2_walk05.png")
                 )));
-                return map;
-            }
-            case C -> {
-                HashMap<State, Animator> map = new HashMap<>();
-                map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                return map1;
+            case C :
+                HashMap<State, Animator> map2 = new HashMap<>();
+                map2.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p1_walk04r.png"))));
-                map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                map2.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p1_walk04.png"))));
-                map.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                map2.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/p1_walk05r.png"),
                         ImageController.getInstance().tryGet("/p1_walk04r.png")
                 )));
-                map.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                map2.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/p1_walk05.png"),
                         ImageController.getInstance().tryGet("/p1_walk04.png")
                 )));
-                return map;
-            }
-            default -> {
+                return map2;
+            default :
                 return null;
-            }
         }
     }
     // 如果要改善效能問題 存圖片路徑 載入時再導入圖片
@@ -111,12 +107,29 @@ public class Alien extends GameObject {
 
 //        待解決
         switch (horizontalDir) {
-            case LEFT -> translateX(-2);
-            case RIGHT -> translateX(2);
+//<<<<<<< HEAD
+//            case LEFT -> translateX(-2);
+//            case RIGHT -> translateX(2);
+//        }
+//        switch (verticalDir) {
+//            case UP -> translateY(-2);
+//            case DOWN -> translateY(2);
+//=======
+            case LEFT :
+                translateX(-1);
+                break;
+            case RIGHT :
+                translateX(1);
+                break;
         }
         switch (verticalDir) {
-            case UP -> translateY(-2);
-            case DOWN -> translateY(2);
+            case UP :
+                translateY(-1);
+                break;
+            case DOWN :
+                translateY(1);
+                break;
+//>>>>>>> e25e14bf31029a4ea89090f9e568fbbdf7d34fb1
         }
     }
 
@@ -134,8 +147,12 @@ public class Alien extends GameObject {
         State lastState = currentState;
         if (horizontalDir != Global.Direction.NO_DIR) {
             switch (horizontalDir) {
-                case LEFT -> currentState = State.WALK_LEFT;
-                case RIGHT -> currentState = State.WALK_RIGHT;
+                case LEFT :
+                    currentState = State.WALK_LEFT;
+                    break;
+                case RIGHT :
+                    currentState = State.WALK_RIGHT;
+                    break;
             }
         } else {
             switch (lastState) {
