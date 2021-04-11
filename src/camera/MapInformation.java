@@ -15,5 +15,7 @@ public class MapInformation {
     public static void setMapInfo(int left, int top, int right, int bottom){
         mapInfo = new Rect(left, top, right, bottom);
     }
+
+
     
 }

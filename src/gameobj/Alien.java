@@ -103,32 +103,20 @@ public class Alien extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-        stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 36, 49);
+        stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 54, 73);
     }
 
     @Override
     public void update() {
-        if(this.touchLeft()){
-            this.translateX(1);
-            return;
-        }
-        if(this.touchTop()){
-            this.translateY(1);
-        }
-        if(this.touchBottom()){
-            this.translateY(-1);
-        }
-        if(this.touchRight()){
-            this.translateX(-1);
-        }
+
 //        待解決
         switch (horizontalDir) {
-            case LEFT -> translateX(-1);
-            case RIGHT -> translateX(1);
+            case LEFT -> translateX(-2);
+            case RIGHT -> translateX(2);
         }
         switch (verticalDir) {
-            case UP -> translateY(-1);
-            case DOWN -> translateY(1);
+            case UP -> translateY(-2);
+            case DOWN -> translateY(2);
         }
     }
 
