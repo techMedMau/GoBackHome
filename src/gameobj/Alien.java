@@ -120,48 +120,48 @@ public class Alien extends GameObject {
         switch (horizontalDir) {
             case LEFT:
                 if (verticalDir == Global.Direction.DOWN) {
-                    translateX(-(int) (2 / (Math.sqrt(2))));
-                    translateY((int) (2 / (Math.sqrt(2))));
+                    translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else if (verticalDir == Global.Direction.UP) {
-                    translateX(-(int) (2 / (Math.sqrt(2))));
-                    translateY(-(int) (2 / (Math.sqrt(2))));
+                    translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else {
-                    translateX(-2);
+                    translateX(-Global.MOVE_SPEED);
                 }
                 break;
             case RIGHT:
                 if (verticalDir == Global.Direction.DOWN) {
-                    translateX((int) (2 / (Math.sqrt(2))));
-                    translateY((int) (2 / (Math.sqrt(2))));
+                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else if (verticalDir == Global.Direction.UP) {
-                    translateX((int) (2 / (Math.sqrt(2))));
-                    translateY(-(int) (2 / (Math.sqrt(2))));
+                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else {
-                    translateX(2);
+                    translateX(Global.MOVE_SPEED);
                 }
                 break;
         }
         switch (verticalDir) {
             case UP:
                 if (horizontalDir == Global.Direction.RIGHT) {
-                    translateX((int) (2 / (Math.sqrt(2))));
-                    translateY(-(int) (2 / (Math.sqrt(2))));
+                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else if (horizontalDir == Global.Direction.LEFT) {
-                    translateX(-(int) (2 / (Math.sqrt(2))));
-                    translateY(-(int) (2 / (Math.sqrt(2))));
+                    translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else {
-                    translateY(-2);
+                    translateY(-Global.MOVE_SPEED);
                 }
                 break;
             case DOWN:
                 if (horizontalDir == Global.Direction.RIGHT) {
-                    translateX((int) (2 / (Math.sqrt(2))));
-                    translateY((int) (2 / (Math.sqrt(2))));
+                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else if (horizontalDir == Global.Direction.LEFT) {
-                    translateX((int) (-2 / (Math.sqrt(2))));
-                    translateY((int) (2 / (Math.sqrt(2))));
+                    translateX((int) (-Global.MOVE_SPEED / (Math.sqrt(2))));
+                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else {
-                    translateY(2);
+                    translateY(Global.MOVE_SPEED);
                 }
                 break;
         }

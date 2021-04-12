@@ -21,7 +21,7 @@ public class GameScene extends Scene {
     private Image backGroundTest;
     private ArrayList<GameObject> forGame;
     private MapLoader mapLoader;
-    private TaskItem taskItem;
+    private ArrayList<TaskItem> taskItems;
 
 
     public GameScene(ArrayList<Alien> aliens){
@@ -35,7 +35,8 @@ public class GameScene extends Scene {
         backGroundTest = ImageController.getInstance().tryGet("/dirt.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
-        taskItem = new TaskItem("/boxItem.png",0,0);
+        taskItems = new ArrayList<>();
+        taskItems.add(new TaskItem("/boxItem.png",161,447));
     }
 
     @Override
@@ -104,7 +105,7 @@ public class GameScene extends Scene {
         for (int i = 0; i < aliens.size(); i++) {
             aliens.get(i).paint(g);
         }
-        taskItem.isTriggered(aliens.get(0)).paint(g);
+        taskItems.get(0).isTriggered(aliens.get(0)).paint(g);
         cam.paint(g);
         cam.end(g);
 
@@ -115,19 +116,19 @@ public class GameScene extends Scene {
         aliens.get(0).update();
         for(int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).painter().left() <= map.painter().left()) {
-                aliens.get(i).translateX(2);
+                aliens.get(i).translateX(Global.MOVE_SPEED);
                 return;
             }
             if (aliens.get(i).painter().top() <= map.painter().top()) {
-                aliens.get(i).translateY(2);
+                aliens.get(i).translateY(Global.MOVE_SPEED);
                 return;
             }
             if (aliens.get(i).painter().bottom() >= map.painter().bottom()) {
-                aliens.get(i).translateY(-2);
+                aliens.get(i).translateY(-Global.MOVE_SPEED);
                 return;
             }
             if (aliens.get(i).painter().right() >= map.painter().right()) {
-                aliens.get(i).translateX(-2);
+                aliens.get(i).translateX(-Global.MOVE_SPEED);
                 return;
             }
         }
@@ -137,7 +138,14 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i))
                             && aliens.get(0).leftIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateX(2);
+                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        break;
+                    }
+                }
+                for(int i = 0; i < taskItems.size(); i++){
+                    if (aliens.get(0).isCollision(taskItems.get(i))
+                            && aliens.get(0).leftIsCollision(taskItems.get(i))) {
+                        aliens.get(0).translateX(Global.MOVE_SPEED);
                         break;
                     }
                 }
@@ -146,7 +154,14 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).rightIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateX(-2);
+                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        break;
+                    }
+                }
+                for (int i = 0; i < taskItems.size(); i++) {
+                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+                            aliens.get(0).rightIsCollision(taskItems.get(i))) {
+                        aliens.get(0).translateX(-Global.MOVE_SPEED);
                         break;
                     }
                 }
@@ -158,19 +173,33 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).bottomIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateY(-2);
+                        aliens.get(0).translateY(-Global.MOVE_SPEED);
                         break;
                     }
                 }
+                for (int i = 0; i < taskItems.size(); i++) {
+                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
+                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+                    break;
+                }
+            }
                 break;
             case UP:
                 for (int i=0;i<forGame.size();i++){
                     if (aliens.get(0).isCollision(forGame.get(i))&&
                             aliens.get(0).topIsCollision(forGame.get(i))){
-                        aliens.get(0).translateY(2);
+                        aliens.get(0).translateY(Global.MOVE_SPEED);
                         break;
                     }
                 }
+                for (int i=0;i<taskItems.size();i++){
+                    if (aliens.get(0).isCollision(taskItems.get(i))&&
+                        aliens.get(0).topIsCollision(taskItems.get(i))){
+                    aliens.get(0).translateY(Global.MOVE_SPEED);
+                    break;
+                }
+            }
                 break;
         }
         cam.update();

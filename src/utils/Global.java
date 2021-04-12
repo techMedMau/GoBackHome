@@ -61,6 +61,8 @@ public class Global {
     // 畫面更新時間
     public static final int FRAME_LIMIT = 60;
     public static final int LIMIT_DELTA_TIME = 1000000000 / FRAME_LIMIT;
+    //人物移動速度
+    public static final int MOVE_SPEED = 2;
 
     public static int random(int min, int max) {
         return (int) (Math.random() * (max - min + 1) + min);

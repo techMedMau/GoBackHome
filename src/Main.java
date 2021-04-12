@@ -1,4 +1,5 @@
 import controllers.SceneController;
+import scene.GameScene;
 import scene.OpenScene;
 import scene.WaitingScene;
 import utils.CommandSolver;

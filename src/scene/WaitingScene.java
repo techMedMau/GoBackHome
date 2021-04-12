@@ -47,9 +47,6 @@ public class WaitingScene extends Scene {
         aliens.add(new Alien(Integer.valueOf(str.get(0)), Integer.valueOf(str.get(1)), num));
 
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
-//        b = new Alien(500, 200, num);
-//        location.add(new Location(a, a.painter().left(), a.painter().top()));
-//        location.add(new Location(b, b.painter().left(), b.painter().top()));
         aliens.get(0).setId(ClientClass.getInstance().getID());
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
