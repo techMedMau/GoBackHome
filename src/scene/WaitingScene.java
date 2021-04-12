@@ -48,12 +48,12 @@ public class WaitingScene extends Scene {
 //                alien = new Alien(450, 300, 54, 73, Alien.AlienType.C);
 //                break;
 //        }
+        //要傳出去的東西
         ArrayList<String> str = new ArrayList<>();
         str.add("450");
         str.add("300");
         str.add(String.valueOf(num));
         aliens.add(new Alien(Integer.valueOf(str.get(0)), Integer.valueOf(str.get(1)), num));
-
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
         aliens.get(0).setId(ClientClass.getInstance().getID());
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
@@ -185,9 +185,10 @@ public class WaitingScene extends Scene {
 //            strr.add(aliens.get(0).getDir()+"");
             if(aliens.get(0).getHorizontalDir() == Global.Direction.LEFT || aliens.get(0).getHorizontalDir() == Global.Direction.RIGHT) {
                 strr.add(aliens.get(0).getHorizontalDir()+"");
-            }
-            if(aliens.get(0).getVerticalDir() == Global.Direction.DOWN || aliens.get(0).getVerticalDir() == Global.Direction.UP){
+            }else if(aliens.get(0).getVerticalDir() == Global.Direction.DOWN || aliens.get(0).getVerticalDir() == Global.Direction.UP){
                 strr.add(aliens.get(0).getVerticalDir()+"");
+            }else{
+                strr.add("NO_DIR");
             }
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
             ClientClass.getInstance().consume(new CommandReceiver() {

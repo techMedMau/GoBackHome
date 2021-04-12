@@ -12,7 +12,7 @@ public class TaskItem extends GameObject{
     public TaskItem(String path, int x, int y) {
         super(x, y, 64, 64);
         this.img = ImageController.getInstance().tryGet(path);
-        this.imgS = ImageController.getInstance().tryGet("/shineEffect.png");
+        this.imgS = ImageController.getInstance().tryGet("/shadow.png");
         state = false;
     }
 

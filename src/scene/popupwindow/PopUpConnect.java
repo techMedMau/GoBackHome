@@ -54,8 +54,8 @@ public class PopUpConnect extends PopUpWindows {
                     }
                     if (confirmButton.state(e.getPoint())){
                        if (Global.WAIT_SCENES.containsKey(input.getNum())){
-                           sceneEnd();
                            SceneController.getInstance().changeScene(Global.WAIT_SCENES.get(input.getNum()));
+                           sceneEnd();
                        }
                     }
                     break;
