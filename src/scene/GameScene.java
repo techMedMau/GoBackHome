@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GameScene extends Scene{
+public class GameScene extends Scene {
     private ArrayList<Alien> aliens;
     private Camera cam;
     private Map map;
@@ -53,14 +53,24 @@ public class GameScene extends Scene{
             public void keyPressed(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
-                    case LEFT, RIGHT -> aliens.get(0).setHorizontalDir(direction);
-                    case UP, DOWN -> aliens.get(0).setVerticalDir(direction);
-                }
-                switch (direction){
+                    case LEFT:
+                        aliens.get(0).setHorizontalDir(direction);
+                        break;
+                    case RIGHT:
+                        aliens.get(0).setHorizontalDir(direction);
+                        break;
+                    case UP:
+                        aliens.get(0).setVerticalDir(direction);
+                        break;
                     case DOWN:
-                        for (int i=0;i<forGame.size();i++){
-                            if (aliens.get(0).isCollision(forGame.get(i))&&
-                                    aliens.get(0).bottomIsCollision(forGame.get(i))){
+                        aliens.get(0).setVerticalDir(direction);
+                        break;
+                }
+                switch (direction) {
+                    case DOWN:
+                        for (int i = 0; i < forGame.size(); i++) {
+                            if (aliens.get(0).isCollision(forGame.get(i)) &&
+                                    aliens.get(0).bottomIsCollision(forGame.get(i))) {
                                 aliens.get(0).translateY(-2);
                                 break;
                             }
@@ -71,7 +81,6 @@ public class GameScene extends Scene{
                         for (int i=0;i<forGame.size();i++){
                             if (aliens.get(0).isCollision(forGame.get(i))&&
                                     aliens.get(0).topIsCollision(forGame.get(i))){
-
                                 aliens.get(0).translateY(2);
                                 break;
                             }
@@ -79,9 +88,9 @@ public class GameScene extends Scene{
                         aliens.get(0).update();
                         break;
                     case LEFT:
-                        for (int i=0;i<forGame.size();i++){
+                        for (int i = 0; i < forGame.size(); i++) {
                             if (aliens.get(0).isCollision(forGame.get(i))
-                                    && aliens.get(0).leftIsCollision(forGame.get(i))){
+                                    && aliens.get(0).leftIsCollision(forGame.get(i))) {
                                 aliens.get(0).translateX(2);
                                 break;
                             }
@@ -89,9 +98,9 @@ public class GameScene extends Scene{
                         aliens.get(0).update();
                         break;
                     case RIGHT:
-                        for (int i=0;i<forGame.size();i++){
-                            if (aliens.get(0).isCollision(forGame.get(i))&&
-                                    aliens.get(0).rightIsCollision(forGame.get(i))){
+                        for (int i = 0; i < forGame.size(); i++) {
+                            if (aliens.get(0).isCollision(forGame.get(i)) &&
+                                    aliens.get(0).rightIsCollision(forGame.get(i))) {
                                 aliens.get(0).translateX(-2);
                                 break;
                             }
@@ -106,8 +115,14 @@ public class GameScene extends Scene{
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
 
                 switch (direction) {
-                    case LEFT, RIGHT -> aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
-                    case UP, DOWN -> aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
+                    case LEFT:
+                    case RIGHT:
+                        aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case UP:
+                    case DOWN:
+                        aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
+                        break;
                 }
             }
 
@@ -121,10 +136,10 @@ public class GameScene extends Scene{
     @Override
     public void paint(Graphics g) {
         cam.start(g);
-        g.drawImage(backGroundTest,0,0,null);
+        g.drawImage(backGroundTest, 0, 0, null);
         for (int i = 0; i < forGame.size(); i++) {
-            if(cam.isCollision(forGame.get(i)))
-            forGame.get(i).paint(g);
+            if (cam.isCollision(forGame.get(i)))
+                forGame.get(i).paint(g);
         }
         for (int i = 0; i < aliens.size(); i++) {
             aliens.get(i).paint(g);
@@ -157,7 +172,7 @@ public class GameScene extends Scene{
         cam.update();
     }
 
-    public MapLoader MapGameGen(){
+    public MapLoader MapGameGen() {
         try {
             mapLoader = new MapLoader("/genMap.bmp", "/genMap.txt");
             ArrayList<MapInfo> test = mapLoader.combineInfo();
@@ -168,7 +183,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/coal.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/coal.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -180,7 +195,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/brown.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/brown.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -192,7 +207,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/diamond.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/diamond.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -204,7 +219,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/gold.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/gold.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -216,7 +231,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/gravel.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/gravel.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -228,7 +243,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/iron.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/iron.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -240,7 +255,7 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/ruby.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/ruby.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -252,14 +267,14 @@ public class GameScene extends Scene{
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/silver.png",mapInfo.getX() * size, mapInfo.getY() * size,32,32);
+                                tmp = new GameObjectForMap("/silver.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-        }catch(IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mapLoader;
