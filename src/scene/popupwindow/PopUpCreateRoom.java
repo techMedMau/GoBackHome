@@ -4,6 +4,7 @@ import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.Nums;
 import gameobj.button.Button;
+import internet.server.ClientClass;
 import scene.WaitingScene;
 import utils.CommandSolver;
 import utils.Global;
@@ -11,6 +12,7 @@ import utils.ReadIPFile;
 
 import java.awt.*;
 import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class PopUpCreateRoom extends PopUpWindows{
     private Image img;
@@ -70,6 +72,11 @@ public class PopUpCreateRoom extends PopUpWindows{
                             sceneEnd();
                             WaitingScene waitingScene=new WaitingScene(str,traitorNums.getTarget(),playNums.getTarget());
                             Global.WAIT_SCENES.put(str,waitingScene);
+                            ArrayList<String> strCreat=new ArrayList<>();
+                            strCreat.add(str);
+                            strCreat.add(String.valueOf(traitorNums.getTarget()));
+                            strCreat.add(String.valueOf(playNums.getTarget()));
+                            ClientClass.getInstance().sent(Global.InternetCommand.CREAT,strCreat);
                             SceneController.getInstance().changeScene(waitingScene);
                         }
                         break;

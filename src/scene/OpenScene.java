@@ -4,6 +4,7 @@ import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.button.Button;
 import internet.server.ClientClass;
+import internet.server.CommandReceiver;
 import internet.server.Server;
 import scene.popupwindow.PopUpConnect;
 import scene.popupwindow.PopUpCreateRoom;
@@ -13,6 +14,7 @@ import utils.Global;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OpenScene extends Scene {
@@ -38,6 +40,16 @@ public class OpenScene extends Scene {
 
     @Override
     public void update() {
+        ClientClass.getInstance().consume(new CommandReceiver() {
+            @Override
+            public void receive(int serialNum, int commandCode, ArrayList<String> strs) {
+                switch (commandCode){
+                    case Global.InternetCommand.CREAT:
+                        Global.WAIT_SCENES.put(strs.get(0),
+                                new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2))));
+                }
+            }
+        });
 
 
     }
