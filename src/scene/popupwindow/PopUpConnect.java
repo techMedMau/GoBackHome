@@ -1,6 +1,7 @@
 package scene.popupwindow;
 
 import controllers.ImageController;
+import controllers.SceneController;
 import gameobj.Input;
 import gameobj.InputLine;
 import gameobj.button.Button;
@@ -10,9 +11,6 @@ import utils.CommandSolver;
 import utils.Global;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class PopUpConnect extends PopUpWindows {
     private Image img;
@@ -55,9 +53,10 @@ public class PopUpConnect extends PopUpWindows {
                         sceneEnd();
                     }
                     if (confirmButton.state(e.getPoint())){
-                        ArrayList<String> str=new ArrayList<>();
-
-
+                       if (Global.WAIT_SCENES.containsKey(input.getNum())){
+                           sceneEnd();
+                           SceneController.getInstance().changeScene(Global.WAIT_SCENES.get(input.getNum()));
+                       }
                     }
                     break;
             }

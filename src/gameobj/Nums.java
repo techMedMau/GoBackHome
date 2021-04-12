@@ -35,8 +35,8 @@ public class Nums {
 
 
     }
-    public String getTarget(){
-        return target.getStr();
+    public int getTarget(){
+        return Integer.parseInt(target.getStr());
     }
 
 }

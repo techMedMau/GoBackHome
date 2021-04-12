@@ -49,4 +49,7 @@ public class Input extends GameObject{
             inputLine.translateX(inputChange);
         }
     }
+    public String getNum(){
+        return num;
+    }
 }

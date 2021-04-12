@@ -1,32 +1,35 @@
 package scene.popupwindow;
 
 import controllers.ImageController;
+import controllers.SceneController;
 import gameobj.Nums;
-import gameobj.button.Num;
-import gameobj.button.XMark;
+import gameobj.button.Button;
+import scene.WaitingScene;
 import utils.CommandSolver;
-import scene.Scene;
 import utils.Global;
+import utils.ReadIPFile;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.io.FileWriter;
 
 public class PopUpCreateRoom extends PopUpWindows{
     private Image img;
-    private XMark xMark;
     private Nums traitorNums;
     private Nums playNums;
+    private Button cancelButton;
+    private Button confirmButton;
     public PopUpCreateRoom() {
-        super(485,276);
+        super(486,486);
     }
 
     @Override
     public void sceneBegin() {
-        xMark=new XMark(660,220,50);
         img= ImageController.getInstance().tryGet("/popupcreat.png");
         show();
-        traitorNums=new Nums(2,380,220);
-        playNums=new Nums(8,280,350);
+        traitorNums=new Nums(2,380,110);
+        playNums=new Nums(8,280,230);
+        cancelButton = new Button(280,300,186,73,ImageController.getInstance().tryGet("/cancel.png"));
+        confirmButton=new Button(480,300,186,73,ImageController.getInstance().tryGet("/confirm.png"));
     }
 
     @Override
@@ -48,11 +51,29 @@ public class PopUpCreateRoom extends PopUpWindows{
             }
             switch (state) {
                 case CLICKED:
-                    if (xMark.state(e.getPoint())){
+                    if (cancelButton.state(e.getPoint())){
                         sceneEnd();
                         break;
                     }
-                    System.out.println("AA");
+                    if (confirmButton.state(e.getPoint())){
+                        String str;
+                        while (true){
+                            str=new String();
+                            for (int i=0;i<9;i++){
+                                str+=Global.random(0,9);
+                            }
+                            if (!Global.WAIT_SCENES.containsKey(str)){
+                                break;
+                            }
+                        }
+                        if (traitorNums.getTarget()!=0&&playNums.getTarget()!=0){
+                            sceneEnd();
+                            WaitingScene waitingScene=new WaitingScene(str,traitorNums.getTarget(),playNums.getTarget());
+                            Global.WAIT_SCENES.put(str,waitingScene);
+                            SceneController.getInstance().changeScene(waitingScene);
+                        }
+                        break;
+                    }
                     traitorNums.show(e.getPoint());
                     playNums.show(e.getPoint());
                     break;
@@ -63,7 +84,8 @@ public class PopUpCreateRoom extends PopUpWindows{
     @Override
     public void paint(Graphics g) {
         g.drawImage(img,(Global.WINDOW_WIDTH - getWidth()) / 2, (Global.WINDOW_HEIGHT - getHeight()) / 2, null);
-        xMark.paint(g);
+        cancelButton.paint(g);
+        confirmButton.paint(g);
         traitorNums.paint(g);
         playNums.paint(g);
     }

@@ -1,5 +1,11 @@
 package utils;
 
+import scene.Scene;
+import scene.WaitingScene;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Global {
     public class InternetCommand{
         public static final int CONNECT=0;
@@ -31,11 +37,11 @@ public class Global {
             return Direction.NO_DIR;
         }
     }
-
+    public static HashMap<String,WaitingScene> WAIT_SCENES=new HashMap<>();
     public static final boolean IS_DEBUG = false;
     public static final String SERVE_IP="192.168.1.38";
     public static final String FONT="Times New Roman";
-
+    public static final String FILE_PATH= "C:/Users/a0920/IdeaProjects/GoBackHome/resource/IP.txt";
     public static void log(String str) {
         if (IS_DEBUG) {
             System.out.println(str);
