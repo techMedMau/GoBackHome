@@ -8,6 +8,7 @@ import internet.server.Server;
 import scene.popupwindow.PopUpConnect;
 import scene.popupwindow.PopUpCreateRoom;
 import utils.CommandSolver;
+import utils.Global;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -53,13 +54,12 @@ public class OpenScene extends Scene {
         popUpCreateRoom=new PopUpCreateRoom();
         Server s=Server.instance();
         System.out.println(s.getLocalAddress()[0]);
-        if (s.getLocalAddress()[0].equals("192.168.43.69")){
+        if (s.getLocalAddress()[0].equals(Global.SERVE_IP)){
             s.create(12345);
             s.start();
-            System.out.println(s.getLocalAddress()[0]);
         }
         try {
-            ClientClass.getInstance().connect(s.getLocalAddress()[0],12345);
+            ClientClass.getInstance().connect(Global.SERVE_IP,12345);
         } catch (IOException ee) {
             ee.printStackTrace();
         }
@@ -76,19 +76,28 @@ public class OpenScene extends Scene {
             if (state==null){
                 return;
             }
-            if (popUpCreateRoom.isShow()){
-                popUpCreateRoom.mouseListener().mouseTrig(e,state,trigTime);
-            }
-            if (popUpConnect.isShow()){
-                popUpConnect.mouseListener().mouseTrig(e,state,trigTime);
-            }
             switch (state){
                 case CLICKED:
-                    if (createRoomButton.state(e.getPoint())){
+                    if (createRoomButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpCreateRoom.sceneBegin();
+                        System.out.println("1");
+                        break;
+
                     }
-                    if (inputButton.state(e.getPoint())){
+                    if (inputButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpConnect.sceneBegin();
+                        System.out.println("2");
+                        break;
+                    }
+                    if (popUpCreateRoom.isShow()){
+                        popUpCreateRoom.mouseListener().mouseTrig(e,state,trigTime);
+                        System.out.println("3");
+                        break;
+                    }
+                    if (popUpConnect.isShow()){
+                        popUpConnect.mouseListener().mouseTrig(e,state,trigTime);
+                        System.out.println("4");
+                        break;
                     }
                     break;
             }

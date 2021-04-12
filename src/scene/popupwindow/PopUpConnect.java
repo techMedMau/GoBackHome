@@ -11,6 +11,7 @@ import utils.Global;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PopUpConnect extends PopUpWindows {
@@ -54,6 +55,8 @@ public class PopUpConnect extends PopUpWindows {
                         sceneEnd();
                     }
                     if (confirmButton.state(e.getPoint())){
+                        ArrayList<String> str=new ArrayList<>();
+
 
                     }
                     break;
