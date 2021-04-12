@@ -220,9 +220,11 @@ public class WaitingScene extends Scene {
                                     aliens.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
                                     if(aliens.get(i).getHorizontalDir() == Global.Direction.LEFT || aliens.get(i).getHorizontalDir() == Global.Direction.RIGHT) {
                                         aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                                    }
-                                    if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){
+                                    }else if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){
                                         aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
+                                    }else if(aliens.get(i).getNoDirection()){
+                                        aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
+                                        aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
                                     }
                                     break;
                                 }

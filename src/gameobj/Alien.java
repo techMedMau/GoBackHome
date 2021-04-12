@@ -185,6 +185,10 @@ public class Alien extends GameObject {
         return horizontalDir;
     }
 
+    public boolean getNoDirection(){
+        return verticalDir == Global.Direction.NO_DIR && horizontalDir == Global.Direction.NO_DIR;
+    }
+
     public int getNum() {
         return num;
     }
