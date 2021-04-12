@@ -1,11 +1,10 @@
 package scene;
 
-import camera.Camera;
-import camera.MapInformation;
-import camera.SmallMap;
 import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.*;
+import internet.server.ClientClass;
+import internet.server.CommandReceiver;
 import maploader.MapInfo;
 import maploader.MapLoader;
 import utils.CommandSolver;
@@ -25,13 +24,12 @@ public class WaitingScene extends Scene {
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Location> location;
-    private Alien a;
-    private Alien b;
+    private ArrayList<Alien> aliens;
 
     @Override
     public void sceneBegin() {
-                location = new ArrayList<>();
-//        num = (int) (Math.random() * 3 + 1);
+        aliens = new ArrayList<>();
+        num = (int) (Math.random() * 3 + 1);
 //        switch (num) {
 //            case 1:
 //                alien = new Alien(450, 300, 54, 73, Alien.AlienType.A);
@@ -43,10 +41,17 @@ public class WaitingScene extends Scene {
 //                alien = new Alien(450, 300, 54, 73, Alien.AlienType.C);
 //                break;
 //        }
-        a = new Alien(450, 300, 54, 73, Alien.AlienType.A);
-        b = new Alien(500, 200, 54, 73, Alien.AlienType.B);
-        location.add(new Location(a, a.painter().left(), a.painter().top()));
-        location.add(new Location(b, b.painter().left(), b.painter().top()));
+        ArrayList<String> str = new ArrayList<>();
+        str.add("450");
+        str.add("300");
+        str.add(String.valueOf(num));
+        aliens.add(new Alien(Integer.valueOf(str.get(0)), Integer.valueOf(str.get(1)), num));
+
+        ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+//        b = new Alien(500, 200, num);
+//        location.add(new Location(a, a.painter().left(), a.painter().top()));
+//        location.add(new Location(b, b.painter().left(), b.painter().top()));
+        aliens.get(0).setId(ClientClass.getInstance().getID());
         startButton = new Button(400, 500, 300, 300, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
         mapLoader = MapWaitGen();
@@ -63,70 +68,51 @@ public class WaitingScene extends Scene {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-                switch (direction) {
-                    case LEFT:
-                        location.get(0).alien.setHorizontalDir(direction);
-                        break;
-                    case RIGHT:
-                        location.get(0).alien.setHorizontalDir(direction);
-                        break;
-                    case UP:
-                        location.get(0).alien.setVerticalDir(direction);
-                        break;
-                    case DOWN:
-                        location.get(0).alien.setVerticalDir(direction);
-                        break;
+                if(commandCode==6){  //角色斷線時發送斷線訊息
+                    ArrayList<String> strs = new ArrayList<String>();
+                    strs.add(String.valueOf(ClientClass.getInstance().getID()));
+                    ClientClass.getInstance().sent(Global.InternetCommand.DISCONNECT,strs);
+                    ClientClass.getInstance().disConnect();
+                    System.exit(0);
                 }
-                switch (direction) {
-                    case LEFT:
-                        location.get(1).alien.setHorizontalDir(direction);
-                        break;
-                    case RIGHT:
-                        location.get(1).alien.setHorizontalDir(direction);
-                        break;
-                    case UP:
-                        location.get(1).alien.setVerticalDir(direction);
-                        break;
-                    case DOWN:
-                        location.get(1).alien.setVerticalDir(direction);
-                        break;
+                for(int i = 0; i< aliens.size(); i ++) {
+                    switch (direction) {
+                        case LEFT:
+                            aliens.get(i).setHorizontalDir(direction);
+                            break;
+                        case RIGHT:
+                            aliens.get(i).setHorizontalDir(direction);
+                            break;
+                        case UP:
+                            aliens.get(i).setVerticalDir(direction);
+                            break;
+                        case DOWN:
+                            aliens.get(i).setVerticalDir(direction);
+                            break;
+                    }
                 }
-
             }
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-                switch (direction) {
-
-                    case LEFT:
-                        location.get(0).alien.setHorizontalDir(Global.Direction.NO_DIR);
-                        break;
-                    case RIGHT:
-                        location.get(0).alien.setHorizontalDir(Global.Direction.NO_DIR);
-                        break;
-                    case UP:
-                        location.get(0).alien.setVerticalDir(Global.Direction.NO_DIR);
-                        break;
-                    case DOWN:
-                        location.get(0).alien.setVerticalDir(Global.Direction.NO_DIR);
-                        break;
+                for(int i = 0; i< aliens.size(); i ++) {
+                    switch (direction) {
+                        case LEFT:
+                            aliens.get(i).setHorizontalDir(Global.Direction.NO_DIR);
+                            break;
+                        case RIGHT:
+                            aliens.get(i).setHorizontalDir(Global.Direction.NO_DIR);
+                            break;
+                        case UP:
+                            aliens.get(i).setVerticalDir(Global.Direction.NO_DIR);
+                            break;
+                        case DOWN:
+                            aliens.get(i).setVerticalDir(Global.Direction.NO_DIR);
+                            break;
+                    }
                 }
-                switch (direction) {
 
-                    case LEFT:
-                        location.get(1).alien.setHorizontalDir(Global.Direction.NO_DIR);
-                        break;
-                    case RIGHT:
-                        location.get(1).alien.setHorizontalDir(Global.Direction.NO_DIR);
-                        break;
-                    case UP:
-                        location.get(1).alien.setVerticalDir(Global.Direction.NO_DIR);
-                        break;
-                    case DOWN:
-                        location.get(1).alien.setVerticalDir(Global.Direction.NO_DIR);
-                        break;
-                }
             }
 
             @Override
@@ -144,7 +130,7 @@ public class WaitingScene extends Scene {
                 if (state == CommandSolver.MouseState.CLICKED) {
                     if (startButton.state(e.getPoint())) {
 
-                        SceneController.getInstance().changeScene(new GameScene(location));
+                        SceneController.getInstance().changeScene(new GameScene(aliens));
                     }
                 }
             }
@@ -158,33 +144,84 @@ public class WaitingScene extends Scene {
             }
             startButton.paint(g);
 
-            for (int i = 0; i < location.size(); i++) {
-                location.get(i).alien.paint(g);
+            for (int i = 0; i < aliens.size(); i++) {
+                aliens.get(i).paint(g);
             }
         }
 
         @Override
         public void update () {
-            for (int i = 0; i < location.size(); i++) {
-                if (location.get(i).alien.painter().left() <= 0) {
-                    location.get(i).alien.translateX(2);
+            for (int i = 0; i < aliens.size(); i++) {
+                if (aliens.get(i).painter().left() <= 0) {
+                    aliens.get(i).translateX(2);
                     return;
                 }
-                if (location.get(i).alien.painter().top() <= 0) {
-                    location.get(i).alien.translateY(2);
+                if (aliens.get(i).painter().top() <= 0) {
+                    aliens.get(i).translateY(2);
                     return;
                 }
-                if (location.get(i).alien.painter().top() >= Global.SCREEN_Y) {
-                    location.get(i).alien.translateY(-2);
+                if (aliens.get(i).painter().bottom() >= Global.SCREEN_Y) {
+                    aliens.get(i).translateY(-2);
                     return;
                 }
-                if (location.get(i).alien.painter().right() >= Global.SCREEN_X) {
-                    location.get(i).alien.translateX(-2);
+                if (aliens.get(i).painter().right() >= Global.SCREEN_X) {
+                    aliens.get(i).translateX(-2);
                     return;
                 }
-
-                location.get(i).alien.update();
+                aliens.get(i).update();
             }
+            ArrayList<String> strr = new ArrayList<>();
+            strr.add(ClientClass.getInstance().getID()+"");
+            strr.add(aliens.get(0).painter().centerX()+"");
+            strr.add(aliens.get(0).painter().centerY()+"");
+            strr.add(aliens.get(0).getDir()+"");
+            ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
+            ClientClass.getInstance().consume(new CommandReceiver() {
+                @Override
+                public void receive(int serialNum, int internetcommand, ArrayList<String> strs) {
+                    switch(internetcommand){
+                        case Global.InternetCommand.CONNECT:
+                            System.out.println("Connect " + serialNum);
+                            boolean isBorn = false;
+                            for (int i = 0; i < aliens.size(); i++) {
+                                if (aliens.get(i).getId() == serialNum) {
+                                    isBorn = true;
+                                    break;
+                                }
+                            }
+                            if(!isBorn) {
+                                aliens.add(new Alien(Integer.valueOf(strs.get(0)), Integer.valueOf(strs.get(1)), Integer.valueOf(strs.get(2))));
+                                aliens.get(aliens.size() - 1).setId(serialNum);
+                                ArrayList<String> str=new ArrayList<>();
+                                str.add(aliens.get(0).painter().centerX()+"");
+                                str.add(aliens.get(0).painter().centerY()+"");
+                                str.add(aliens.get(0).getNum()+"");
+                                ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+                            }
+                            break;
+                        case Global.InternetCommand.MOVE:
+                            for(int i=1;i<aliens.size();i++) {
+                                if(aliens.get(i).getId()==Integer.valueOf(strs.get(0))) {
+                                    aliens.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
+                                    if(aliens.get(i).getDir() == Global.Direction.LEFT || aliens.get(i).getDir() == Global.Direction.RIGHT) {
+                                        aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
+                                    }else if(aliens.get(i).getDir() == Global.Direction.DOWN || aliens.get(i).getDir() == Global.Direction.UP){
+                                        aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
+                                    }
+                                    break;
+                                }
+                            }
+                            break;
+                        case Global.InternetCommand.DISCONNECT:
+                            for(int i=0;i<aliens.size();i++){
+                                if(aliens.get(i).getId()==Integer.valueOf(strs.get(0))){
+                                    aliens.remove(i);
+                                }
+                            }
+                            break;
+                    }
+                }
+            });
         }
 
         public MapLoader MapWaitGen () {

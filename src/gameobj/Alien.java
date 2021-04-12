@@ -86,15 +86,29 @@ public class Alien extends GameObject {
     private State currentState;// 角色動畫狀態
     private Global.Direction verticalDir;// 角色方向, enum包含四方向 這樣做有風險
     private Global.Direction horizontalDir;// 角色方向, enum包含四方向 這樣做有風險
+    private AlienType alienType;
+    private int ID;
+    private Global.Direction tempDir;
     private int num;
 
-    public Alien(int x, int y, int width, int height, AlienType alienType) {
-        super(x, y, width, height);
+    public Alien(int x, int y, int num) {
+        super(x, y, 54, 73);
         currentState = State.STAND_RIGHT;
+        switch(num){
+            case 1:
+                this.alienType = AlienType.A;
+                break;
+            case 2:
+                this.alienType = AlienType.B;
+                break;
+            case 3:
+                this.alienType = AlienType.C;
+                break;
+        }
         stateAnimator = getAnimator(alienType);
         stateAnimator.get(currentState).play();
         horizontalDir = verticalDir = Global.Direction.NO_DIR;
-        this.num = (int)(Math.random()*3+1);
+        this.num = num;
     }
 
     @Override
@@ -104,43 +118,46 @@ public class Alien extends GameObject {
 
     @Override
     public void update() {
-
-//        待解決
         switch (horizontalDir) {
-//<<<<<<< HEAD
-//            case LEFT -> translateX(-2);
-//            case RIGHT -> translateX(2);
-//        }
-//        switch (verticalDir) {
-//            case UP -> translateY(-2);
-//            case DOWN -> translateY(2);
-//=======
             case LEFT :
-                translateX(-1);
+                translateX(-2);
                 break;
             case RIGHT :
-                translateX(1);
+                translateX(2);
                 break;
         }
         switch (verticalDir) {
             case UP :
-                translateY(-1);
+                translateY(-2);
                 break;
             case DOWN :
-                translateY(1);
+                translateY(2);
                 break;
-//>>>>>>> e25e14bf31029a4ea89090f9e568fbbdf7d34fb1
         }
     }
 
     public void setVerticalDir(Global.Direction dir) {
         this.verticalDir = dir;
         setState();
+        tempDir = dir;
     }
 
     public void setHorizontalDir(Global.Direction dir) {
         this.horizontalDir = dir;
         setState();
+        tempDir = dir;
+    }
+
+    public Global.Direction getDir(){
+        return tempDir;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public State getCurrentState() {
+        return currentState;
     }
 
     private void setState() {
@@ -180,5 +197,11 @@ public class Alien extends GameObject {
             }
             stateAnimator.get(currentState).play();
         }
+    }
+    public void setId(int id){
+        this.ID=id;
+    }
+    public int getId(){
+        return this.ID;
     }
 }

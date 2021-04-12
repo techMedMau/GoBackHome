@@ -84,7 +84,7 @@ public abstract class GameObject implements GameKernel.UpdateInterface,GameKerne
     public boolean bottomIsCollision(GameObject obj) {
         return collider.left()<obj.collider.right() &&
                 obj.collider.bottom()>collider.top()&&
-                obj.collider.top()>=collider.bottom()&&
+                obj.collider.top()<=collider.bottom()&&
                 obj.collider.left()<collider.right();
     }
 

@@ -21,10 +21,10 @@ public class GameScene extends Scene{
     private Image backGroundTest;
     private ArrayList<GameObject> forGame;
     private MapLoader mapLoader;
-    private ArrayList<WaitingScene.Location> location;
 
-    public GameScene(ArrayList<WaitingScene.Location> location){
-        this.location = location;
+
+    public GameScene(ArrayList<Alien> aliens){
+        this.aliens = aliens;
     }
 
 
@@ -71,6 +71,7 @@ public class GameScene extends Scene{
                         for (int i=0;i<forGame.size();i++){
                             if (aliens.get(0).isCollision(forGame.get(i))&&
                                     aliens.get(0).topIsCollision(forGame.get(i))){
+
                                 aliens.get(0).translateY(2);
                                 break;
                             }
@@ -103,7 +104,7 @@ public class GameScene extends Scene{
             @Override
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-                System.out.println(direction.name());
+
                 switch (direction) {
                     case LEFT, RIGHT -> aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
                     case UP, DOWN -> aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
@@ -125,8 +126,9 @@ public class GameScene extends Scene{
             if(cam.isCollision(forGame.get(i)))
             forGame.get(i).paint(g);
         }
-        aliens.get(0).paint(g);
-        aliens.get(1).paint(g);
+        for (int i = 0; i < aliens.size(); i++) {
+            aliens.get(i).paint(g);
+        }
         cam.paint(g);
         cam.end(g);
     }
@@ -134,18 +136,21 @@ public class GameScene extends Scene{
     @Override
     public void update() {
         for(int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(i).painter().left() <= 0) {
+            if (aliens.get(i).painter().left() <= map.painter().left()) {
                 aliens.get(i).translateX(2);
                 return;
             }
-            if (aliens.get(i).painter().top() <= 0) {
+            if (aliens.get(i).painter().top() <= map.painter().top()) {
                 aliens.get(i).translateY(2);
+                return;
             }
-            if (aliens.get(i).painter().top() >= Global.SCREEN_Y) {
+            if (aliens.get(i).painter().bottom() >= map.painter().bottom()) {
                 aliens.get(i).translateY(-2);
+                return;
             }
-            if (aliens.get(i).painter().right() >= Global.SCREEN_X) {
+            if (aliens.get(i).painter().right() >= map.painter().right()) {
                 aliens.get(i).translateX(-2);
+                return;
             }
         }
 //        alien.update();
