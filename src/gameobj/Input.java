@@ -1,6 +1,7 @@
 package gameobj;
 
 import utils.Delay;
+import utils.Global;
 
 import java.awt.*;
 
@@ -23,7 +24,7 @@ public class Input extends GameObject{
     @Override
     public void paintComponent(Graphics g) {
         inputLine.paint(g);
-        Font fn = new Font("Times New Roman",Font.PLAIN,size);
+        Font fn = new Font(Global.FONT,Font.PLAIN,size);
         g.setFont(fn);
         g.drawString(num,painter().left(),painter().bottom());
     }
