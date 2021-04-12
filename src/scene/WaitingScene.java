@@ -183,6 +183,12 @@ public class WaitingScene extends Scene {
             strr.add(aliens.get(0).painter().centerX()+"");
             strr.add(aliens.get(0).painter().centerY()+"");
 //            strr.add(aliens.get(0).getDir()+"");
+            if(aliens.get(0).getHorizontalDir() == Global.Direction.LEFT || aliens.get(0).getHorizontalDir() == Global.Direction.RIGHT) {
+                strr.add(aliens.get(0).getHorizontalDir()+"");
+            }
+            if(aliens.get(0).getVerticalDir() == Global.Direction.DOWN || aliens.get(0).getVerticalDir() == Global.Direction.UP){
+                strr.add(aliens.get(0).getVerticalDir()+"");
+            }
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
             ClientClass.getInstance().consume(new CommandReceiver() {
                 @Override
