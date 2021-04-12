@@ -21,6 +21,7 @@ public class GameScene extends Scene {
     private Image backGroundTest;
     private ArrayList<GameObject> forGame;
     private MapLoader mapLoader;
+    private TaskItem taskItem;
 
 
     public GameScene(ArrayList<Alien> aliens){
@@ -34,6 +35,7 @@ public class GameScene extends Scene {
         backGroundTest = ImageController.getInstance().tryGet("/dirt.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
+        taskItem = new TaskItem("/boxItem.png",0,0);
     }
 
     @Override
@@ -64,48 +66,6 @@ public class GameScene extends Scene {
                         break;
                     case DOWN:
                         aliens.get(0).setVerticalDir(direction);
-                        break;
-                }
-                switch (direction) {
-                    case DOWN:
-                        for (int i = 0; i < forGame.size(); i++) {
-                            if (aliens.get(0).isCollision(forGame.get(i)) &&
-                                    aliens.get(0).bottomIsCollision(forGame.get(i))) {
-                                aliens.get(0).translateY(-2);
-                                break;
-                            }
-                        }
-                        aliens.get(0).update();
-                        break;
-                    case UP:
-                        for (int i=0;i<forGame.size();i++){
-                            if (aliens.get(0).isCollision(forGame.get(i))&&
-                                    aliens.get(0).topIsCollision(forGame.get(i))){
-                                aliens.get(0).translateY(2);
-                                break;
-                            }
-                        }
-                        aliens.get(0).update();
-                        break;
-                    case LEFT:
-                        for (int i = 0; i < forGame.size(); i++) {
-                            if (aliens.get(0).isCollision(forGame.get(i))
-                                    && aliens.get(0).leftIsCollision(forGame.get(i))) {
-                                aliens.get(0).translateX(2);
-                                break;
-                            }
-                        }
-                        aliens.get(0).update();
-                        break;
-                    case RIGHT:
-                        for (int i = 0; i < forGame.size(); i++) {
-                            if (aliens.get(0).isCollision(forGame.get(i)) &&
-                                    aliens.get(0).rightIsCollision(forGame.get(i))) {
-                                aliens.get(0).translateX(-2);
-                                break;
-                            }
-                        }
-                        aliens.get(0).update();
                         break;
                 }
             }
@@ -144,12 +104,15 @@ public class GameScene extends Scene {
         for (int i = 0; i < aliens.size(); i++) {
             aliens.get(i).paint(g);
         }
+        taskItem.isTriggered(aliens.get(0)).paint(g);
         cam.paint(g);
         cam.end(g);
+
     }
 
     @Override
     public void update() {
+        aliens.get(0).update();
         for(int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).painter().left() <= map.painter().left()) {
                 aliens.get(i).translateX(2);
@@ -168,7 +131,48 @@ public class GameScene extends Scene {
                 return;
             }
         }
-//        alien.update();
+        Global.Direction horizontalDir = aliens.get(0).getHorizontalDir();
+        switch (horizontalDir) {
+            case LEFT:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i))
+                            && aliens.get(0).leftIsCollision(forGame.get(i))) {
+                        aliens.get(0).translateX(2);
+                        break;
+                    }
+                }
+                break;
+            case RIGHT:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i)) &&
+                            aliens.get(0).rightIsCollision(forGame.get(i))) {
+                        aliens.get(0).translateX(-2);
+                        break;
+                    }
+                }
+                break;
+        }
+        Global.Direction verticalDir = aliens.get(0).getVerticalDir();
+        switch (verticalDir) {
+            case DOWN:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i)) &&
+                            aliens.get(0).bottomIsCollision(forGame.get(i))) {
+                        aliens.get(0).translateY(-2);
+                        break;
+                    }
+                }
+                break;
+            case UP:
+                for (int i=0;i<forGame.size();i++){
+                    if (aliens.get(0).isCollision(forGame.get(i))&&
+                            aliens.get(0).topIsCollision(forGame.get(i))){
+                        aliens.get(0).translateY(2);
+                        break;
+                    }
+                }
+                break;
+        }
         cam.update();
     }
 

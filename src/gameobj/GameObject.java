@@ -63,30 +63,32 @@ public abstract class GameObject implements GameKernel.UpdateInterface,GameKerne
     public boolean isCollision(GameObject obj) {
         return collider.overlap(obj.collider);
     }
+
     public boolean topIsCollision(GameObject obj) {
         return collider.left()<obj.collider.right() &&
-                obj.collider.bottom()<=collider.top()&&
-                obj.collider.top()<collider.bottom()&&
+                obj.collider.bottom()<=collider.top() &&
+                obj.collider.top()<collider.bottom() &&
                 obj.collider.left()<collider.right();
     }
     public boolean leftIsCollision(GameObject obj) {
         return collider.left()<=obj.collider.right() &&
-                obj.collider.bottom()>collider.top()&&
-                obj.collider.top()<collider.bottom()&&
-                obj.collider.left()<collider.left();
+                obj.collider.bottom()>collider.top() &&
+                obj.collider.top()<collider.bottom() &&
+                obj.collider.left()<collider.left(); //改
     }
     public boolean rightIsCollision(GameObject obj) {
-        return collider.right()>=obj.collider.left()&&
-                obj.collider.bottom()>collider.top()&&
-                obj.collider.top()<collider.bottom()&&
-                obj.collider.right()>collider.right();
+        return collider.right()>=obj.collider.left() &&
+                obj.collider.bottom()>collider.top() &&
+                obj.collider.top()<collider.bottom() &&
+                obj.collider.right()>collider.right(); //改
     }
     public boolean bottomIsCollision(GameObject obj) {
         return collider.left()<obj.collider.right() &&
-                obj.collider.bottom()>collider.top()&&
-                obj.collider.top()<=collider.bottom()&&
+                obj.collider.bottom()>collider.top() &&
+                obj.collider.top()<=collider.bottom() &&
                 obj.collider.left()<collider.right();
     }
+
 
     public final void translate(int x, int y) {
         collider.translate(x, y);

@@ -9,15 +9,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class Alien extends GameObject {
-    public enum AlienType{
+    public enum AlienType {
         A,
         B,
         C;
     }
 
-    private static HashMap<State, Animator> getAnimator(AlienType type){
-        switch (type){
-            case A :
+    private static HashMap<State, Animator> getAnimator(AlienType type) {
+        switch (type) {
+            case A:
                 HashMap<State, Animator> map = new HashMap<>();
                 map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p3_walk04r.png"))));
@@ -32,7 +32,7 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p3_walk05.png")
                 )));
                 return map;
-            case B :
+            case B:
                 HashMap<State, Animator> map1 = new HashMap<>();
                 map1.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p2_walk05r.png"))));
@@ -47,7 +47,7 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p2_walk05.png")
                 )));
                 return map1;
-            case C :
+            case C:
                 HashMap<State, Animator> map2 = new HashMap<>();
                 map2.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
                         ImageController.getInstance().tryGet("/p1_walk04r.png"))));
@@ -62,7 +62,7 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p1_walk04.png")
                 )));
                 return map2;
-            default :
+            default:
                 return null;
         }
     }
@@ -74,8 +74,8 @@ public class Alien extends GameObject {
         WALK_LEFT,
         WALK_RIGHT;
 
-        public boolean checkWalkConflict(State lastState){
-            if(lastState != WALK_LEFT && lastState != WALK_RIGHT){
+        public boolean checkWalkConflict(State lastState) {
+            if (lastState != WALK_LEFT && lastState != WALK_RIGHT) {
                 return false;
             }
             return this == WALK_LEFT || this == WALK_RIGHT;
@@ -88,13 +88,12 @@ public class Alien extends GameObject {
     private Global.Direction horizontalDir;// 角色方向, enum包含四方向 這樣做有風險
     private AlienType alienType;
     private int ID;
-    private Global.Direction tempDir;
     private int num;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
         currentState = State.STAND_RIGHT;
-        switch(num){
+        switch (num) {
             case 1:
                 this.alienType = AlienType.A;
                 break;
@@ -119,19 +118,51 @@ public class Alien extends GameObject {
     @Override
     public void update() {
         switch (horizontalDir) {
-            case LEFT :
-                translateX(-2);
+            case LEFT:
+                if (verticalDir == Global.Direction.DOWN) {
+                    translateX(-(int) (2 / (Math.sqrt(2))));
+                    translateY((int) (2 / (Math.sqrt(2))));
+                } else if (verticalDir == Global.Direction.UP) {
+                    translateX(-(int) (2 / (Math.sqrt(2))));
+                    translateY(-(int) (2 / (Math.sqrt(2))));
+                } else {
+                    translateX(-2);
+                }
                 break;
-            case RIGHT :
-                translateX(2);
+            case RIGHT:
+                if (verticalDir == Global.Direction.DOWN) {
+                    translateX((int) (2 / (Math.sqrt(2))));
+                    translateY((int) (2 / (Math.sqrt(2))));
+                } else if (verticalDir == Global.Direction.UP) {
+                    translateX((int) (2 / (Math.sqrt(2))));
+                    translateY(-(int) (2 / (Math.sqrt(2))));
+                } else {
+                    translateX(2);
+                }
                 break;
         }
         switch (verticalDir) {
-            case UP :
-                translateY(-2);
+            case UP:
+                if (horizontalDir == Global.Direction.RIGHT) {
+                    translateX((int) (2 / (Math.sqrt(2))));
+                    translateY(-(int) (2 / (Math.sqrt(2))));
+                } else if (horizontalDir == Global.Direction.LEFT) {
+                    translateX(-(int) (2 / (Math.sqrt(2))));
+                    translateY(-(int) (2 / (Math.sqrt(2))));
+                } else {
+                    translateY(-2);
+                }
                 break;
-            case DOWN :
-                translateY(2);
+            case DOWN:
+                if (horizontalDir == Global.Direction.RIGHT) {
+                    translateX((int) (2 / (Math.sqrt(2))));
+                    translateY((int) (2 / (Math.sqrt(2))));
+                } else if (horizontalDir == Global.Direction.LEFT) {
+                    translateX((int) (-2 / (Math.sqrt(2))));
+                    translateY((int) (2 / (Math.sqrt(2))));
+                } else {
+                    translateY(2);
+                }
                 break;
         }
     }
@@ -139,17 +170,19 @@ public class Alien extends GameObject {
     public void setVerticalDir(Global.Direction dir) {
         this.verticalDir = dir;
         setState();
-        tempDir = dir;
     }
 
     public void setHorizontalDir(Global.Direction dir) {
         this.horizontalDir = dir;
         setState();
-        tempDir = dir;
     }
 
-    public Global.Direction getDir(){
-        return tempDir;
+    public Global.Direction getVerticalDir() {
+        return verticalDir;
+    }
+
+    public Global.Direction getHorizontalDir() {
+        return horizontalDir;
     }
 
     public int getNum() {
@@ -164,10 +197,10 @@ public class Alien extends GameObject {
         State lastState = currentState;
         if (horizontalDir != Global.Direction.NO_DIR) {
             switch (horizontalDir) {
-                case LEFT :
+                case LEFT:
                     currentState = State.WALK_LEFT;
                     break;
-                case RIGHT :
+                case RIGHT:
                     currentState = State.WALK_RIGHT;
                     break;
             }
@@ -191,17 +224,19 @@ public class Alien extends GameObject {
                     break;
             }
         }
-        if(currentState != lastState){
-            if(!currentState.checkWalkConflict(lastState)){
+        if (currentState != lastState) {
+            if (!currentState.checkWalkConflict(lastState)) {
                 stateAnimator.get(lastState).stop();
             }
             stateAnimator.get(currentState).play();
         }
     }
-    public void setId(int id){
-        this.ID=id;
+
+    public void setId(int id) {
+        this.ID = id;
     }
-    public int getId(){
+
+    public int getId() {
         return this.ID;
     }
 }
