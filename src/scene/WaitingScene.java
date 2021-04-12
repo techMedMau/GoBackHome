@@ -26,7 +26,6 @@ public class WaitingScene extends Scene {
     private int num;
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
-    private ArrayList<Location> location;
     private ArrayList<Alien> aliens;
     public WaitingScene(String password,int traitor,int playMax){
         this.password=password;
@@ -60,7 +59,7 @@ public class WaitingScene extends Scene {
 //        location.add(new Location(a, a.painter().left(), a.painter().top()));
 //        location.add(new Location(b, b.painter().left(), b.painter().top()));
         aliens.get(0).setId(ClientClass.getInstance().getID());
-        startButton = new Button(400, 500, 300, 300, ImageController.getInstance()
+        startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
         mapLoader = MapWaitGen();
     }
@@ -186,7 +185,7 @@ public class WaitingScene extends Scene {
             strr.add(ClientClass.getInstance().getID()+"");
             strr.add(aliens.get(0).painter().centerX()+"");
             strr.add(aliens.get(0).painter().centerY()+"");
-            strr.add(aliens.get(0).getDir()+"");
+//            strr.add(aliens.get(0).getDir()+"");
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
             ClientClass.getInstance().consume(new CommandReceiver() {
                 @Override
@@ -215,9 +214,10 @@ public class WaitingScene extends Scene {
                             for(int i=1;i<aliens.size();i++) {
                                 if(aliens.get(i).getId()==Integer.valueOf(strs.get(0))) {
                                     aliens.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
-                                    if(aliens.get(i).getDir() == Global.Direction.LEFT || aliens.get(i).getDir() == Global.Direction.RIGHT) {
+                                    if(aliens.get(i).getHorizontalDir() == Global.Direction.LEFT || aliens.get(i).getHorizontalDir() == Global.Direction.RIGHT) {
                                         aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                                    }else if(aliens.get(i).getDir() == Global.Direction.DOWN || aliens.get(i).getDir() == Global.Direction.UP){
+                                    }
+                                    if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){
                                         aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
                                     }
                                     break;
@@ -261,16 +261,6 @@ public class WaitingScene extends Scene {
         }
 
 
-    public static class Location { //私有的靜態內部類
-        private Alien alien;
-        private int x;
-        private int y;
 
-        public Location(Alien alien, int x, int y) {
-            this.alien = alien;
-            this.x = x;
-            this.y = y;
-        }
-    }
 
 }

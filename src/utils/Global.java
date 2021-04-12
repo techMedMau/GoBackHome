@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class Global {
     public class InternetCommand{
-        public static final int CONNECT=0;
-        public static final int MOVE=1;
-        public static final int DISCONNECT=2;
+        public static final int CONNECT = 0;
+        public static final int MOVE = 1;
+        public static final int DISCONNECT = 2;
     }
 
     public enum Direction {
@@ -47,14 +47,15 @@ public class Global {
             System.out.println(str);
         }
     }
+
     // 單位大小
     public static final int UNIT_X = 32;
     public static final int UNIT_Y = 32;
     // 視窗大小
-    public static final int WINDOW_WIDTH = 960;
-    public static final int WINDOW_HEIGHT = 640;
     public static final int MAP_WIDTH = 1280;
     public static final int MAP_HEIGHT = 1280;
+    public static final int WINDOW_WIDTH = 960;
+    public static final int WINDOW_HEIGHT = 640;
     public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
     //彈跳視窗大小
@@ -75,3 +76,5 @@ public class Global {
         return random(1, 100) <= rate;
     }
 }
+
+//if(Global.random(10)){}
