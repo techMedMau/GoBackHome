@@ -19,11 +19,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WaitingScene extends Scene {
+    private int playMax;
+    private int traitor;
+    private String password;
     private Button startButton;
     private int num;
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Alien> aliens;
+    public WaitingScene(String password,int traitor,int playMax){
+        this.password=password;
+        this.traitor=traitor;
+        this.playMax=playMax;
+    }
 
     @Override
     public void sceneBegin() {
@@ -143,7 +151,11 @@ public class WaitingScene extends Scene {
             for (int i = 0; i < aliens.size(); i++) {
                 aliens.get(i).paint(g);
             }
+            Font font=new Font(Global.FONT,Font.PLAIN,30);
+            g.setFont(font);
+            g.drawString(password,395,480);
         }
+
 
         @Override
         public void update () {
