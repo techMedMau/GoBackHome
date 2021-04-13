@@ -36,6 +36,9 @@ public class Nums {
 
     }
     public int getTarget(){
+        if (target==null){
+            return 0;
+        }
         return Integer.parseInt(target.getStr());
     }
 

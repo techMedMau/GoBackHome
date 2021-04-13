@@ -12,21 +12,23 @@ public class TaskItem extends Button {
     private TaskController.Task task;
 
     public TaskItem(String path, int x, int y, TaskController.Task task) {
-        super(x, y, 45, 52,ImageController.getInstance().tryGet(path));
+        super(x, y, 45, 52, ImageController.getInstance().tryGet(path));
         this.imgS = ImageController.getInstance().tryGet("/shadow.png");
-        state = false;
-        this.task=task;
+        this.state = false;
+        this.task = task;
     }
 
-    public TaskItem isTriggered(Alien alien){
+
+    public void isTriggered(Alien alien){
         if(Math.sqrt(Math.abs((alien.painter().centerX() - this.painter().centerX())*(alien.painter().centerX() - this.painter().centerX())
                 +(alien.painter().centerY() - this.painter().centerY())* (alien.painter().centerY() - this.painter().centerY()))) < 90.0){
             state = true;
-        }else{state = false;}
-
-        return this;
+        } else {
+            state = false;
+        }
     }
-    public boolean getState(){
+
+    public boolean getState() {
         return state;
     }
 
@@ -34,7 +36,7 @@ public class TaskItem extends Button {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(state) {
+        if (state) {
             g.drawImage(imgS, painter().left(), painter().top(), null);
         }
     }
@@ -42,7 +44,8 @@ public class TaskItem extends Button {
     @Override
     public void update() {
     }
-    public TaskController.Task getTask(){
+
+    public TaskController.Task getTask() {
         return task;
     }
 }

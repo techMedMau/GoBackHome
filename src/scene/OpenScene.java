@@ -85,23 +85,19 @@ public class OpenScene extends Scene {
                 case CLICKED:
                     if (createRoomButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpCreateRoom.sceneBegin();
-                        System.out.println("1");
                         break;
 
                     }
                     if (inputButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpConnect.sceneBegin();
-                        System.out.println("2");
                         break;
                     }
                     if (popUpCreateRoom.isShow()){
                         popUpCreateRoom.mouseListener().mouseTrig(e,state,trigTime);
-                        System.out.println("3");
                         break;
                     }
                     if (popUpConnect.isShow()){
                         popUpConnect.mouseListener().mouseTrig(e,state,trigTime);
-                        System.out.println("4");
                         break;
                     }
                     break;

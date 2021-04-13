@@ -5,7 +5,7 @@ import scene.popupwindow.*;
 
 public class TaskController {
     private static TaskController taskController;
-    private static PopUpWindows currentPopUp;
+    private PopUpWindows currentPopUp;
     public static TaskController getTaskController(){
         if (taskController==null){
             taskController=new TaskController();
