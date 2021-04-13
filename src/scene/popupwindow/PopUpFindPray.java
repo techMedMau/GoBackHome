@@ -6,7 +6,7 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUpFindPray extends PopUpWindows{
-    public PopUpFindPray(String name) {
+    public PopUpFindPray() {
         super(0,0);
     }
 

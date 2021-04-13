@@ -6,7 +6,7 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUpRecover extends PopUpWindows {
-    public PopUpRecover(String name) {
+    public PopUpRecover() {
         super(0,0);
     }
 

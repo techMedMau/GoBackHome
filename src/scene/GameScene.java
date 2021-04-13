@@ -2,6 +2,7 @@ package scene;
 
 import camera.Camera;
 import controllers.ImageController;
+import controllers.TaskController;
 import gameobj.*;
 import maploader.MapInfo;
 import maploader.MapLoader;
@@ -9,6 +10,7 @@ import utils.CommandSolver;
 import utils.Global;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -22,6 +24,7 @@ public class GameScene extends Scene {
     private ArrayList<GameObject> forGame;
     private MapLoader mapLoader;
     private ArrayList<TaskItem> taskItems;
+    private TaskController taskController;
 
 
     public GameScene(ArrayList<Alien> aliens){
@@ -36,10 +39,11 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/boxItem.png",161,441));
-        taskItems.add(new TaskItem("/greenBox.png",300,500));
-        taskItems.add(new TaskItem("/redBox.png",790,1110));
-        taskItems.add(new TaskItem("/warningBox.png",600,600));
+        taskItems.add(new TaskItem("/boxItem.png",161,441, TaskController.Task.FIND_PRAY));
+        taskItems.add(new TaskItem("/greenBox.png",300,500, TaskController.Task.LIT_UP));
+        taskItems.add(new TaskItem("/redBox.png",790,1110, TaskController.Task.LUMBER));
+        taskItems.add(new TaskItem("/warningBox.png",600,600, TaskController.Task.WATER));
+        taskController=TaskController.getTaskController();
     }
 
     @Override
@@ -49,7 +53,18 @@ public class GameScene extends Scene {
 
     @Override
     public CommandSolver.MouseListener mouseListener() {
-        return null;
+        return (MouseEvent e, CommandSolver.MouseState state, long trigTime)->{
+            switch (state){
+                case CLICKED:
+                    for (int i=0;i<taskItems.size();i++){
+                        if (taskItems.get(i).getState()&&taskItems.get(i).state(e.getPoint())){
+                            taskController.changePopUp(taskItems.get(i).getTask());
+                        }
+                    }
+                    break;
+            }
+
+        };
     }
 
     @Override
@@ -110,6 +125,9 @@ public class GameScene extends Scene {
         }
         for(int i = 0 ; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0)).paint(g);
+        }
+        if (taskController.getCurrentPopUp().isShow()){
+            taskController.getCurrentPopUp().paint(g);
         }
         cam.paint(g);
         cam.end(g);
@@ -207,6 +225,9 @@ public class GameScene extends Scene {
 //                }
 //            }
                 break;
+        }
+        if (taskController.getCurrentPopUp().isShow()){
+            taskController.getCurrentPopUp().update();
         }
         cam.update();
     }

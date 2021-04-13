@@ -6,7 +6,7 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUpLitUp extends PopUpWindows{
-    public PopUpLitUp(String name) {
+    public PopUpLitUp() {
         super(0,0);
     }
 

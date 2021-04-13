@@ -1,19 +1,21 @@
 package gameobj;
 
 import controllers.ImageController;
+import controllers.TaskController;
+import gameobj.button.Button;
 
 import java.awt.*;
 
-public class TaskItem extends GameObject{
-    private Image img;
+public class TaskItem extends Button {
     private Image imgS;
     private boolean state;
+    private TaskController.Task task;
 
-    public TaskItem(String path, int x, int y) {
-        super(x, y, 45, 52);
-        this.img = ImageController.getInstance().tryGet(path);
+    public TaskItem(String path, int x, int y, TaskController.Task task) {
+        super(x, y, 45, 52,ImageController.getInstance().tryGet(path));
         this.imgS = ImageController.getInstance().tryGet("/shadow.png");
         state = false;
+        this.task=task;
     }
 
     public TaskItem isTriggered(Alien alien){
@@ -24,11 +26,14 @@ public class TaskItem extends GameObject{
 
         return this;
     }
+    public boolean getState(){
+        return state;
+    }
 
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img, painter().left(), painter().top(), null);
+        super.paintComponent(g);
         if(state) {
             g.drawImage(imgS, painter().left(), painter().top(), null);
         }
@@ -36,5 +41,8 @@ public class TaskItem extends GameObject{
 
     @Override
     public void update() {
+    }
+    public TaskController.Task getTask(){
+        return task;
     }
 }

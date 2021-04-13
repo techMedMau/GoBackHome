@@ -6,7 +6,7 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUpLumber extends PopUpWindows{
-    public PopUpLumber(String name) {
+    public PopUpLumber() {
         super(0,0);
     }
 

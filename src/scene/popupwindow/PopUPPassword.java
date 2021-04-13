@@ -6,7 +6,7 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUPPassword extends PopUpWindows{
-    public PopUPPassword(String name) {
+    public PopUPPassword() {
         super(0,0);
     }
 

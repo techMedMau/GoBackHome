@@ -6,7 +6,7 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUpVoteResult extends PopUpWindows{
-    public PopUpVoteResult(String name) {
+    public PopUpVoteResult() {
         super(0,0);
     }
 
