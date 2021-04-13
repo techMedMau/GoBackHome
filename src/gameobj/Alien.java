@@ -12,7 +12,9 @@ public class Alien extends GameObject {
     public enum AlienType {
         A,
         B,
-        C;
+        C,
+        D,
+        E
     }
 
     private static HashMap<State, Animator> getAnimator(AlienType type) {
@@ -62,6 +64,36 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p1_walk04.png")
                 )));
                 return map2;
+            case D:
+                HashMap<State, Animator> map3 = new HashMap<>();
+                map3.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p4_walk01r.png"))));
+                map3.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p4_walk01.png"))));
+                map3.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p4_walkr.png"),
+                        ImageController.getInstance().tryGet("/p4_walk01r.png")
+                )));
+                map3.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p4_walk02.png"),
+                        ImageController.getInstance().tryGet("/p4_walk01.png")
+                )));
+                return map3;
+            case E:
+                HashMap<State, Animator> map4 = new HashMap<>();
+                map4.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p5_walk1r.png"))));
+                map4.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p5_walk1.png"))));
+                map4.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p5_walk2r.png"),
+                        ImageController.getInstance().tryGet("/p5_walk1r.png")
+                )));
+                map4.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p5_walk2.png"),
+                        ImageController.getInstance().tryGet("/p5_walk1.png")
+                )));
+                return map4;
             default:
                 return null;
         }
@@ -103,6 +135,10 @@ public class Alien extends GameObject {
             case 3:
                 this.alienType = AlienType.C;
                 break;
+            case 4:
+                this.alienType = AlienType.D;
+            case 5:
+                this.alienType = AlienType.E;
         }
         stateAnimator = getAnimator(alienType);
         stateAnimator.get(currentState).play();
@@ -144,6 +180,7 @@ public class Alien extends GameObject {
         switch (verticalDir) {
             case UP:
                 if (horizontalDir == Global.Direction.RIGHT) {
+                    System.out.println("!");
                     translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                     translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else if (horizontalDir == Global.Direction.LEFT) {

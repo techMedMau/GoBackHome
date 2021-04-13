@@ -17,7 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+//187+getValue()
+//221 222  parseIn v.s. ValueOf?
 public class WaitingScene extends Scene {
     private int playMax;
     private int traitor;
@@ -36,24 +37,13 @@ public class WaitingScene extends Scene {
     @Override
     public void sceneBegin() {
         aliens = new ArrayList<>();
-        num = (int) (Math.random() * 3 + 1);
-//        switch (num) {
-//            case 1:
-//                alien = new Alien(450, 300, 54, 73, Alien.AlienType.A);
-//                break;
-//            case 2:
-//                alien = new Alien(450, 300, 54, 73, Alien.AlienType.B);
-//                break;
-//            case 3:
-//                alien = new Alien(450, 300, 54, 73, Alien.AlienType.C);
-//                break;
-//        }
+        num = (int) (Math.random() * 5 + 1);
         //要傳出去的東西
         ArrayList<String> str = new ArrayList<>();
         str.add("450");
         str.add("300");
-        str.add(String.valueOf(num));
-        aliens.add(new Alien(Integer.valueOf(str.get(0)), Integer.valueOf(str.get(1)), num));
+        str.add(num+"");
+        aliens.add(new Alien(Integer.parseInt(str.get(0)), Integer.parseInt(str.get(1)), num));
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
         aliens.get(0).setId(ClientClass.getInstance().getID());
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
@@ -184,11 +174,11 @@ public class WaitingScene extends Scene {
             strr.add(aliens.get(0).painter().centerY()+"");
 //            strr.add(aliens.get(0).getDir()+"");
             if(aliens.get(0).getHorizontalDir() == Global.Direction.LEFT || aliens.get(0).getHorizontalDir() == Global.Direction.RIGHT) {
-                strr.add(aliens.get(0).getHorizontalDir()+"");
+                strr.add(aliens.get(0).getHorizontalDir().getValue()+"");
             }else if(aliens.get(0).getVerticalDir() == Global.Direction.DOWN || aliens.get(0).getVerticalDir() == Global.Direction.UP){
-                strr.add(aliens.get(0).getVerticalDir()+"");
+                strr.add(aliens.get(0).getVerticalDir().getValue()+"");
             }else{
-                strr.add("NO_DIR");
+                strr.add(Global.Direction.NO_DIR.getValue()+"");
             }
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
             ClientClass.getInstance().consume(new CommandReceiver() {
@@ -217,7 +207,9 @@ public class WaitingScene extends Scene {
                         case Global.InternetCommand.MOVE:
                             for(int i=1;i<aliens.size();i++) {
                                 if(aliens.get(i).getId()==Integer.valueOf(strs.get(0))) {
+                                    //setCenter? 還是應該要是setX setY?
                                     aliens.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
+                                    aliens.get(i).collider().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
                                     if(aliens.get(i).getHorizontalDir() == Global.Direction.LEFT || aliens.get(i).getHorizontalDir() == Global.Direction.RIGHT) {
                                         aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
                                     }else if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){

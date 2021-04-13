@@ -10,7 +10,7 @@ public class TaskItem extends GameObject{
     private boolean state;
 
     public TaskItem(String path, int x, int y) {
-        super(x, y, 64, 64);
+        super(x, y, 45, 52);
         this.img = ImageController.getInstance().tryGet(path);
         this.imgS = ImageController.getInstance().tryGet("/shadow.png");
         state = false;
