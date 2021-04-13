@@ -20,11 +20,13 @@ public class GameScene extends Scene {
     private ArrayList<Alien> aliens;
     private Camera cam;
     private Map map;
-    private Image backGroundTest;
+    private Image backGround;
     private ArrayList<GameObject> forGame;
     private MapLoader mapLoader;
     private ArrayList<TaskItem> taskItems;
     private TaskController taskController;
+    private Image infoBoard;
+    private BackgroundItem backgroundItem;
 
 
     public GameScene(ArrayList<Alien> aliens){
@@ -35,15 +37,19 @@ public class GameScene extends Scene {
     @Override
     public void sceneBegin() {
         map = new Map();
-        backGroundTest = ImageController.getInstance().tryGet("/ground.png");
+        backGround = ImageController.getInstance().tryGet("/background.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/boxItem.png",161,441, TaskController.Task.FIND_PRAY));
+        taskItems.add(new TaskItem("/boxItem.png",105,441, TaskController.Task.FIND_PRAY));
         taskItems.add(new TaskItem("/greenBox.png",300,500, TaskController.Task.LIT_UP));
         taskItems.add(new TaskItem("/redBox.png",790,1110, TaskController.Task.LUMBER));
         taskItems.add(new TaskItem("/warningBox.png",600,600, TaskController.Task.WATER));
-        taskController=TaskController.getTaskController();
+        taskItems.add(new TaskItem("/woodBox.png",1000,66, TaskController.Task.WATER));
+        taskItems.add(new TaskItem("/blueBox.png",1750,900, TaskController.Task.WATER));
+        taskController = TaskController.getTaskController();
+        this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
+        this.backgroundItem = new BackgroundItem("/arrowRight.png",500, 500+64/2,28,8,500,500,64,64);
     }
 
     @Override
@@ -116,7 +122,7 @@ public class GameScene extends Scene {
     @Override
     public void paint(Graphics g) {
         cam.start(g);
-        g.drawImage(backGroundTest, 0, 0, null);
+        g.drawImage(backGround, 0, 0, null);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i)))
                 forGame.get(i).paint(g);
@@ -127,11 +133,26 @@ public class GameScene extends Scene {
         for(int i = 0 ; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0)).paint(g);
         }
+        backgroundItem.paint(g);
         if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
             taskController.getCurrentPopUp().paint(g);
         }
+
         cam.paint(g);
         cam.end(g);
+        g.drawImage(infoBoard, 0 ,0, null);
+        g.setColor(Color.BLACK);
+        Font font = new Font(Global.FONT,Font.PLAIN,15);
+        g.setFont(font);
+        g.drawString("Task1", 10, 30);
+        g.drawString("Task2", 10, 50);
+        g.drawString("Task3", 10, 70);
+        g.drawString("Task4", 10, 90);
+        g.drawString("Task5", 10, 110);
+        g.drawString("Task6", 10, 130);
+        g.drawString("Task7", 10, 150);
+        g.drawString("Task8", 10, 170);
+
 
     }
 
@@ -166,6 +187,11 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).leftIsCollision(backgroundItem)) {
+                    aliens.get(0).translateX(Global.MOVE_SPEED);
+                    break;
+                }
 //                for(int i = 0; i < taskItems.size(); i++){
 //                    if (aliens.get(0).isCollision(taskItems.get(i))
 //                            && aliens.get(0).leftIsCollision(taskItems.get(i))) {
@@ -183,6 +209,11 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                            aliens.get(0).rightIsCollision(backgroundItem)) {
+                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        break;
+                    }
 //                for (int i = 0; i < taskItems.size(); i++) {
 //                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
 //                            aliens.get(0).rightIsCollision(taskItems.get(i))) {
@@ -202,6 +233,11 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).bottomIsCollision(backgroundItem)) {
+                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+                    break;
+                }
 //                for (int i = 0; i < taskItems.size(); i++) {
 //                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
 //                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
@@ -217,6 +253,11 @@ public class GameScene extends Scene {
                         aliens.get(0).translateY(Global.MOVE_SPEED);
                         break;
                     }
+                }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).topIsCollision(backgroundItem)) {
+                    aliens.get(0).translateY(Global.MOVE_SPEED);
+                    break;
                 }
 //                for (int i=0;i<taskItems.size();i++){
 //                    if (aliens.get(0).isCollision(taskItems.get(i))&&
@@ -239,96 +280,156 @@ public class GameScene extends Scene {
             ArrayList<MapInfo> test = mapLoader.combineInfo();
             forGame = new ArrayList<>();
             // to be continued
-            this.forGame = mapLoader.creatObjectArray("coal", 32, test, new MapLoader.CompareClass() {
+            this.forGame = mapLoader.creatObjectArray("black", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/coal.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/black.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             );
-            this.forGame.addAll(mapLoader.creatObjectArray("Name", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("black2_2", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/brown.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/black2_2.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-            this.forGame.addAll(mapLoader.creatObjectArray("diamond", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("block", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/diamond.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/block.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-            this.forGame.addAll(mapLoader.creatObjectArray("gold", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("border", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/gold.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/border.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-            this.forGame.addAll(mapLoader.creatObjectArray("gravel", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("brick", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/gravel.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/brick.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-            this.forGame.addAll(mapLoader.creatObjectArray("iron", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("castle", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/iron.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/castle.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-            this.forGame.addAll(mapLoader.creatObjectArray("ruby", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("crate", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/ruby.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/crate.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
                         }
                     }
             ));
-            this.forGame.addAll(mapLoader.creatObjectArray("silver", 32, test, new MapLoader.CompareClass() {
+            this.forGame.addAll(mapLoader.creatObjectArray("diagonal", 32, test, new MapLoader.CompareClass() {
                         @Override
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/silver.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/diagonal.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            ));
+            this.forGame.addAll(mapLoader.creatObjectArray("grassWall", 32, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new GameObjectForMap("/grassWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            ));
+            this.forGame.addAll(mapLoader.creatObjectArray("sandWall", 32, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new GameObjectForMap("/sandWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            ));
+            this.forGame.addAll(mapLoader.creatObjectArray("stone", 32, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new GameObjectForMap("/stone.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            ));
+            this.forGame.addAll(mapLoader.creatObjectArray("tile", 32, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new GameObjectForMap("/tile.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                return tmp;
+                            }
+                            return null;
+                        }
+                    }
+            ));
+            this.forGame.addAll(mapLoader.creatObjectArray("waterWall", 32, test, new MapLoader.CompareClass() {
+                        @Override
+                        public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
+                            GameObject tmp = null;
+                            if (gameObject.equals(name)) {
+                                tmp = new GameObjectForMap("/waterWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;

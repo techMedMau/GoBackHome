@@ -39,8 +39,8 @@ public class WaitingScene extends Scene {
         num = (int) (Math.random() * 5 + 1);
         //要傳出去的東西
         ArrayList<String> str = new ArrayList<>();
-        str.add("450");
-        str.add("300");
+        str.add("500");
+        str.add("500");
         str.add(num+"");
         aliens.add(new Alien(Integer.parseInt(str.get(0)), Integer.parseInt(str.get(1)), num));
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);

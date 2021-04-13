@@ -137,8 +137,10 @@ public class Alien extends GameObject {
                 break;
             case 4:
                 this.alienType = AlienType.D;
+                break;
             case 5:
                 this.alienType = AlienType.E;
+                break;
         }
         stateAnimator = getAnimator(alienType);
         stateAnimator.get(currentState).play();

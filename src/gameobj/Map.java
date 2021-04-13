@@ -9,13 +9,13 @@ public class Map extends GameObject{
     private Image img;
 
     public Map() {
-        super(0, 0, 2880, 1920);
-        MapInformation.setMapInfo(0,0, 2880,1920); //地圖大小(自行調整)
+        super(0, 0, 1920, 1280);
+        MapInformation.setMapInfo(0,0, 1920,1280); //地圖大小(自行調整)
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img,painter().left(), painter().top(),2880,1920,null);
+        g.drawImage(img,painter().left(), painter().top(),1920,1280,null);
     }
 
     @Override
