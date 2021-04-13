@@ -17,8 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//187+getValue()
-//221 222  parseIn v.s. ValueOf?
+
 public class WaitingScene extends Scene {
     private int playMax;
     private int traitor;
