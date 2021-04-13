@@ -32,7 +32,7 @@ public class GameScene extends Scene {
     @Override
     public void sceneBegin() {
         map = new Map();
-//        backGroundTest = ImageController.getInstance().tryGet("/ground.png");
+        backGroundTest = ImageController.getInstance().tryGet("/ground.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
@@ -100,7 +100,7 @@ public class GameScene extends Scene {
     @Override
     public void paint(Graphics g) {
         cam.start(g);
-//        g.drawImage(backGroundTest, 0, 0, null);
+        g.drawImage(backGroundTest, 0, 0, null);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i)))
                 forGame.get(i).paint(g);

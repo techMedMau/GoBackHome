@@ -1,0 +1,12 @@
+Name,-3381760,/Users/zhangyuxuan/for wall/brown.png,1,1
+coal,-13421773,/Users/zhangyuxuan/for wall/coal.png,1,1
+diamond,-6697729,/Users/zhangyuxuan/for wall/diamond.png,1,1
+iron,-13395712,/Users/zhangyuxuan/for wall/iron.png,1,1
+gold,-103,/Users/zhangyuxuan/for wall/gold.png,1,1
+ruby,-52429,/Users/zhangyuxuan/for wall/ruby.png,1,1
+silver,-3355444,/Users/zhangyuxuan/for wall/silver.png,1,1
+gravel,-6710887,/Users/zhangyuxuan/for wall/gravel.png,1,1
+dirt128,-6724096,/Users/zhangyuxuan/for wall/dirt128.png,4,4
+dirt96,-3368704,/Users/zhangyuxuan/for wall/dirt96.png,3,3
+dirt64,-26317,/Users/zhangyuxuan/for wall/dirt64.png,2,2
+dirt32,-13312,/Users/zhangyuxuan/for wall/dirt32.png,1,1

@@ -10,7 +10,6 @@ public class Map extends GameObject{
 
     public Map() {
         super(0, 0, 2880, 1920);
-        img = ImageController.getInstance().tryGet("/genMap.bmp");
         MapInformation.setMapInfo(0,0, 2880,1920); //地圖大小(自行調整)
     }
 
