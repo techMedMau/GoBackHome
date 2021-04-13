@@ -27,7 +27,7 @@ public class GameScene extends Scene {
     private TaskController taskController;
 
 
-    public GameScene(ArrayList<Alien> aliens){
+    public GameScene(ArrayList<Alien> aliens) {
         this.aliens = aliens;
     }
 
@@ -39,11 +39,11 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/boxItem.png",161,441, TaskController.Task.FIND_PRAY));
-        taskItems.add(new TaskItem("/greenBox.png",300,500, TaskController.Task.LIT_UP));
-        taskItems.add(new TaskItem("/redBox.png",790,1110, TaskController.Task.LUMBER));
-        taskItems.add(new TaskItem("/warningBox.png",600,600, TaskController.Task.WATER));
-        taskController=TaskController.getTaskController();
+        taskItems.add(new TaskItem("/boxItem.png", 161, 441, TaskController.Task.FIND_PRAY));
+        taskItems.add(new TaskItem("/greenBox.png", 300, 500, TaskController.Task.LIT_UP));
+        taskItems.add(new TaskItem("/redBox.png", 790, 1110, TaskController.Task.LUMBER));
+        taskItems.add(new TaskItem("/warningBox.png", 600, 600, TaskController.Task.WATER));
+        taskController = TaskController.getTaskController();
     }
 
     @Override
@@ -53,13 +53,20 @@ public class GameScene extends Scene {
 
     @Override
     public CommandSolver.MouseListener mouseListener() {
-        return (MouseEvent e, CommandSolver.MouseState state, long trigTime)->{
-            if (state==null){return;}
-            switch (state){
+        return (MouseEvent e, CommandSolver.MouseState state, long trigTime) -> {
+            if (state == null) {
+                return;
+            }
+            if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
+                taskController.getCurrentPopUp().mouseListener().mouseTrig(e,state,trigTime);
+                return;
+            }
+            switch (state) {
                 case CLICKED:
-                    for (int i=0;i<taskItems.size();i++){
-                        if (taskItems.get(i).getState()&&taskItems.get(i).state(e.getPoint())){
+                    for (int i = 0; i < taskItems.size(); i++) {
+                        if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             taskController.changePopUp(taskItems.get(i).getTask());
+                            break;
                         }
                     }
                     break;
@@ -124,21 +131,22 @@ public class GameScene extends Scene {
         for (int i = 0; i < aliens.size(); i++) {
             aliens.get(i).paint(g);
         }
-        for(int i = 0 ; i < taskItems.size(); i++) {
-            taskItems.get(i).isTriggered(aliens.get(0)).paint(g);
+        for (int i = 0; i < taskItems.size(); i++) {
+            taskItems.get(i).paint(g);
         }
-        if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
-            taskController.getCurrentPopUp().paint(g);
-        }
+
         cam.paint(g);
         cam.end(g);
+        if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
+            taskController.getCurrentPopUp().paint(g);
+        }
 
     }
 
     @Override
     public void update() {
         aliens.get(0).update();
-        for(int i = 0; i < aliens.size(); i++) {
+        for (int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).painter().left() <= map.painter().left()) {
                 aliens.get(i).translateX(Global.MOVE_SPEED);
                 return;
@@ -211,9 +219,9 @@ public class GameScene extends Scene {
 //            }
                 break;
             case UP:
-                for (int i=0;i<forGame.size();i++){
-                    if (aliens.get(0).isCollision(forGame.get(i))&&
-                            aliens.get(0).topIsCollision(forGame.get(i))){
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i)) &&
+                            aliens.get(0).topIsCollision(forGame.get(i))) {
                         aliens.get(0).translateY(Global.MOVE_SPEED);
                         break;
                     }
@@ -227,7 +235,10 @@ public class GameScene extends Scene {
 //            }
                 break;
         }
-        if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
+        for (int i = 0; i < taskItems.size(); i++) {
+            taskItems.get(i).isTriggered(aliens.get(0));
+        }
+        if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().update();
         }
         cam.update();

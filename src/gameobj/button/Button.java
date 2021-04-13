@@ -16,6 +16,10 @@ public class Button extends GameObject {
         return point.getX()>painter().left() && point.getX()<painter().right()&&
                 point.getY()>painter().top() && point.getY()<painter().bottom();
     }
+    public boolean state(int x,int y){
+        return x>painter().left() && x<painter().right()&&
+                y>painter().top() && y<painter().bottom();
+    }
     @Override
     public void update() {
     }
