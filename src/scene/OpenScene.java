@@ -1,10 +1,8 @@
 package scene;
 
 import controllers.ImageController;
-import controllers.SceneController;
 import gameobj.button.Button;
 import internet.server.ClientClass;
-import internet.server.CommandReceiver;
 import internet.server.Server;
 import scene.popupwindow.PopUpConnect;
 import scene.popupwindow.PopUpCreateRoom;
@@ -14,8 +12,6 @@ import utils.Global;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class OpenScene extends Scene {
     private Image image;
@@ -40,14 +36,11 @@ public class OpenScene extends Scene {
 
     @Override
     public void update() {
-        ClientClass.getInstance().consume(new CommandReceiver() {
-            @Override
-            public void receive(int serialNum, int commandCode, ArrayList<String> strs) {
-                switch (commandCode){
-                    case Global.InternetCommand.CREAT:
-                        Global.WAIT_SCENES.put(strs.get(0),
-                                new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2))));
-                }
+        ClientClass.getInstance().consume((serialNum, commandCode, strs) -> {
+            switch (commandCode){
+                case Global.InternetCommand.CREAT:
+                    Global.WAIT_SCENES.put(strs.get(0),
+                            new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2))));
             }
         });
 
@@ -122,28 +115,6 @@ public class OpenScene extends Scene {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
                 popUpConnect.keyListener().keyPressed(commandCode,trigTime);
-                /*Scanner sc=new Scanner(System.in);
-                        if ( commandCode == 0) {
-                            Server s=Server.instance();
-                            s.create(12345);
-                            s.start();
-                            try {
-                                ClientClass.getInstance().connect("127.0.0.1",12345);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            System.out.println("主機IP：" + Server.instance().getLocalAddress()[0] +
-                                    "\n主機PORT：" + Server.instance().getLocalAddress()[1]);
-                        }else if(commandCode==5){
-                            System.out.println("請輸入IP:");
-                            String str=sc.next();
-                            try {
-                                ClientClass.getInstance().connect(str,12345);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        SceneController.getInstance().changeScene(new MapScene());*/
                 }
             @Override
             public void keyReleased(int commandCode, long trigTime) {

@@ -1,7 +1,6 @@
 package gameobj.button;
 
 import controllers.ImageController;
-import gameobj.button.Button;
 import utils.Global;
 
 import java.awt.*;

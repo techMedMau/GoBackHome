@@ -3,10 +3,7 @@ package scene.popupwindow;
 import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.Input;
-import gameobj.InputLine;
 import gameobj.button.Button;
-import internet.server.ClientClass;
-import internet.server.Server;
 import utils.CommandSolver;
 import utils.Global;
 

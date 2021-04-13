@@ -8,10 +8,8 @@ import internet.server.ClientClass;
 import scene.WaitingScene;
 import utils.CommandSolver;
 import utils.Global;
-import utils.ReadIPFile;
 
 import java.awt.*;
-import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class PopUpCreateRoom extends PopUpWindows{

@@ -117,14 +117,11 @@ public class WaitingScene extends Scene {
 
     @Override
     public CommandSolver.MouseListener mouseListener() {
-        return new CommandSolver.MouseListener() {
-            @Override
-            public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-                if (state == CommandSolver.MouseState.CLICKED) {
-                    if (startButton.state(e.getPoint())) {
+        return (e, state, trigTime) -> {
+            if (state == CommandSolver.MouseState.CLICKED) {
+                if (startButton.state(e.getPoint())) {
 
-                        SceneController.getInstance().changeScene(new GameScene(aliens));
-                    }
+                    SceneController.getInstance().changeScene(new GameScene(aliens));
                 }
             }
         };
@@ -180,55 +177,52 @@ public class WaitingScene extends Scene {
                 strr.add(Global.Direction.NO_DIR.getValue()+"");
             }
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
-            ClientClass.getInstance().consume(new CommandReceiver() {
-                @Override
-                public void receive(int serialNum, int internetcommand, ArrayList<String> strs) {
-                    switch(internetcommand){
-                        case Global.InternetCommand.CONNECT:
-                            System.out.println("Connect " + serialNum);
-                            boolean isBorn = false;
-                            for (int i = 0; i < aliens.size(); i++) {
-                                if (aliens.get(i).getId() == serialNum) {
-                                    isBorn = true;
-                                    break;
+            ClientClass.getInstance().consume((serialNum, internetcommand, strs) -> {
+                switch(internetcommand){
+                    case Global.InternetCommand.CONNECT:
+                        System.out.println("Connect " + serialNum);
+                        boolean isBorn = false;
+                        for (int i = 0; i < aliens.size(); i++) {
+                            if (aliens.get(i).getId() == serialNum) {
+                                isBorn = true;
+                                break;
+                            }
+                        }
+                        if(!isBorn) {
+                            aliens.add(new Alien(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2))));
+                            aliens.get(aliens.size() - 1).setId(serialNum);
+                            ArrayList<String> str=new ArrayList<>();
+                            str.add(aliens.get(0).painter().centerX()+"");
+                            str.add(aliens.get(0).painter().centerY()+"");
+                            str.add(aliens.get(0).getNum()+"");
+                            ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+                        }
+                        break;
+                    case Global.InternetCommand.MOVE:
+                        for(int i=1;i<aliens.size();i++) {
+                            if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))) {
+                                //setCenter? 還是應該要是setX setY?
+                                aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                                aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                                if(aliens.get(i).getHorizontalDir() == Global.Direction.LEFT || aliens.get(i).getHorizontalDir() == Global.Direction.RIGHT) {
+                                    aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
+                                }else if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){
+                                    aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
+                                }else if(aliens.get(i).getNoDirection()){
+                                    aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
+                                    aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
                                 }
+                                break;
                             }
-                            if(!isBorn) {
-                                aliens.add(new Alien(Integer.valueOf(strs.get(0)), Integer.valueOf(strs.get(1)), Integer.valueOf(strs.get(2))));
-                                aliens.get(aliens.size() - 1).setId(serialNum);
-                                ArrayList<String> str=new ArrayList<>();
-                                str.add(aliens.get(0).painter().centerX()+"");
-                                str.add(aliens.get(0).painter().centerY()+"");
-                                str.add(aliens.get(0).getNum()+"");
-                                ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+                        }
+                        break;
+                    case Global.InternetCommand.DISCONNECT:
+                        for(int i=0;i<aliens.size();i++){
+                            if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                aliens.remove(i);
                             }
-                            break;
-                        case Global.InternetCommand.MOVE:
-                            for(int i=1;i<aliens.size();i++) {
-                                if(aliens.get(i).getId()==Integer.valueOf(strs.get(0))) {
-                                    //setCenter? 還是應該要是setX setY?
-                                    aliens.get(i).painter().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
-                                    aliens.get(i).collider().setCenter(Integer.valueOf(strs.get(1)),Integer.valueOf(strs.get(2)));
-                                    if(aliens.get(i).getHorizontalDir() == Global.Direction.LEFT || aliens.get(i).getHorizontalDir() == Global.Direction.RIGHT) {
-                                        aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                                    }else if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){
-                                        aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                                    }else if(aliens.get(i).getNoDirection()){
-                                        aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                                        aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.valueOf(strs.get(3))));
-                                    }
-                                    break;
-                                }
-                            }
-                            break;
-                        case Global.InternetCommand.DISCONNECT:
-                            for(int i=0;i<aliens.size();i++){
-                                if(aliens.get(i).getId()==Integer.valueOf(strs.get(0))){
-                                    aliens.remove(i);
-                                }
-                            }
-                            break;
-                    }
+                        }
+                        break;
                 }
             });
         }
@@ -252,7 +246,7 @@ public class WaitingScene extends Scene {
                 );
 
             } catch (IOException ex) {
-                Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WaitingScene.class.getName()).log(Level.SEVERE, null, ex);
             }
             return mapLoader;
         }

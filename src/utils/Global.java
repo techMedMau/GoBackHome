@@ -1,9 +1,6 @@
 package utils;
 
-import scene.Scene;
 import scene.WaitingScene;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Global {
@@ -42,16 +39,12 @@ public class Global {
     public static final boolean IS_DEBUG = false;
     public static final String SERVE_IP="192.168.1.38";
     public static final String FONT="Times New Roman";
-    public static final String FILE_PATH= "C:/Users/a0920/IdeaProjects/GoBackHome/resource/IP.txt";
     public static void log(String str) {
         if (IS_DEBUG) {
             System.out.println(str);
         }
     }
 
-    // 單位大小
-    public static final int UNIT_X = 32;
-    public static final int UNIT_Y = 32;
     // 視窗大小
     public static final int MAP_WIDTH = 1280;
     public static final int MAP_HEIGHT = 1280;
@@ -75,9 +68,6 @@ public class Global {
         return (int) (Math.random() * (max - min + 1) + min);
     }
 
-    public static boolean random(int rate) {
-        return random(1, 100) <= rate;
-    }
 }
 
 //if(Global.random(10)){}

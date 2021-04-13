@@ -314,7 +314,7 @@ public class GameScene extends Scene {
                     }
             ));
         } catch (IOException ex) {
-            Logger.getLogger(MapScene.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mapLoader;
     }
