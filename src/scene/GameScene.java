@@ -54,6 +54,7 @@ public class GameScene extends Scene {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (MouseEvent e, CommandSolver.MouseState state, long trigTime)->{
+            if (state==null){return;}
             switch (state){
                 case CLICKED:
                     for (int i=0;i<taskItems.size();i++){
@@ -126,7 +127,7 @@ public class GameScene extends Scene {
         for(int i = 0 ; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0)).paint(g);
         }
-        if (taskController.getCurrentPopUp().isShow()){
+        if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
             taskController.getCurrentPopUp().paint(g);
         }
         cam.paint(g);
@@ -226,7 +227,7 @@ public class GameScene extends Scene {
 //            }
                 break;
         }
-        if (taskController.getCurrentPopUp().isShow()){
+        if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
             taskController.getCurrentPopUp().update();
         }
         cam.update();
