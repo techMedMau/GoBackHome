@@ -33,10 +33,6 @@ public class Alien extends GameObject implements ClickState, Range {
         return isTraitor;
     }
 
-    @Override
-    public boolean getState() {
-        return false;
-    }
 
     public enum AlienType {
         A,
@@ -166,7 +162,6 @@ public class Alien extends GameObject implements ClickState, Range {
     private AlienType alienType;
     private int ID;
     private int num;
-    private boolean state;//是否接近被害者
     private boolean isTraitor;
 
     public Alien(int x, int y, int num) {

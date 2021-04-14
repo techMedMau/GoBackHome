@@ -61,6 +61,17 @@ public class WaitingScene extends Scene {
     public boolean canEnter(){
         return currentPlay<playMax;
     }
+    public int getHomeOwner(){
+        return homeOwner;
+    }
+
+    public int getTraitor() {
+        return traitor;
+    }
+
+    public int getPlayMax() {
+        return playMax;
+    }
 
     @Override
     public CommandSolver.KeyListener keyListener() {
@@ -163,7 +174,7 @@ public class WaitingScene extends Scene {
             }
             Font font=new Font(Global.FONT,Font.PLAIN,30);
             g.setFont(font);
-            g.drawString(password,395,480);
+            g.drawString(password,425,480);
             Font numFont=new Font(Global.FONT,Font.PLAIN,20);
             g.setFont(numFont);
             g.drawString(currentPlay+"/"+playMax,445,580);
@@ -289,6 +300,7 @@ public class WaitingScene extends Scene {
             }
             return mapLoader;
         }
+
 
 
 

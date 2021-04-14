@@ -32,6 +32,7 @@ public class GameScene extends Scene {
         this.aliens = aliens;
         aliens.forEach(alien -> {
             alien.painter().setCenter(630,200);
+            alien.collider().setCenter(630,200);
         });
     }
 
@@ -135,16 +136,22 @@ public class GameScene extends Scene {
     public void paint(Graphics g) {
         cam.start(g);
         g.drawImage(backGround, 0, 0, null);
+        Font font=new Font(Global.FONT,Font.PLAIN,20);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i)))
                 forGame.get(i).paint(g);
         }
         for (int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(0).isTraitor()&&aliens.get(i).isTraitor()){
+            if (aliens.get(0).isTraitor()){
                 g.setColor(Color.RED);
-                Font font=new Font(Global.FONT,Font.PLAIN,20);
                 g.setFont(font);
-                g.drawString("Traitor",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
+                if (aliens.get(i).isTraitor()){
+                    g.drawString("Traitor",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
+                }
+                if (!aliens.get(i).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))){
+                    g.drawString("Kill?",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
+                }
+
             }
             aliens.get(i).paint(g);
         }
@@ -384,13 +391,13 @@ public class GameScene extends Scene {
                     aliens.get(0).translateX(Global.MOVE_SPEED);
                     break;
                 }
-//                for(int i = 0; i < taskItems.size(); i++){
-//                    if (aliens.get(0).isCollision(taskItems.get(i))
-//                            && aliens.get(0).leftIsCollision(taskItems.get(i))) {
-//                        aliens.get(0).translateX(Global.MOVE_SPEED);
-//                        break;
-//                    }
-//                }
+                for(int i = 0; i < taskItems.size(); i++){
+                    if (aliens.get(0).isCollision(taskItems.get(i))
+                            && aliens.get(0).leftIsCollision(taskItems.get(i))) {
+                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        break;
+                    }
+                }
                 break;
             case RIGHT:
                 for (int i = 0; i < forGame.size(); i++) {
@@ -406,13 +413,13 @@ public class GameScene extends Scene {
                     aliens.get(0).translateX(-Global.MOVE_SPEED);
                     break;
                 }
-//                for (int i = 0; i < taskItems.size(); i++) {
-//                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
-//                            aliens.get(0).rightIsCollision(taskItems.get(i))) {
-//                        aliens.get(0).translateX(-Global.MOVE_SPEED);
-//                        break;
-//                    }
-//                }
+                for (int i = 0; i < taskItems.size(); i++) {
+                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+                            aliens.get(0).rightIsCollision(taskItems.get(i))) {
+                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        break;
+                    }
+                }
                 break;
         }
         Global.Direction verticalDir = aliens.get(0).getVerticalDir();
@@ -430,13 +437,13 @@ public class GameScene extends Scene {
                     aliens.get(0).translateY(-Global.MOVE_SPEED);
                     break;
                 }
-//                for (int i = 0; i < taskItems.size(); i++) {
-//                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
-//                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
-//                    aliens.get(0).translateY(-Global.MOVE_SPEED);
-//                    break;
-//                }
-//            }
+                for (int i = 0; i < taskItems.size(); i++) {
+                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
+                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+                    break;
+                }
+            }
                 break;
             case UP:
                 for (int i = 0; i < forGame.size(); i++) {
@@ -451,13 +458,13 @@ public class GameScene extends Scene {
                     aliens.get(0).translateY(Global.MOVE_SPEED);
                     break;
                 }
-//                for (int i=0;i<taskItems.size();i++){
-//                    if (aliens.get(0).isCollision(taskItems.get(i))&&
-//                        aliens.get(0).topIsCollision(taskItems.get(i))){
-//                    aliens.get(0).translateY(Global.MOVE_SPEED);
-//                    break;
-//                }
-//            }
+                for (int i=0;i<taskItems.size();i++){
+                    if (aliens.get(0).isCollision(taskItems.get(i))&&
+                        aliens.get(0).topIsCollision(taskItems.get(i))){
+                    aliens.get(0).translateY(Global.MOVE_SPEED);
+                    break;
+                }
+            }
                 break;
         }
     }

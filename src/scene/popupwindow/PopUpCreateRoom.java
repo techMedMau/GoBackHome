@@ -59,7 +59,7 @@ public class PopUpCreateRoom extends PopUpWindows{
                         String str;
                         while (true){
                             str=new String();
-                            for (int i=0;i<9;i++){
+                            for (int i=0;i<5;i++){
                                 str+=Global.random(0,9);
                             }
                             if (!Global.WAIT_SCENES.containsKey(str)){

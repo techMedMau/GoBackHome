@@ -12,6 +12,7 @@ import utils.Global;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class OpenScene extends Scene {
     private Image image;
@@ -39,8 +40,22 @@ public class OpenScene extends Scene {
         ClientClass.getInstance().consume((serialNum, commandCode, strs) -> {
             switch (commandCode){
                 case Global.InternetCommand.CREAT:
+                    if (Global.WAIT_SCENES.containsKey(strs.get(0))){
+                        return;
+                    }
                     Global.WAIT_SCENES.put(strs.get(0),
                             new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3))));
+                    break;
+                case Global.InternetCommand.GET_ROOM:
+                    Global.WAIT_SCENES.forEach((s, waitingScene) -> {
+                        ArrayList<String> str=new ArrayList<>();
+                        str.add(s);
+                        str.add(String.valueOf(waitingScene.getTraitor()));
+                        str.add(String.valueOf(waitingScene.getPlayMax()));
+                        str.add(String.valueOf(waitingScene.getHomeOwner()));
+                        ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                    });
+                    break;
             }
         });
 
@@ -68,6 +83,7 @@ public class OpenScene extends Scene {
         } catch (IOException ee) {
             ee.printStackTrace();
         }
+        ClientClass.getInstance().sent(Global.InternetCommand.GET_ROOM,new ArrayList<>());
     }
 
     @Override

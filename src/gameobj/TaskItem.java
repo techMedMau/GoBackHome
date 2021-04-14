@@ -29,7 +29,6 @@ public class TaskItem extends Button implements Range {
         }
         return state;
     }
-    @Override
     public boolean getState() {
         return state;
     }
