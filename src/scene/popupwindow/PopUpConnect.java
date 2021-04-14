@@ -4,6 +4,7 @@ import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.Input;
 import gameobj.button.Button;
+import scene.WaitingScene;
 import utils.CommandSolver;
 import utils.Global;
 
@@ -48,12 +49,18 @@ public class PopUpConnect extends PopUpWindows {
                 case CLICKED:
                     if (cancelButton.state(e.getPoint())) {
                         sceneEnd();
+                        break;
                     }
                     if (confirmButton.state(e.getPoint())){
                        if (Global.WAIT_SCENES.containsKey(input.getNum())){
-                           SceneController.getInstance().changeScene(Global.WAIT_SCENES.get(input.getNum()));
-                           sceneEnd();
+                           WaitingScene tmp=Global.WAIT_SCENES.get(input.getNum());
+                           if (tmp.canEnter()){
+                               SceneController.getInstance().changeScene(tmp);
+                               sceneEnd();
+                           }
+
                        }
+                       break;
                     }
                     break;
             }

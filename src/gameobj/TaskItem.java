@@ -20,13 +20,14 @@ public class TaskItem extends Button implements Range {
     }
 
 
-    public void isTriggered(Alien alien){
+    public boolean isTriggered(Alien alien){
         if(Math.sqrt(Math.abs((alien.painter().centerX() - this.painter().centerX())*(alien.painter().centerX() - this.painter().centerX())
                 +(alien.painter().centerY() - this.painter().centerY())* (alien.painter().centerY() - this.painter().centerY()))) < 90.0){
             state = true;
         } else {
             state = false;
         }
+        return state;
     }
     @Override
     public boolean getState() {

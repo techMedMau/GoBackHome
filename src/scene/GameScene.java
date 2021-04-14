@@ -31,6 +31,9 @@ public class GameScene extends Scene {
 
     public GameScene(ArrayList<Alien> aliens) {
         this.aliens = aliens;
+        aliens.forEach(alien -> {
+            alien.painter().setCenter(630,200);
+        });
     }
 
 
@@ -77,8 +80,8 @@ public class GameScene extends Scene {
                             break;
                         }
                     }
-                    for (int i=0;i<aliens.size();i++){
-                        if(aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
+                    for (int i=1;i<aliens.size();i++){
+                        if(aliens.get(0).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))&&aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).death();
                         }
                     }
@@ -140,6 +143,12 @@ public class GameScene extends Scene {
                 forGame.get(i).paint(g);
         }
         for (int i = 0; i < aliens.size(); i++) {
+            if (aliens.get(0).isTraitor()&&aliens.get(i).isTraitor()){
+                g.setColor(Color.RED);
+                Font font=new Font(Global.FONT,Font.PLAIN,20);
+                g.setFont(font);
+                g.drawString("Traitor",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
+            }
             aliens.get(i).paint(g);
         }
         for (int i = 0; i < taskItems.size(); i++) {

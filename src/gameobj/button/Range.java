@@ -4,5 +4,5 @@ import gameobj.Alien;
 
 public interface Range {
     boolean getState();
-    void isTriggered(Alien alien);
+    boolean isTriggered(Alien alien);
 }
