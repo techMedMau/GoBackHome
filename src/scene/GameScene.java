@@ -184,6 +184,9 @@ public class GameScene extends Scene {
         str.add(aliens.get(0).getHorizontalDir().getValue()+"");
         str.add(aliens.get(0).getVerticalDir().getValue()+"");
         str.add(aliens.get(0).getCurrentState().name()+"");
+        System.out.println(aliens.get(0).getCurrentState().name());
+        System.out.println(Alien.State.DEATH.name());
+        System.out.println(Alien.State.DEATH.name().equals(aliens.get(0).getCurrentState().name()));
         ClientClass.getInstance().sent(Global.InternetCommand.MOVE,str);
         //任物箱亮
         for (int i = 0; i < taskItems.size(); i++) {
