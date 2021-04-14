@@ -253,11 +253,13 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     public void setVerticalDir(Global.Direction dir) {
+        if (currentState==State.DEATH){return;}
         this.verticalDir = dir;
         setState();
     }
 
     public void setHorizontalDir(Global.Direction dir) {
+        if (currentState==State.DEATH){return;}
         this.horizontalDir = dir;
         setState();
     }
