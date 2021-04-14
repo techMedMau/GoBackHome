@@ -13,7 +13,7 @@ public class PopUpLineUp extends PopUpTask {
 
     private ArrayList<KeyPair> keyPairs;
     private Button tmp;
-    private boolean line;
+    private int line;
 
 
     public PopUpLineUp(){
@@ -38,6 +38,9 @@ public class PopUpLineUp extends PopUpTask {
             keyPairs.get(i).button.paint(g);
             keyPairs.get(i).button1.paint(g);
         }
+//        switch(line){
+//
+//        }
     }
 
     @Override
@@ -63,7 +66,7 @@ public class PopUpLineUp extends PopUpTask {
                     }
                     for(int k = 0; k < keyPairs.size(); k++) {
                         if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
-                            System.out.println("correct");
+                            line = k;
                         }
                      }
                     tmp = null;
