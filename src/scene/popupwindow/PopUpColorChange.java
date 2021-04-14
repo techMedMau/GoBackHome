@@ -5,19 +5,9 @@ import scene.Scene;
 
 import java.awt.*;
 
-public class PopUpRecover extends PopUpWindows {
-    public PopUpRecover() {
+public class PopUpColorChange extends PopUpWindows{
+    public PopUpColorChange() {
         super(0,0);
-    }
-
-    @Override
-    public void paint(Graphics g) {
-
-    }
-
-    @Override
-    public void update() {
-
     }
 
     @Override
@@ -38,5 +28,15 @@ public class PopUpRecover extends PopUpWindows {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return null;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+
+    }
+
+    @Override
+    public void update() {
+
     }
 }

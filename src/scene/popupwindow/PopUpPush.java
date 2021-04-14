@@ -1,13 +1,12 @@
 package scene.popupwindow;
 
 import utils.CommandSolver;
-import scene.Scene;
 
 import java.awt.*;
 
-public class PopUpLitUp extends PopUpWindows{
-    public PopUpLitUp() {
-        super(0,0);
+public class PopUpPush extends PopUpWindows{
+    public PopUpPush() {
+        super(0, 0);
     }
 
     @Override
@@ -21,12 +20,12 @@ public class PopUpLitUp extends PopUpWindows{
     }
 
     @Override
-    public CommandSolver.KeyListener keyListener() {
+    public CommandSolver.MouseListener mouseListener() {
         return null;
     }
 
     @Override
-    public CommandSolver.MouseListener mouseListener() {
+    public CommandSolver.KeyListener keyListener() {
         return null;
     }
 
