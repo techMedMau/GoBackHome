@@ -33,8 +33,10 @@ public class PopUpLineUp extends PopUpTask {
         gold2 = new Button(600,300,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"));
         diamond2 = new Button(600,100,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"));
         iron2 = new Button(600,400,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"));
-        this.keyPairs.add(new KeyPair(gold, gold2));
-        this.keyPairs.add(new KeyPair(diamond, diamond2));
+        this.keyPairs.add(new KeyPair(new Button(300,100,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))
+                , new Button(600,300,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))));
+        this.keyPairs.add(new KeyPair(new Button(300,200,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))
+                , new Button(600,100,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))));
         this.keyPairs.add(new KeyPair(iron, iron2));
         this.keyPairs.add(new KeyPair(ruby, ruby2));
     }
