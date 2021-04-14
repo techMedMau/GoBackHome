@@ -5,8 +5,8 @@ import scene.Scene;
 
 import java.awt.*;
 
-public class PopUpWater extends PopUpWindows{
-    public PopUpWater() {
+public class PopUpFindPic extends PopUpWindows{
+    public PopUpFindPic() {
         super(0,0);
     }
 

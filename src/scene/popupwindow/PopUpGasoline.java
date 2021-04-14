@@ -7,9 +7,9 @@ import utils.Global;
 
 import java.awt.*;
 
-public class PopUpFindPray extends PopUpWindows{
+public class PopUpGasoline extends PopUpWindows{
     private Button test;
-    public PopUpFindPray() {
+    public PopUpGasoline() {
         super(800,500);
     }
 

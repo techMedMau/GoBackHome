@@ -1,6 +1,5 @@
 package controllers;
 
-import scene.Scene;
 import scene.popupwindow.*;
 
 public class TaskController {
@@ -30,12 +29,15 @@ public class TaskController {
         return currentPopUp;
     }
     public enum Task{
-        FIND_PRAY(new PopUpFindPray()),
-        LIT_UP(new PopUpLitUp()),
-        LUMBER(new PopUpLumber()),
+        GASOLINE(new PopUpGasoline()),
+        FIND_PIC(new PopUpFindPic()),
+        COLOR_CHANGE(new PopUpColorChange()),
         PASSWORD(new PopUPPassword()),
-        RECOVER(new PopUpRecover()),
-        WATER(new PopUpWater());
+        LINE_UP(new PopUpLineUp()),
+        ROCK(new PopUpRock()),
+        CENTER(new PopUpCenter()),
+        PUSH(new PopUpPush());
+
         private PopUpWindows popUpWindows;
         Task(PopUpWindows popUpWindows){
             this.popUpWindows=popUpWindows;

@@ -41,16 +41,17 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-
-        taskItems.add(new TaskItem("/boxItem.png",105,441, TaskController.Task.FIND_PRAY));
-        taskItems.add(new TaskItem("/greenBox.png",300,500, TaskController.Task.LIT_UP));
-        taskItems.add(new TaskItem("/redBox.png",790,1110, TaskController.Task.LUMBER));
-        taskItems.add(new TaskItem("/warningBox.png",600,600, TaskController.Task.WATER));
-        taskItems.add(new TaskItem("/woodBox.png",1000,66, TaskController.Task.WATER));
-        taskItems.add(new TaskItem("/blueBox.png",1750,900, TaskController.Task.WATER));
+        taskItems.add(new TaskItem("/boxItem.png",105,441, TaskController.Task.GASOLINE));
+        taskItems.add(new TaskItem("/greenBox.png",300,500, TaskController.Task.COLOR_CHANGE));
+        taskItems.add(new TaskItem("/redBox.png",790,1110, TaskController.Task.FIND_PIC));
+        taskItems.add(new TaskItem("/warningBox.png",600,600, TaskController.Task.LINE_UP));
+        taskItems.add(new TaskItem("/woodBox.png",1000,66, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/blueBox.png",1750,900, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/warningWood.png",1600,400, TaskController.Task.ROCK));
+        taskItems.add(new TaskItem("/blackBox.png",1100,400, TaskController.Task.CENTER));
         taskController = TaskController.getTaskController();
         this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
-        this.backgroundItem = new BackgroundItem("/arrowRight.png",500, 500+64/2,28,8,500,500,64,64);
+        this.backgroundItem = new BackgroundItem("/arrowRight.png",500, 500+32,28,8,500,500,64,64);
     }
 
     @Override
@@ -107,7 +108,6 @@ public class GameScene extends Scene {
             @Override
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-
                 switch (direction) {
                     case LEFT:
                     case RIGHT:
@@ -119,7 +119,6 @@ public class GameScene extends Scene {
                         break;
                 }
             }
-
             @Override
             public void keyTyped(char c, long trigTime) {
 
@@ -138,29 +137,14 @@ public class GameScene extends Scene {
         for (int i = 0; i < aliens.size(); i++) {
             aliens.get(i).paint(g);
         }
-
-
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).paint(g);
 
         }
-
+        backgroundItem.paint(g);
         cam.paint(g);
         cam.end(g);
-
-        g.drawImage(infoBoard, 0 ,0, null);
-        g.setColor(Color.BLACK);
-        Font font = new Font(Global.FONT,Font.PLAIN,15);
-        g.setFont(font);
-        g.drawString("Task1", 10, 30);
-        g.drawString("Task2", 10, 50);
-        g.drawString("Task3", 10, 70);
-        g.drawString("Task4", 10, 90);
-        g.drawString("Task5", 10, 110);
-        g.drawString("Task6", 10, 130);
-        g.drawString("Task7", 10, 150);
-        g.drawString("Task8", 10, 170);
-
+        drawInfo(g);
         if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().paint(g);
         }
@@ -171,115 +155,11 @@ public class GameScene extends Scene {
     @Override
     public void update() {
         aliens.get(0).update();
-        for (int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(i).painter().left() <= map.painter().left()) {
-                aliens.get(i).translateX(Global.MOVE_SPEED);
-                return;
-            }
-            if (aliens.get(i).painter().top() <= map.painter().top()) {
-                aliens.get(i).translateY(Global.MOVE_SPEED);
-                return;
-            }
-            if (aliens.get(i).painter().bottom() >= map.painter().bottom()) {
-                aliens.get(i).translateY(-Global.MOVE_SPEED);
-                return;
-            }
-            if (aliens.get(i).painter().right() >= map.painter().right()) {
-                aliens.get(i).translateX(-Global.MOVE_SPEED);
-                return;
-            }
-        }
-        Global.Direction horizontalDir = aliens.get(0).getHorizontalDir();
-        switch (horizontalDir) {
-            case LEFT:
-                for (int i = 0; i < forGame.size(); i++) {
-                    if (aliens.get(0).isCollision(forGame.get(i))
-                            && aliens.get(0).leftIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateX(Global.MOVE_SPEED);
-                        break;
-                    }
-                }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).leftIsCollision(backgroundItem)) {
-                    aliens.get(0).translateX(Global.MOVE_SPEED);
-                    break;
-                }
-//                for(int i = 0; i < taskItems.size(); i++){
-//                    if (aliens.get(0).isCollision(taskItems.get(i))
-//                            && aliens.get(0).leftIsCollision(taskItems.get(i))) {
-//                        aliens.get(0).translateX(Global.MOVE_SPEED);
-//                        break;
-//                    }
-//                }
-                break;
-            case RIGHT:
-                for (int i = 0; i < forGame.size(); i++) {
-                    if (aliens.get(0).isCollision(forGame.get(i)) &&
-                            aliens.get(0).rightIsCollision(forGame.get(i))) {
-                        System.out.println("?");
-                        aliens.get(0).translateX(-Global.MOVE_SPEED);
-                        break;
-                    }
-                }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                            aliens.get(0).rightIsCollision(backgroundItem)) {
-                        aliens.get(0).translateX(-Global.MOVE_SPEED);
-                        break;
-                    }
-//                for (int i = 0; i < taskItems.size(); i++) {
-//                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
-//                            aliens.get(0).rightIsCollision(taskItems.get(i))) {
-//                        aliens.get(0).translateX(-Global.MOVE_SPEED);
-//                        break;
-//                    }
-//                }
-                break;
-        }
-        Global.Direction verticalDir = aliens.get(0).getVerticalDir();
-        switch (verticalDir) {
-            case DOWN:
-                for (int i = 0; i < forGame.size(); i++) {
-                    if (aliens.get(0).isCollision(forGame.get(i)) &&
-                            aliens.get(0).bottomIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateY(-Global.MOVE_SPEED);
-                        break;
-                    }
-                }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).bottomIsCollision(backgroundItem)) {
-                    aliens.get(0).translateY(-Global.MOVE_SPEED);
-                    break;
-                }
-//                for (int i = 0; i < taskItems.size(); i++) {
-//                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
-//                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
-//                    aliens.get(0).translateY(-Global.MOVE_SPEED);
-//                    break;
-//                }
-//            }
-                break;
-            case UP:
-                for (int i = 0; i < forGame.size(); i++) {
-                    if (aliens.get(0).isCollision(forGame.get(i)) &&
-                            aliens.get(0).topIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateY(Global.MOVE_SPEED);
-                        break;
-                    }
-                }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).topIsCollision(backgroundItem)) {
-                    aliens.get(0).translateY(Global.MOVE_SPEED);
-                    break;
-                }
-//                for (int i=0;i<taskItems.size();i++){
-//                    if (aliens.get(0).isCollision(taskItems.get(i))&&
-//                        aliens.get(0).topIsCollision(taskItems.get(i))){
-//                    aliens.get(0).translateY(Global.MOVE_SPEED);
-//                    break;
-//                }
-//            }
-                break;
-        }
+        colliedWithMap();
+        colliedWithWall();
+
+
+        //任物箱亮
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0));
         }
@@ -455,5 +335,135 @@ public class GameScene extends Scene {
             Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mapLoader;
+    }
+
+    public void colliedWithMap(){
+        for (int i = 0; i < aliens.size(); i++) {
+            if (aliens.get(i).painter().left() <= map.painter().left()) {
+                aliens.get(i).translateX(Global.MOVE_SPEED);
+                return;
+            }
+            if (aliens.get(i).painter().top() <= map.painter().top()) {
+                aliens.get(i).translateY(Global.MOVE_SPEED);
+                return;
+            }
+            if (aliens.get(i).painter().bottom() >= map.painter().bottom()) {
+                aliens.get(i).translateY(-Global.MOVE_SPEED);
+                return;
+            }
+            if (aliens.get(i).painter().right() >= map.painter().right()) {
+                aliens.get(i).translateX(-Global.MOVE_SPEED);
+                return;
+            }
+        }
+    }
+
+    public void colliedWithWall(){
+        Global.Direction horizontalDir = aliens.get(0).getHorizontalDir();
+        switch (horizontalDir) {
+            case LEFT:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i))
+                            && aliens.get(0).leftIsCollision(forGame.get(i))) {
+                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        break;
+                    }
+                }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).leftIsCollision(backgroundItem)) {
+                    aliens.get(0).translateX(Global.MOVE_SPEED);
+                    break;
+                }
+//                for(int i = 0; i < taskItems.size(); i++){
+//                    if (aliens.get(0).isCollision(taskItems.get(i))
+//                            && aliens.get(0).leftIsCollision(taskItems.get(i))) {
+//                        aliens.get(0).translateX(Global.MOVE_SPEED);
+//                        break;
+//                    }
+//                }
+                break;
+            case RIGHT:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i)) &&
+                            aliens.get(0).rightIsCollision(forGame.get(i))) {
+                        System.out.println("?");
+                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        break;
+                    }
+                }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).rightIsCollision(backgroundItem)) {
+                    aliens.get(0).translateX(-Global.MOVE_SPEED);
+                    break;
+                }
+//                for (int i = 0; i < taskItems.size(); i++) {
+//                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+//                            aliens.get(0).rightIsCollision(taskItems.get(i))) {
+//                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+//                        break;
+//                    }
+//                }
+                break;
+        }
+        Global.Direction verticalDir = aliens.get(0).getVerticalDir();
+        switch (verticalDir) {
+            case DOWN:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i)) &&
+                            aliens.get(0).bottomIsCollision(forGame.get(i))) {
+                        aliens.get(0).translateY(-Global.MOVE_SPEED);
+                        break;
+                    }
+                }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).bottomIsCollision(backgroundItem)) {
+                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+                    break;
+                }
+//                for (int i = 0; i < taskItems.size(); i++) {
+//                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+//                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
+//                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+//                    break;
+//                }
+//            }
+                break;
+            case UP:
+                for (int i = 0; i < forGame.size(); i++) {
+                    if (aliens.get(0).isCollision(forGame.get(i)) &&
+                            aliens.get(0).topIsCollision(forGame.get(i))) {
+                        aliens.get(0).translateY(Global.MOVE_SPEED);
+                        break;
+                    }
+                }
+                if (aliens.get(0).isCollision(backgroundItem) &&
+                        aliens.get(0).topIsCollision(backgroundItem)) {
+                    aliens.get(0).translateY(Global.MOVE_SPEED);
+                    break;
+                }
+//                for (int i=0;i<taskItems.size();i++){
+//                    if (aliens.get(0).isCollision(taskItems.get(i))&&
+//                        aliens.get(0).topIsCollision(taskItems.get(i))){
+//                    aliens.get(0).translateY(Global.MOVE_SPEED);
+//                    break;
+//                }
+//            }
+                break;
+        }
+    }
+
+    public void drawInfo(Graphics g){
+        g.drawImage(infoBoard, 0 ,0, null);
+        g.setColor(Color.BLACK);
+        Font font = new Font(Global.FONT,Font.PLAIN,15);
+        g.setFont(font);
+        g.drawString("Task1", 10, 30);
+        g.drawString("Task2", 10, 50);
+        g.drawString("Task3", 10, 70);
+        g.drawString("Task4", 10, 90);
+        g.drawString("Task5", 10, 110);
+        g.drawString("Task6", 10, 130);
+        g.drawString("Task7", 10, 150);
+        g.drawString("Task8", 10, 170);
     }
 }
