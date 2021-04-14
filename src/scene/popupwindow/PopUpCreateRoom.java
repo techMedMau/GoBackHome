@@ -66,7 +66,7 @@ public class PopUpCreateRoom extends PopUpWindows{
                                 break;
                             }
                         }
-                        if (traitorNums.getTarget()<=playNums.getTarget()&&traitorNums.getTarget()!=0){
+                        if (traitorNums.getTarget()<playNums.getTarget()&&traitorNums.getTarget()!=0){
                             sceneEnd();
                             WaitingScene waitingScene=new WaitingScene(str,traitorNums.getTarget(),playNums.getTarget(),ClientClass.getInstance().getID());
                             Global.WAIT_SCENES.put(str,waitingScene);
