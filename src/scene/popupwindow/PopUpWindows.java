@@ -14,7 +14,6 @@ public abstract class PopUpWindows extends Scene {
     public int getWidth(){
         return width;
     }
-
     public int getHeight() {
         return height;
     }
@@ -24,6 +23,14 @@ public abstract class PopUpWindows extends Scene {
     public void disShow(){
         show=false;
     }
+
+
+
+    public boolean getShow(){
+        return show;
+    }
+
+
     public boolean isShow(){
         return show;
     }

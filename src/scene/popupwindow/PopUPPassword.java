@@ -5,38 +5,6 @@ import scene.Scene;
 
 import java.awt.*;
 
-public class PopUPPassword extends PopUpWindows{
-    public PopUPPassword() {
-        super(0,0);
-    }
+public class PopUPPassword extends PopUpTask {
 
-    @Override
-    public void sceneBegin() {
-
-    }
-
-    @Override
-    public void sceneEnd() {
-
-    }
-
-    @Override
-    public CommandSolver.KeyListener keyListener() {
-        return null;
-    }
-
-    @Override
-    public CommandSolver.MouseListener mouseListener() {
-        return null;
-    }
-
-    @Override
-    public void paint(Graphics g) {
-
-    }
-
-    @Override
-    public void update() {
-
-    }
 }

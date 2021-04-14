@@ -52,91 +52,91 @@ public class Alien extends GameObject implements ClickState, Range {
             case A:
                 HashMap<State, Animator> map = new HashMap<>();
                 map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p3_walk04r.png"))));
+                        ImageController.getInstance().tryGet("/player/p3_walk04r.png"))));
                 map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p3_walk04.png"))));
+                        ImageController.getInstance().tryGet("/player/p3_walk04.png"))));
                 map.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p3_walk04r.png"),
-                        ImageController.getInstance().tryGet("/p3_walk05r.png")
+                        ImageController.getInstance().tryGet("/player/p3_walk04r.png"),
+                        ImageController.getInstance().tryGet("/player/p3_walk05r.png")
                 )));
                 map.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p3_walk04.png"),
-                        ImageController.getInstance().tryGet("/p3_walk05.png")
+                        ImageController.getInstance().tryGet("/player/p3_walk04.png"),
+                        ImageController.getInstance().tryGet("/player/p3_walk05.png")
                 )));
                 map.put(State.DEATH, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p3_dieBody.png")
+                        ImageController.getInstance().tryGet("/player/p3_dieBody.png")
                 )));
                 return map;
             case B:
                 HashMap<State, Animator> map1 = new HashMap<>();
                 map1.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p2_walk05r.png"))));
+                        ImageController.getInstance().tryGet("/player/p2_walk05r.png"))));
                 map1.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p2_walk05.png"))));
+                        ImageController.getInstance().tryGet("/player/p2_walk05.png"))));
                 map1.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p2_walk06r.png"),
-                        ImageController.getInstance().tryGet("/p2_walk05r.png")
+                        ImageController.getInstance().tryGet("/player/p2_walk06r.png"),
+                        ImageController.getInstance().tryGet("/player/p2_walk05r.png")
                 )));
                 map1.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p2_walk06.png"),
-                        ImageController.getInstance().tryGet("/p2_walk05.png")
+                        ImageController.getInstance().tryGet("/player/p2_walk06.png"),
+                        ImageController.getInstance().tryGet("/player/p2_walk05.png")
                 )));
                 map1.put(State.DEATH, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p2_dieBody.png")
+                        ImageController.getInstance().tryGet("/player/p2_dieBody.png")
                 )));
                 return map1;
             case C:
                 HashMap<State, Animator> map2 = new HashMap<>();
                 map2.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p1_walk04r.png"))));
+                        ImageController.getInstance().tryGet("/player/p1_walk04r.png"))));
                 map2.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p1_walk04.png"))));
+                        ImageController.getInstance().tryGet("/player/p1_walk04.png"))));
                 map2.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p1_walk05r.png"),
-                        ImageController.getInstance().tryGet("/p1_walk04r.png")
+                        ImageController.getInstance().tryGet("/player/p1_walk05r.png"),
+                        ImageController.getInstance().tryGet("/player/p1_walk04r.png")
                 )));
                 map2.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p1_walk05.png"),
-                        ImageController.getInstance().tryGet("/p1_walk04.png")
+                        ImageController.getInstance().tryGet("/player/p1_walk05.png"),
+                        ImageController.getInstance().tryGet("/player/p1_walk04.png")
                 )));
                 map2.put(State.DEATH, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p1_dieBody.png")
+                        ImageController.getInstance().tryGet("/player/p1_dieBody.png")
                 )));
                 return map2;
             case D:
                 HashMap<State, Animator> map3 = new HashMap<>();
                 map3.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p4_walk01r.png"))));
+                        ImageController.getInstance().tryGet("/player/p4_walk01r.png"))));
                 map3.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p4_walk01.png"))));
+                        ImageController.getInstance().tryGet("/player/p4_walk01.png"))));
                 map3.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p4_walkr.png"),
-                        ImageController.getInstance().tryGet("/p4_walk01r.png")
+                        ImageController.getInstance().tryGet("/player/p4_walkr.png"),
+                        ImageController.getInstance().tryGet("/player/p4_walk01r.png")
                 )));
                 map3.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p4_walk02.png"),
-                        ImageController.getInstance().tryGet("/p4_walk01.png")
+                        ImageController.getInstance().tryGet("/player/p4_walk02.png"),
+                        ImageController.getInstance().tryGet("/player/p4_walk01.png")
                 )));
                 map3.put(State.DEATH, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p4_dieBody.png")
+                        ImageController.getInstance().tryGet("/player/p4_dieBody.png")
                 )));
                 return map3;
             case E:
                 HashMap<State, Animator> map4 = new HashMap<>();
                 map4.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p5_walk1r.png"))));
+                        ImageController.getInstance().tryGet("/player/p5_walk1r.png"))));
                 map4.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p5_walk1.png"))));
+                        ImageController.getInstance().tryGet("/player/p5_walk1.png"))));
                 map4.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p5_walk2r.png"),
-                        ImageController.getInstance().tryGet("/p5_walk1r.png")
+                        ImageController.getInstance().tryGet("/player/p5_walk2r.png"),
+                        ImageController.getInstance().tryGet("/player/p5_walk1r.png")
                 )));
                 map4.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p5_walk2.png"),
-                        ImageController.getInstance().tryGet("/p5_walk1.png")
+                        ImageController.getInstance().tryGet("/player/p5_walk2.png"),
+                        ImageController.getInstance().tryGet("/player/p5_walk1.png")
                 )));
                 map4.put(State.DEATH, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/p5_dieBody.png")
+                        ImageController.getInstance().tryGet("/player/p5_dieBody.png")
                 )));
                 return map4;
             default:

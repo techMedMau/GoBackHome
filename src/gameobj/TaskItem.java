@@ -13,7 +13,7 @@ public class TaskItem extends Button implements Range {
     private TaskController.Task task;
 
     public TaskItem(String path, int x, int y, TaskController.Task task) {
-        super(x, y, 45, 52, ImageController.getInstance().tryGet(path));
+        super(x, y, 60, 70, ImageController.getInstance().tryGet(path));
         this.imgS = ImageController.getInstance().tryGet("/shadow.png");
         this.state = false;
         this.task = task;

@@ -28,11 +28,9 @@ public class GameScene extends Scene {
     private Image infoBoard;
     private BackgroundItem backgroundItem;
 
-
     public GameScene(ArrayList<Alien> aliens) {
         this.aliens = aliens;
     }
-
 
     @Override
     public void sceneBegin() {
@@ -41,14 +39,14 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/boxItem.png",105,441, TaskController.Task.GASOLINE));
-        taskItems.add(new TaskItem("/greenBox.png",300,500, TaskController.Task.COLOR_CHANGE));
-        taskItems.add(new TaskItem("/redBox.png",790,1110, TaskController.Task.FIND_PIC));
-        taskItems.add(new TaskItem("/warningBox.png",600,600, TaskController.Task.LINE_UP));
-        taskItems.add(new TaskItem("/woodBox.png",1000,66, TaskController.Task.PASSWORD));
-        taskItems.add(new TaskItem("/blueBox.png",1750,900, TaskController.Task.PUSH));
-        taskItems.add(new TaskItem("/warningWood.png",1600,400, TaskController.Task.ROCK));
-        taskItems.add(new TaskItem("/blackBox.png",1100,400, TaskController.Task.CENTER));
+        taskItems.add(new TaskItem("/taskBox/boxItem.png",105,441, TaskController.Task.GASOLINE));
+        taskItems.add(new TaskItem("/taskBox/greenBox.png",300,500, TaskController.Task.COLOR_CHANGE));
+        taskItems.add(new TaskItem("/taskBox/redBox.png",790,1110, TaskController.Task.FIND_PIC));
+        taskItems.add(new TaskItem("/taskBox/warningBox.png",600,600, TaskController.Task.LINE_UP));
+        taskItems.add(new TaskItem("/taskBox/woodBox.png",1000,66, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/taskBox/blueBox.png",1750,900, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/taskBox/warningWood.png",1600,400, TaskController.Task.ROCK));
+        taskItems.add(new TaskItem("/taskBox/blackBox.png",1100,400, TaskController.Task.CENTER));
         taskController = TaskController.getTaskController();
         this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
         this.backgroundItem = new BackgroundItem("/arrowRight.png",500, 500+32,28,8,500,500,64,64);
@@ -84,7 +82,6 @@ public class GameScene extends Scene {
                     }
                     break;
             }
-
         };
     }
 
@@ -163,7 +160,6 @@ public class GameScene extends Scene {
         colliedWithMap();
         colliedWithWall();
 
-
         //任物箱亮
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0));
@@ -185,7 +181,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/black.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/black.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -197,7 +193,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/black2_2.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                tmp = new GameObjectForMap("/map/black2_2.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
@@ -209,7 +205,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/block.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                tmp = new GameObjectForMap("/map/block.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
@@ -221,7 +217,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/border.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/border.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -233,7 +229,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/brick.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/brick.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -245,7 +241,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/castle.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                tmp = new GameObjectForMap("/map/castle.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
@@ -257,7 +253,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/crate.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/crate.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -269,7 +265,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/diagonal.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/diagonal.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -281,7 +277,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/grassWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                tmp = new GameObjectForMap("/map/grassWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
@@ -293,7 +289,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/sandWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                tmp = new GameObjectForMap("/map/sandWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
@@ -305,7 +301,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/stone.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/stone.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -317,7 +313,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/tile.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
+                                tmp = new GameObjectForMap("/map/tile.png", mapInfo.getX() * size, mapInfo.getY() * size, 32, 32);
                                 return tmp;
                             }
                             return null;
@@ -329,7 +325,7 @@ public class GameScene extends Scene {
                         public GameObject compareClassName(String gameObject, String name, MapInfo mapInfo, int size) {
                             GameObject tmp = null;
                             if (gameObject.equals(name)) {
-                                tmp = new GameObjectForMap("/waterWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
+                                tmp = new GameObjectForMap("/map/waterWall.png", mapInfo.getX() * size, mapInfo.getY() * size, 64, 64);
                                 return tmp;
                             }
                             return null;
