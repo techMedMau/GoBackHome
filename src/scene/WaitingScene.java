@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WaitingScene extends Scene {
+    private int currentPlay;
     private int playMax;
     private int traitor;
     private String password;
@@ -33,6 +34,7 @@ public class WaitingScene extends Scene {
         this.traitor=traitor;
         this.playMax=playMax;
         this.homeOwner=homeOwner;
+        this.currentPlay=1;
     }
 
     @Override
@@ -55,6 +57,9 @@ public class WaitingScene extends Scene {
     @Override
     public void sceneEnd() {
 
+    }
+    public boolean canEnter(){
+        return currentPlay<playMax;
     }
 
     @Override
@@ -121,7 +126,23 @@ public class WaitingScene extends Scene {
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
             if (state == CommandSolver.MouseState.CLICKED) {
-                if (startButton.state(e.getPoint())) {
+                if (ClientClass.getInstance().getID()==homeOwner&&startButton.state(e.getPoint())) {
+                    for (int i=0;i<traitor;i++){
+                        while (true){
+                            int select=Global.random(0,aliens.size()-1);
+                            if (!aliens.get(select).isTraitor()){
+                                aliens.get(select).setTraitor();
+                                ArrayList<String> str=new ArrayList<>();
+                                str.add(String.valueOf(aliens.get(select).getId()));
+                                ClientClass.getInstance().sent(Global.InternetCommand.TRAITOR,str);
+                                break;
+                            }
+                        }
+                    }
+                    ArrayList<String> str=new ArrayList<>();
+                    str.add(password);
+                    ClientClass.getInstance().sent(Global.InternetCommand.START,str);
+                    Global.WAIT_SCENES.remove(password,this);
                     SceneController.getInstance().changeScene(new GameScene(aliens));
                 }
             }
@@ -130,17 +151,22 @@ public class WaitingScene extends Scene {
 
         @Override
         public void paint (Graphics g){
+
             for (int i = 0; i < forWaitingRoom.size(); i++) {
                 forWaitingRoom.get(i).paint(g);
             }
-            startButton.paint(g);
-
             for (int i = 0; i < aliens.size(); i++) {
                 aliens.get(i).paint(g);
+            }
+            if (ClientClass.getInstance().getID()==homeOwner){
+                startButton.paint(g);
             }
             Font font=new Font(Global.FONT,Font.PLAIN,30);
             g.setFont(font);
             g.drawString(password,395,480);
+            Font numFont=new Font(Global.FONT,Font.PLAIN,20);
+            g.setFont(numFont);
+            g.drawString(currentPlay+"/"+playMax,445,580);
         }
 
 
@@ -196,6 +222,7 @@ public class WaitingScene extends Scene {
                             str.add(aliens.get(0).painter().centerX()+"");
                             str.add(aliens.get(0).painter().centerY()+"");
                             str.add(aliens.get(0).getNum()+"");
+                            currentPlay++;
                             ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
                         }
                         break;
@@ -223,6 +250,17 @@ public class WaitingScene extends Scene {
                                 aliens.remove(i);
                             }
                         }
+                        break;
+                    case Global.InternetCommand.TRAITOR:
+                        for(int i=0;i<aliens.size();i++){
+                            if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                aliens.get(i).setTraitor();
+                            }
+                        }
+                        break;
+                    case Global.InternetCommand.START:
+                        Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
+                        SceneController.getInstance().changeScene(new GameScene(aliens));
                         break;
                 }
             });

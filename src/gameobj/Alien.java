@@ -12,13 +12,9 @@ import java.util.HashMap;
 
 public class Alien extends GameObject implements ClickState, Range {
     @Override
-    public void isTriggered(Alien alien) {
-        if (Math.sqrt(Math.abs((alien.painter().centerX() - this.painter().centerX()) * (alien.painter().centerX() - this.painter().centerX())
-                + (alien.painter().centerY() - this.painter().centerY()) * (alien.painter().centerY() - this.painter().centerY()))) < 90.0) {
-            state = true;
-        } else {
-            state = false;
-        }
+    public boolean isTriggered(Alien alien) {
+        return (Math.sqrt(Math.abs((alien.painter().centerX() - this.painter().centerX()) * (alien.painter().centerX() - this.painter().centerX())
+                + (alien.painter().centerY() - this.painter().centerY()) * (alien.painter().centerY() - this.painter().centerY()))) < 90.0) ;
     }
         @Override
     public boolean state(Point point){
@@ -32,6 +28,9 @@ public class Alien extends GameObject implements ClickState, Range {
     }
     public void setTraitor(){
         isTraitor=true;
+    }
+    public boolean isTraitor(){
+        return isTraitor;
     }
 
     @Override
