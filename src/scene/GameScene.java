@@ -76,6 +76,11 @@ public class GameScene extends Scene {
                             break;
                         }
                     }
+                    for (int i=0;i<aliens.size();i++){
+                        if(aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
+                            aliens.get(i).death();
+                        }
+                    }
                     break;
             }
 

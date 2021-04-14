@@ -3,10 +3,11 @@ package gameobj;
 import controllers.ImageController;
 import controllers.TaskController;
 import gameobj.button.Button;
+import gameobj.button.Range;
 
 import java.awt.*;
 
-public class TaskItem extends Button {
+public class TaskItem extends Button implements Range {
     private Image imgS;
     private boolean state;
     private TaskController.Task task;
@@ -27,7 +28,7 @@ public class TaskItem extends Button {
             state = false;
         }
     }
-
+    @Override
     public boolean getState() {
         return state;
     }

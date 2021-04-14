@@ -1,6 +1,8 @@
 package gameobj;
 
 import controllers.ImageController;
+import gameobj.button.ClickState;
+import gameobj.button.Range;
 import utils.Animator;
 import utils.Global;
 
@@ -8,7 +10,35 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Alien extends GameObject {
+public class Alien extends GameObject implements ClickState, Range {
+    @Override
+    public void isTriggered(Alien alien) {
+        if (Math.sqrt(Math.abs((alien.painter().centerX() - this.painter().centerX()) * (alien.painter().centerX() - this.painter().centerX())
+                + (alien.painter().centerY() - this.painter().centerY()) * (alien.painter().centerY() - this.painter().centerY()))) < 90.0) {
+            state = true;
+        } else {
+            state = false;
+        }
+    }
+        @Override
+    public boolean state(Point point){
+        return point.getX()>painter().left() && point.getX()<painter().right()&&
+                point.getY()>painter().top() && point.getY()<painter().bottom();
+    }
+    @Override
+    public boolean state(int x,int y){
+        return x>painter().left() && x<painter().right()&&
+                y>painter().top() && y<painter().bottom();
+    }
+    public void setTraitor(){
+        isTraitor=true;
+    }
+
+    @Override
+    public boolean getState() {
+        return false;
+    }
+
     public enum AlienType {
         A,
         B,
@@ -33,6 +63,9 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p3_walk04.png"),
                         ImageController.getInstance().tryGet("/p3_walk05.png")
                 )));
+                map.put(State.DEATH, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p3_dieBody.png")
+                )));
                 return map;
             case B:
                 HashMap<State, Animator> map1 = new HashMap<>();
@@ -47,6 +80,9 @@ public class Alien extends GameObject {
                 map1.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/p2_walk06.png"),
                         ImageController.getInstance().tryGet("/p2_walk05.png")
+                )));
+                map1.put(State.DEATH, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p2_dieBody.png")
                 )));
                 return map1;
             case C:
@@ -63,6 +99,9 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p1_walk05.png"),
                         ImageController.getInstance().tryGet("/p1_walk04.png")
                 )));
+                map2.put(State.DEATH, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p1_dieBody.png")
+                )));
                 return map2;
             case D:
                 HashMap<State, Animator> map3 = new HashMap<>();
@@ -77,6 +116,9 @@ public class Alien extends GameObject {
                 map3.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/p4_walk02.png"),
                         ImageController.getInstance().tryGet("/p4_walk01.png")
+                )));
+                map3.put(State.DEATH, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p4_dieBody.png")
                 )));
                 return map3;
             case E:
@@ -93,6 +135,9 @@ public class Alien extends GameObject {
                         ImageController.getInstance().tryGet("/p5_walk2.png"),
                         ImageController.getInstance().tryGet("/p5_walk1.png")
                 )));
+                map4.put(State.DEATH, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/p5_dieBody.png")
+                )));
                 return map4;
             default:
                 return null;
@@ -104,7 +149,8 @@ public class Alien extends GameObject {
         STAND_LEFT,
         STAND_RIGHT,
         WALK_LEFT,
-        WALK_RIGHT;
+        WALK_RIGHT,
+        DEATH;
 
         public boolean checkWalkConflict(State lastState) {
             if (lastState != WALK_LEFT && lastState != WALK_RIGHT) {
@@ -121,6 +167,8 @@ public class Alien extends GameObject {
     private AlienType alienType;
     private int ID;
     private int num;
+    private boolean state;//是否接近被害者
+    private boolean isTraitor;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -146,6 +194,7 @@ public class Alien extends GameObject {
         stateAnimator.get(currentState).play();
         horizontalDir = verticalDir = Global.Direction.NO_DIR;
         this.num = num;
+        this.isTraitor=false;
     }
 
     @Override
@@ -155,6 +204,9 @@ public class Alien extends GameObject {
 
     @Override
     public void update() {
+        if (currentState==State.DEATH){
+            return;
+        }
         switch (horizontalDir) {
             case LEFT:
                 if (verticalDir == Global.Direction.DOWN) {
@@ -237,6 +289,9 @@ public class Alien extends GameObject {
     }
 
     private void setState() {
+        if (currentState==State.DEATH){
+            return;
+        }
         State lastState = currentState;
         if (horizontalDir != Global.Direction.NO_DIR) {
             switch (horizontalDir) {
@@ -273,6 +328,9 @@ public class Alien extends GameObject {
             }
             stateAnimator.get(currentState).play();
         }
+    }
+    public void death(){
+        currentState=State.DEATH;
     }
 
     public void setId(int id) {

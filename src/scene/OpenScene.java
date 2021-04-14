@@ -40,7 +40,7 @@ public class OpenScene extends Scene {
             switch (commandCode){
                 case Global.InternetCommand.CREAT:
                     Global.WAIT_SCENES.put(strs.get(0),
-                            new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2))));
+                            new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3))));
             }
         });
 

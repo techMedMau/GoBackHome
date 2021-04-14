@@ -27,10 +27,12 @@ public class WaitingScene extends Scene {
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Alien> aliens;
-    public WaitingScene(String password,int traitor,int playMax){
+    private int homeOwner;
+    public WaitingScene(String password,int traitor,int playMax,int homeOwner){
         this.password=password;
         this.traitor=traitor;
         this.playMax=playMax;
+        this.homeOwner=homeOwner;
     }
 
     @Override
@@ -120,7 +122,6 @@ public class WaitingScene extends Scene {
         return (e, state, trigTime) -> {
             if (state == CommandSolver.MouseState.CLICKED) {
                 if (startButton.state(e.getPoint())) {
-
                     SceneController.getInstance().changeScene(new GameScene(aliens));
                 }
             }

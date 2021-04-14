@@ -24,6 +24,12 @@ public class Animator {
     public void stop() {
         delay.stop();
     }
+    public Delay getDelay(){
+        return delay;
+    }
+    public List<Image> getImgs(){
+        return this.imgs;
+    }
 
     public void paintComponent(Graphics g, int left, int top, int right, int bottom) {
         if (delay.count()) {

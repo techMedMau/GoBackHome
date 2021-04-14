@@ -68,12 +68,13 @@ public class PopUpCreateRoom extends PopUpWindows{
                         }
                         if (traitorNums.getTarget()!=0&&playNums.getTarget()!=0){
                             sceneEnd();
-                            WaitingScene waitingScene=new WaitingScene(str,traitorNums.getTarget(),playNums.getTarget());
+                            WaitingScene waitingScene=new WaitingScene(str,traitorNums.getTarget(),playNums.getTarget(),ClientClass.getInstance().getID());
                             Global.WAIT_SCENES.put(str,waitingScene);
                             ArrayList<String> strCreat=new ArrayList<>();
                             strCreat.add(str);
                             strCreat.add(String.valueOf(traitorNums.getTarget()));
                             strCreat.add(String.valueOf(playNums.getTarget()));
+                            strCreat.add(String.valueOf(ClientClass.getInstance().getID()));
                             ClientClass.getInstance().sent(Global.InternetCommand.CREAT,strCreat);
                             SceneController.getInstance().changeScene(waitingScene);
                         }
