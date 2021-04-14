@@ -181,8 +181,8 @@ public class GameScene extends Scene {
         str.add(ClientClass.getInstance().getID()+"");
         str.add(aliens.get(0).painter().centerX()+"");
         str.add(aliens.get(0).painter().centerY()+"");
-        str.add(aliens.get(0).getHorizontalDir().name()+"");
-        str.add(aliens.get(0).getVerticalDir().name()+"");
+        str.add(aliens.get(0).getHorizontalDir().getValue()+"");
+        str.add(aliens.get(0).getVerticalDir().getValue()+"");
         str.add(aliens.get(0).getCurrentState().name()+"");
         ClientClass.getInstance().sent(Global.InternetCommand.MOVE,str);
         //任物箱亮
@@ -202,8 +202,8 @@ public class GameScene extends Scene {
                             if (aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
                                 aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
                                 aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
-                                aliens.get(i).setHorizontalDir(Global.Direction.valueOf(strs.get(3)));
-                                aliens.get(i).setVerticalDir(Global.Direction.valueOf(strs.get(4)));
+                                aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
+                                aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
                                 if (strs.get(5).equals(Alien.State.DEATH.name())){
                                     aliens.get(i).death();
                                 }
