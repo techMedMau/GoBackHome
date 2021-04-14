@@ -1,27 +1,49 @@
 package scene.popupwindow;
 
 import controllers.ImageController;
+import gameobj.button.Button;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PopUpLineUp extends PopUpTask {
-    private ArrayList<Image> images;
+    private Map<Button, Button> lineUp;
+    private Button gold ;
+    private Button diamond;
+    private Button iron;
+    private Button ruby;
+
 
     public PopUpLineUp(){
-        images = new ArrayList<>();
-        images.add(ImageController.getInstance().tryGet("/lineUp/diamond.png"));
-        images.add(ImageController.getInstance().tryGet("/lineUp/gold.png"));
-        images.add(ImageController.getInstance().tryGet("/lineUp/iron.png"));
-        images.add(ImageController.getInstance().tryGet("/lineUp/ruby.png"));
+
+        lineUp = new HashMap<>();
+        gold = new Button(300,100,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"));
+        diamond = new Button(300,200,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"));
+        iron = new Button(300,300,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"));
+        ruby =
+        lineUp.put(gold
+                ,new Button(600,300,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png")));
+        lineUp.put(diamond
+                ,new Button(600,100,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png")));
+        lineUp.put(iron
+                ,new Button(600,400,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png")));
+        lineUp.put(new Button(300,400,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))
+                ,new Button(600,200,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png")));
     }
+
+
 
     @Override
     public void paint(Graphics g){
         super.paint(g);
-        for(int i = 0; i < images.size(); i++) {
-            g.drawImage(images.get(i), 200, 100+ i*5, null);
-        }
+//        lineUp.get(button1);
+    }
+
+    @Override
+    public void update(){
+
     }
 
 

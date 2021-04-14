@@ -1,4 +1,5 @@
 import controllers.SceneController;
+import gameobj.Alien;
 import scene.GameScene;
 import scene.OpenScene;
 import scene.WaitingScene;
@@ -8,9 +9,12 @@ import utils.Global;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+//        ArrayList<Alien> aliens = new ArrayList<>();
+//        aliens.add(new Alien(500,500,1));
         JFrame jframe=new JFrame();
         SceneController sceneController=SceneController.getInstance(); //取得單例模式的控場實體
         sceneController.changeScene(new OpenScene()); //一開始使用開場畫面
