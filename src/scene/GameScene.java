@@ -4,6 +4,8 @@ import camera.Camera;
 import controllers.ImageController;
 import controllers.TaskController;
 import gameobj.*;
+import internet.server.ClientClass;
+import internet.server.CommandReceiver;
 import maploader.MapInfo;
 import maploader.MapLoader;
 import utils.CommandSolver;
@@ -80,7 +82,7 @@ public class GameScene extends Scene {
                         }
                     }
                     for (int i=1;i<aliens.size();i++){
-                        if(aliens.get(0).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))&&aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
+                        if(aliens.get(0).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))&&!aliens.get(i).isTraitor()&&aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).death();
                         }
                     }
@@ -149,7 +151,7 @@ public class GameScene extends Scene {
                     g.drawString("Traitor",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
                 }
                 if (!aliens.get(i).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))){
-                    g.drawString("Kill?",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
+                    g.drawString("Kill?",aliens.get(i).painter().centerX()-20,aliens.get(i).painter().top());
                 }
 
             }
@@ -175,7 +177,14 @@ public class GameScene extends Scene {
         aliens.get(0).update();
         colliedWithMap();
         colliedWithWall();
-
+        ArrayList<String> str=new ArrayList<>();
+        str.add(ClientClass.getInstance().getID()+"");
+        str.add(aliens.get(0).painter().centerX()+"");
+        str.add(aliens.get(0).painter().centerY()+"");
+        str.add(aliens.get(0).getHorizontalDir().name()+"");
+        str.add(aliens.get(0).getVerticalDir().name()+"");
+        str.add(aliens.get(0).getCurrentState().name()+"");
+        ClientClass.getInstance().sent(Global.InternetCommand.MOVE,str);
         //任物箱亮
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0));
@@ -184,6 +193,25 @@ public class GameScene extends Scene {
             taskController.getCurrentPopUp().update();
         }
         cam.update();
+        ClientClass.getInstance().consume(new CommandReceiver() {
+            @Override
+            public void receive(int serialNum, int commandCode, ArrayList<String> strs) {
+                switch (commandCode){
+                    case Global.InternetCommand.MOVE:
+                        for (int i=1;i<aliens.size();i++){
+                            if (aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                                aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                                aliens.get(i).setHorizontalDir(Global.Direction.valueOf(strs.get(3)));
+                                aliens.get(i).setVerticalDir(Global.Direction.valueOf(strs.get(4)));
+                                if (strs.get(5).equals(Alien.State.DEATH.name())){
+                                    aliens.get(i).death();
+                                }
+                            }
+                        }
+                }
+            }
+        });
     }
 
     public MapLoader MapGameGen() {

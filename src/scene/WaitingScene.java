@@ -61,17 +61,6 @@ public class WaitingScene extends Scene {
     public boolean canEnter(){
         return currentPlay<playMax;
     }
-    public int getHomeOwner(){
-        return homeOwner;
-    }
-
-    public int getTraitor() {
-        return traitor;
-    }
-
-    public int getPlayMax() {
-        return playMax;
-    }
 
     @Override
     public CommandSolver.KeyListener keyListener() {
@@ -272,6 +261,17 @@ public class WaitingScene extends Scene {
                     case Global.InternetCommand.START:
                         Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
                         SceneController.getInstance().changeScene(new GameScene(aliens));
+                        break;
+                    case Global.InternetCommand.GET_ROOM:
+                        Global.WAIT_SCENES.forEach((s, waitingScene) -> {
+                            ArrayList<String> str=new ArrayList<>();
+                            str.add(s);
+                            str.add(String.valueOf(waitingScene.traitor));
+                            str.add(String.valueOf(waitingScene.playMax));
+                            str.add(String.valueOf(waitingScene.homeOwner));
+                            ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                            System.out.println(s);
+                        });
                         break;
                 }
             });
