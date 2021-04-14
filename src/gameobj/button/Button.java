@@ -13,6 +13,8 @@ public class Button extends GameObject implements ClickState{
         super(x, y, width, height);
         this.img=img;
     }
+
+
     @Override
     //小任務
     public boolean state(Point point){

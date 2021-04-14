@@ -273,6 +273,18 @@ public class WaitingScene extends Scene {
                         Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
                         SceneController.getInstance().changeScene(new GameScene(aliens));
                         break;
+                    case Global.InternetCommand.GET_ROOM:
+                        System.out.println("GET_ROOM");
+                        Global.WAIT_SCENES.forEach((s, waitingScene) -> {
+                            ArrayList<String> str=new ArrayList<>();
+                            str.add(s);
+                            str.add(String.valueOf(waitingScene.getTraitor()));
+                            str.add(String.valueOf(waitingScene.getPlayMax()));
+                            str.add(String.valueOf(waitingScene.getHomeOwner()));
+                            ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                            System.out.println(s);
+                        });
+                        break;
                 }
             });
         }

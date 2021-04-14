@@ -46,16 +46,18 @@ public class OpenScene extends Scene {
                     Global.WAIT_SCENES.put(strs.get(0),
                             new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3))));
                     break;
-                case Global.InternetCommand.GET_ROOM:
-                    Global.WAIT_SCENES.forEach((s, waitingScene) -> {
-                        ArrayList<String> str=new ArrayList<>();
-                        str.add(s);
-                        str.add(String.valueOf(waitingScene.getTraitor()));
-                        str.add(String.valueOf(waitingScene.getPlayMax()));
-                        str.add(String.valueOf(waitingScene.getHomeOwner()));
-                        ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
-                    });
-                    break;
+//                case Global.InternetCommand.GET_ROOM:
+//                    System.out.println("GET_ROOM");
+//                    Global.WAIT_SCENES.forEach((s, waitingScene) -> {
+//                        ArrayList<String> str=new ArrayList<>();
+//                        str.add(s);
+//                        str.add(String.valueOf(waitingScene.getTraitor()));
+//                        str.add(String.valueOf(waitingScene.getPlayMax()));
+//                        str.add(String.valueOf(waitingScene.getHomeOwner()));
+//                        ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+//                        System.out.println(s);
+//                    });
+//                    break;
             }
         });
 
