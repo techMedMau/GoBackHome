@@ -72,6 +72,7 @@ public class WaitingScene extends Scene {
                 if(commandCode==6){  //角色斷線時發送斷線訊息
                     ArrayList<String> strs = new ArrayList<String>();
                     strs.add(String.valueOf(ClientClass.getInstance().getID()));
+                    strs.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.DISCONNECT,strs);
                     ClientClass.getInstance().disConnect();
                     System.exit(0);
@@ -135,6 +136,7 @@ public class WaitingScene extends Scene {
                                 aliens.get(select).setTraitor();
                                 ArrayList<String> str=new ArrayList<>();
                                 str.add(String.valueOf(aliens.get(select).getId()));
+                                str.add(password);
                                 ClientClass.getInstance().sent(Global.InternetCommand.TRAITOR,str);
                                 break;
                             }
@@ -144,7 +146,7 @@ public class WaitingScene extends Scene {
                     str.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.START,str);
                     Global.WAIT_SCENES.remove(password,this);
-                    SceneController.getInstance().changeScene(new GameScene(aliens));
+                    SceneController.getInstance().changeScene(new GameScene(aliens,password));
                 }
             }
         };
@@ -198,6 +200,7 @@ public class WaitingScene extends Scene {
             strr.add(aliens.get(0).painter().centerY()+"");
             strr.add(aliens.get(0).getHorizontalDir().getValue()+"");
             strr.add(aliens.get(0).getVerticalDir().getValue()+"");
+            strr.add(password);
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
             ClientClass.getInstance().consume((serialNum, internetcommand, strs) -> {
                 switch(internetcommand){
@@ -210,7 +213,7 @@ public class WaitingScene extends Scene {
                                 break;
                             }
                         }
-                        if(!isBorn&&strs.get(0).equals(password)) {
+                        if(!isBorn&&strs.get(3).equals(password)) {
                             aliens.add(new Alien(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2))));
                             aliens.get(aliens.size() - 1).setId(serialNum);
                             ArrayList<String> str=new ArrayList<>();
@@ -223,45 +226,54 @@ public class WaitingScene extends Scene {
                         }
                         break;
                     case Global.InternetCommand.MOVE:
-                        for (int i=1;i<aliens.size();i++){
-                            if (aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
-                                aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
-                                aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
-                                aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
-                                aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
-                                break;
+                        if (strs.get(5).equals(password)){
+                            for (int i=1;i<aliens.size();i++){
+                                if (aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                    aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                                    aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                                    aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
+                                    aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
+                                    break;
+                                }
                             }
                         }
                         break;
                     case Global.InternetCommand.DISCONNECT:
-                        for(int i=0;i<aliens.size();i++){
-                            if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
-                                aliens.remove(i);
-                                break;
+                        if (strs.get(1).equals(password)){
+                            for(int i=0;i<aliens.size();i++){
+                                if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                    aliens.remove(i);
+                                    break;
+                                }
                             }
                         }
                         break;
                     case Global.InternetCommand.TRAITOR:
-                        for(int i=0;i<aliens.size();i++){
-                            if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
-                                aliens.get(i).setTraitor();
-                                break;
+                        if (strs.get(1).equals(password)){
+                            for(int i=0;i<aliens.size();i++){
+                                if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                    aliens.get(i).setTraitor();
+                                    break;
+                                }
                             }
                         }
+
                         break;
                     case Global.InternetCommand.START:
-                        Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
-                        SceneController.getInstance().changeScene(new GameScene(aliens));
+                        if (strs.get(1).equals(password)){
+                            Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
+                            SceneController.getInstance().changeScene(new GameScene(aliens,password));
+                        }
                         break;
                     case Global.InternetCommand.GET_ROOM:
-                        Global.WAIT_SCENES.forEach((s, waitingScene) -> {
-                            ArrayList<String> str=new ArrayList<>();
-                            str.add(s);
-                            str.add(String.valueOf(waitingScene.traitor));
-                            str.add(String.valueOf(waitingScene.playMax));
-                            str.add(String.valueOf(waitingScene.homeOwner));
-                            ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
-                        });
+                            Global.WAIT_SCENES.forEach((s, waitingScene) -> {
+                                ArrayList<String> str=new ArrayList<>();
+                                str.add(s);
+                                str.add(String.valueOf(waitingScene.traitor));
+                                str.add(String.valueOf(waitingScene.playMax));
+                                str.add(String.valueOf(waitingScene.homeOwner));
+                                ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                            });
                         break;
                 }
             });
