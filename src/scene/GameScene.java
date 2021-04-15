@@ -30,13 +30,15 @@ public class GameScene extends Scene {
     private TaskController taskController;
     private Image infoBoard;
     private BackgroundItem backgroundItem;
+    private String password;
 
-    public GameScene(ArrayList<Alien> aliens) {
+    public GameScene(ArrayList<Alien> aliens,String password) {
         this.aliens = aliens;
         aliens.forEach(alien -> {
             alien.painter().setCenter(630, 200);
             alien.collider().setCenter(630, 200);
         });
+        this.password=password;
     }
 
     @Override
@@ -86,6 +88,7 @@ public class GameScene extends Scene {
                         if (aliens.get(0).isTraitor() &&aliens.get(i).getCurrentState()!= Alien.State.DEATH && aliens.get(0).isTriggered(aliens.get(i)) && !aliens.get(i).isTraitor() && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();
                             ArrayList<String> str = new ArrayList<>();
+                            str.add(password);
                             str.add(aliens.get(i).getId() + "");
                             ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
                             return;
@@ -94,6 +97,7 @@ public class GameScene extends Scene {
                     for (int i = 1; i < aliens.size(); i++) {
                         if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             ArrayList<String> str = new ArrayList<>();
+                            str.add(password);
                             str.add(String.valueOf(aliens.get(0).getId()));
                             ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
                             SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
@@ -202,6 +206,7 @@ public class GameScene extends Scene {
         colliedWithMap();
         colliedWithWall();
         ArrayList<String> str = new ArrayList<>();
+        str.add(password);
         str.add(ClientClass.getInstance().getID() + "");
         str.add(aliens.get(0).painter().centerX() + "");
         str.add(aliens.get(0).painter().centerY() + "");
@@ -219,29 +224,31 @@ public class GameScene extends Scene {
         ClientClass.getInstance().consume(new CommandReceiver() {
             @Override
             public void receive(int serialNum, int commandCode, ArrayList<String> strs) {
-                switch (commandCode) {
-                    case Global.InternetCommand.MOVE:
-                        for (int i = 1; i < aliens.size(); i++) {
-                            if (aliens.get(i).getId() == Integer.parseInt(strs.get(0))) {
-                                aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
-                                aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
-                                aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
-                                aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
-                                break;
+                if (strs.get(0).equals(password)){
+                    switch (commandCode) {
+                        case Global.InternetCommand.MOVE:
+                            for (int i = 1; i < aliens.size(); i++) {
+                                if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {
+                                    aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(2)), Integer.parseInt(strs.get(3)));
+                                    aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(2)), Integer.parseInt(strs.get(3)));
+                                    aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
+                                    aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(5))));
+                                    break;
+                                }
                             }
-                        }
-                        break;
-                    case Global.InternetCommand.DEATH:
-                        for (int i = 0; i < aliens.size(); i++) {
-                            if (aliens.get(i).getId() == Integer.parseInt(strs.get(0))) {
-                                aliens.get(i).death();
-                                break;
+                            break;
+                        case Global.InternetCommand.DEATH:
+                            for (int i = 0; i < aliens.size(); i++) {
+                                if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {
+                                    aliens.get(i).death();
+                                    break;
+                                }
                             }
-                        }
-                        break;
-                    case Global.InternetCommand.TO_VOTE:
-                        SceneController.getInstance().changeScene(new VoteScene(aliens,Integer.parseInt(str.get(0))));
-                        break;
+                            break;
+                        case Global.InternetCommand.TO_VOTE:
+                            SceneController.getInstance().changeScene(new VoteScene(aliens,Integer.parseInt(str.get(1))));
+                            break;
+                    }
                 }
             }
         });
