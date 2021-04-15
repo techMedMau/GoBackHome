@@ -266,6 +266,7 @@ public class WaitingScene extends Scene {
                         }
                         break;
                     case Global.InternetCommand.GET_ROOM:
+                        System.out.println("GET_ROOM");
                             Global.WAIT_SCENES.forEach((s, waitingScene) -> {
                                 ArrayList<String> str=new ArrayList<>();
                                 str.add(s);
@@ -273,6 +274,7 @@ public class WaitingScene extends Scene {
                                 str.add(String.valueOf(waitingScene.playMax));
                                 str.add(String.valueOf(waitingScene.homeOwner));
                                 ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                                System.out.println("GET_ROOM:"+s);
                             });
                         break;
                 }
