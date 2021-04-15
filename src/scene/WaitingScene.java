@@ -273,7 +273,6 @@ public class WaitingScene extends Scene {
                             str.add(String.valueOf(waitingScene.playMax));
                             str.add(String.valueOf(waitingScene.homeOwner));
                             ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
-                            System.out.println(s);
                         });
                         break;
                 }
