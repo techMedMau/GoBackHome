@@ -2,6 +2,7 @@ package scene;
 
 import camera.Camera;
 import controllers.ImageController;
+import controllers.SceneController;
 import controllers.TaskController;
 import gameobj.*;
 import internet.server.ClientClass;
@@ -78,12 +79,26 @@ public class GameScene extends Scene {
                     for (int i = 0; i < taskItems.size(); i++) {
                         if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             taskController.changePopUp(taskItems.get(i).getTask());
-                            break;
+                            return;
                         }
                     }
                     for (int i=1;i<aliens.size();i++){
                         if(aliens.get(0).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))&&!aliens.get(i).isTraitor()&&aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).death();
+                            ArrayList<String> str = new ArrayList<>();
+                            str.add(aliens.get(i).getId() + "");
+                            ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
+                            return;
+                        }
+                    }
+                    for (int i = 1; i < aliens.size(); i++) {
+                        if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                            ArrayList<String> str = new ArrayList<>();
+                            str.add(String.valueOf(aliens.get(0).getId()));
+                            ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
+                            SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
+                            return;
+
                         }
                     }
                     break;
