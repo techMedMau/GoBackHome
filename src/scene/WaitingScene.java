@@ -260,12 +260,13 @@ public class WaitingScene extends Scene {
 
                         break;
                     case Global.InternetCommand.START:
-                        if (strs.get(1).equals(password)){
+                        if (strs.get(0).equals(password)){
                             Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
                             SceneController.getInstance().changeScene(new GameScene(aliens,password));
                         }
                         break;
                     case Global.InternetCommand.GET_ROOM:
+                        System.out.println("GET_ROOM");
                             Global.WAIT_SCENES.forEach((s, waitingScene) -> {
                                 ArrayList<String> str=new ArrayList<>();
                                 str.add(s);
@@ -273,6 +274,7 @@ public class WaitingScene extends Scene {
                                 str.add(String.valueOf(waitingScene.playMax));
                                 str.add(String.valueOf(waitingScene.homeOwner));
                                 ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                                System.out.println("GET_ROOM:"+s);
                             });
                         break;
                 }

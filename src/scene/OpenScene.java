@@ -40,9 +40,11 @@ public class OpenScene extends Scene {
         ClientClass.getInstance().consume((serialNum, commandCode, strs) -> {
             switch (commandCode){
                 case Global.InternetCommand.CREAT:
+                    System.out.println("CREAT");
                     if (Global.WAIT_SCENES.containsKey(strs.get(0))){
                         return;
                     }
+                    System.out.println(strs.get(0));
                     Global.WAIT_SCENES.put(strs.get(0),
                             new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3))));
                     break;
