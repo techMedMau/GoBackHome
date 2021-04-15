@@ -232,7 +232,7 @@ public class GameScene extends Scene {
                         }
                         break;
                     case Global.InternetCommand.DEATH:
-                        for (int i = 1; i < aliens.size(); i++) {
+                        for (int i = 0; i < aliens.size(); i++) {
                             if (aliens.get(i).getId() == Integer.parseInt(strs.get(0))) {
                                 aliens.get(i).death();
                                 break;
