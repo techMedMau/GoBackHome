@@ -6,5 +6,6 @@ import scene.Scene;
 import java.awt.*;
 
 public class PopUPPassword extends PopUpTask {
+    private Image img;
 
 }
