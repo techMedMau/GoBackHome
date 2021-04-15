@@ -34,8 +34,8 @@ public class GameScene extends Scene {
     public GameScene(ArrayList<Alien> aliens) {
         this.aliens = aliens;
         aliens.forEach(alien -> {
-            alien.painter().setCenter(630,200);
-            alien.collider().setCenter(630,200);
+            alien.painter().setCenter(630, 200);
+            alien.collider().setCenter(630, 200);
         });
     }
 
@@ -46,17 +46,17 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/taskBox/boxItem.png",105,441, TaskController.Task.GASOLINE));
-        taskItems.add(new TaskItem("/taskBox/greenBox.png",300,500, TaskController.Task.COLOR_CHANGE));
-        taskItems.add(new TaskItem("/taskBox/redBox.png",790,1110, TaskController.Task.FIND_PIC));
-        taskItems.add(new TaskItem("/taskBox/warningBox.png",600,600, TaskController.Task.LINE_UP));
-        taskItems.add(new TaskItem("/taskBox/woodBox.png",1000,66, TaskController.Task.PASSWORD));
-        taskItems.add(new TaskItem("/taskBox/blueBox.png",1750,900, TaskController.Task.PUSH));
-        taskItems.add(new TaskItem("/taskBox/warningWood.png",1600,400, TaskController.Task.ROCK));
-        taskItems.add(new TaskItem("/taskBox/blackBox.png",1100,400, TaskController.Task.CENTER));
+        taskItems.add(new TaskItem("/taskBox/boxItem.png", 105, 441, TaskController.Task.GASOLINE));
+        taskItems.add(new TaskItem("/taskBox/greenBox.png", 300, 500, TaskController.Task.COLOR_CHANGE));
+        taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
+        taskItems.add(new TaskItem("/taskBox/warningBox.png", 600, 600, TaskController.Task.LINE_UP));
+        taskItems.add(new TaskItem("/taskBox/woodBox.png", 1000, 66, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1750, 900, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
+        taskItems.add(new TaskItem("/taskBox/blackBox.png", 1100, 400, TaskController.Task.CENTER));
         taskController = TaskController.getTaskController();
         this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
-        this.backgroundItem = new BackgroundItem("/arrowRight.png",500, 500+32,28,8,500,500,64,64);
+        this.backgroundItem = new BackgroundItem("/arrowRight.png", 500, 500 + 32, 28, 8, 500, 500, 64, 64);
     }
 
     @Override
@@ -67,11 +67,11 @@ public class GameScene extends Scene {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (MouseEvent e, CommandSolver.MouseState state, long trigTime) -> {
-            if (state == null) {
+            if (state == null || aliens.get(0).getCurrentState() == Alien.State.DEATH) {
                 return;
             }
-            if (taskController.getCurrentPopUp()!=null&&taskController.getCurrentPopUp().isShow()){
-                taskController.getCurrentPopUp().mouseListener().mouseTrig(e,state,trigTime);
+            if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
+                taskController.getCurrentPopUp().mouseListener().mouseTrig(e, state, trigTime);
                 return;
             }
             switch (state) {
@@ -82,8 +82,8 @@ public class GameScene extends Scene {
                             return;
                         }
                     }
-                    for (int i=1;i<aliens.size();i++){
-                        if(aliens.get(0).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))&&!aliens.get(i).isTraitor()&&aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
+                    for (int i = 1; i < aliens.size(); i++) {
+                        if (aliens.get(0).isTraitor() && aliens.get(0).isTriggered(aliens.get(i)) && !aliens.get(i).isTraitor() && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();
                             ArrayList<String> str = new ArrayList<>();
                             str.add(aliens.get(i).getId() + "");
@@ -98,10 +98,10 @@ public class GameScene extends Scene {
                             ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
                             SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
                             return;
-
                         }
                     }
                     break;
+
             }
         };
     }
@@ -111,6 +111,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
+                if (aliens.get(0).getCurrentState() == Alien.State.DEATH) {
+                    return;
+                }
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
                     case LEFT:
@@ -130,6 +133,9 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
+                if (aliens.get(0).getCurrentState() == Alien.State.DEATH) {
+                    return;
+                }
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
                 switch (direction) {
                     case LEFT:
@@ -142,6 +148,7 @@ public class GameScene extends Scene {
                         break;
                 }
             }
+
             @Override
             public void keyTyped(char c, long trigTime) {
 
@@ -153,22 +160,24 @@ public class GameScene extends Scene {
     public void paint(Graphics g) {
         cam.start(g);
         g.drawImage(backGround, 0, 0, null);
-        Font font=new Font(Global.FONT,Font.PLAIN,20);
+        Font font = new Font(Global.FONT, Font.PLAIN, 20);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i)))
                 forGame.get(i).paint(g);
         }
         for (int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(0).isTraitor()){
+            if (aliens.get(0).isTraitor()) {
                 g.setColor(Color.RED);
                 g.setFont(font);
-                if (aliens.get(i).isTraitor()){
-                    g.drawString("Traitor",aliens.get(i).painter().centerX()-28,aliens.get(i).painter().top());
+                if (aliens.get(i).isTraitor()) {
+                    g.drawString("Traitor", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
                 }
-                if (!aliens.get(i).isTraitor()&&aliens.get(0).isTriggered(aliens.get(i))){
-                    g.drawString("Kill?",aliens.get(i).painter().centerX()-20,aliens.get(i).painter().top());
+                if (!aliens.get(i).isTraitor() && aliens.get(0).isTriggered(aliens.get(i))) {
+                    g.drawString("Kill?", aliens.get(i).painter().centerX() - 20, aliens.get(i).painter().top());
                 }
-
+            }
+            if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH) {
+                g.drawString("Report?", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
             }
             aliens.get(i).paint(g);
         }
@@ -192,14 +201,13 @@ public class GameScene extends Scene {
         aliens.get(0).update();
         colliedWithMap();
         colliedWithWall();
-        ArrayList<String> str=new ArrayList<>();
-        str.add(ClientClass.getInstance().getID()+"");
-        str.add(aliens.get(0).painter().centerX()+"");
-        str.add(aliens.get(0).painter().centerY()+"");
-        str.add(aliens.get(0).getHorizontalDir().getValue()+"");
-        str.add(aliens.get(0).getVerticalDir().getValue()+"");
-        str.add(aliens.get(0).getCurrentState().name()+"");
-        ClientClass.getInstance().sent(Global.InternetCommand.MOVE,str);
+        ArrayList<String> str = new ArrayList<>();
+        str.add(ClientClass.getInstance().getID() + "");
+        str.add(aliens.get(0).painter().centerX() + "");
+        str.add(aliens.get(0).painter().centerY() + "");
+        str.add(aliens.get(0).getHorizontalDir().getValue() + "");
+        str.add(aliens.get(0).getVerticalDir().getValue() + "");
+        ClientClass.getInstance().sent(Global.InternetCommand.MOVE, str);
         //任物箱亮
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).isTriggered(aliens.get(0));
@@ -211,19 +219,29 @@ public class GameScene extends Scene {
         ClientClass.getInstance().consume(new CommandReceiver() {
             @Override
             public void receive(int serialNum, int commandCode, ArrayList<String> strs) {
-                switch (commandCode){
+                switch (commandCode) {
                     case Global.InternetCommand.MOVE:
-                        for (int i=1;i<aliens.size();i++){
-                            if (aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
-                                aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
-                                aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
+                        for (int i = 1; i < aliens.size(); i++) {
+                            if (aliens.get(i).getId() == Integer.parseInt(strs.get(0))) {
+                                aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
+                                aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
                                 aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
                                 aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
-                                if (strs.get(5).equals(Alien.State.DEATH.name())){
-                                    aliens.get(i).death();
-                                }
+                                break;
                             }
                         }
+                        break;
+                    case Global.InternetCommand.DEATH:
+                        for (int i = 1; i < aliens.size(); i++) {
+                            if (aliens.get(i).getId() == Integer.parseInt(strs.get(0))) {
+                                aliens.get(i).death();
+                                break;
+                            }
+                        }
+                        break;
+                    case Global.InternetCommand.TO_VOTE:
+                        SceneController.getInstance().changeScene(new VoteScene(aliens,Integer.parseInt(str.get(0))));
+                        break;
                 }
             }
         });
@@ -397,7 +415,7 @@ public class GameScene extends Scene {
         return mapLoader;
     }
 
-    public void colliedWithMap(){
+    public void colliedWithMap() {
         for (int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).painter().left() <= map.painter().left()) {
                 aliens.get(i).translateX(Global.MOVE_SPEED);
@@ -418,7 +436,7 @@ public class GameScene extends Scene {
         }
     }
 
-    public void colliedWithWall(){
+    public void colliedWithWall() {
         Global.Direction horizontalDir = aliens.get(0).getHorizontalDir();
         switch (horizontalDir) {
             case LEFT:
@@ -434,7 +452,7 @@ public class GameScene extends Scene {
                     aliens.get(0).translateX(Global.MOVE_SPEED);
                     break;
                 }
-                for(int i = 0; i < taskItems.size(); i++){
+                for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i))
                             && aliens.get(0).leftIsCollision(taskItems.get(i))) {
                         aliens.get(0).translateX(Global.MOVE_SPEED);
@@ -481,11 +499,11 @@ public class GameScene extends Scene {
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&
-                        aliens.get(0).bottomIsCollision(taskItems.get(i))) {
-                    aliens.get(0).translateY(-Global.MOVE_SPEED);
-                    break;
+                            aliens.get(0).bottomIsCollision(taskItems.get(i))) {
+                        aliens.get(0).translateY(-Global.MOVE_SPEED);
+                        break;
+                    }
                 }
-            }
                 break;
             case UP:
                 for (int i = 0; i < forGame.size(); i++) {
@@ -500,21 +518,21 @@ public class GameScene extends Scene {
                     aliens.get(0).translateY(Global.MOVE_SPEED);
                     break;
                 }
-                for (int i=0;i<taskItems.size();i++){
-                    if (aliens.get(0).isCollision(taskItems.get(i))&&
-                        aliens.get(0).topIsCollision(taskItems.get(i))){
-                    aliens.get(0).translateY(Global.MOVE_SPEED);
-                    break;
+                for (int i = 0; i < taskItems.size(); i++) {
+                    if (aliens.get(0).isCollision(taskItems.get(i)) &&
+                            aliens.get(0).topIsCollision(taskItems.get(i))) {
+                        aliens.get(0).translateY(Global.MOVE_SPEED);
+                        break;
+                    }
                 }
-            }
                 break;
         }
     }
 
-    public void drawInfo(Graphics g){
-        g.drawImage(infoBoard, 0 ,0, null);
+    public void drawInfo(Graphics g) {
+        g.drawImage(infoBoard, 0, 0, null);
         g.setColor(Color.BLACK);
-        Font font = new Font(Global.FONT,Font.PLAIN,15);
+        Font font = new Font(Global.FONT, Font.PLAIN, 15);
         g.setFont(font);
         g.drawString("Task1", 10, 30);
         g.drawString("Task2", 10, 50);
