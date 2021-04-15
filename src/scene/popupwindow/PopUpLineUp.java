@@ -13,12 +13,17 @@ public class PopUpLineUp extends PopUpTask {
 
     private ArrayList<KeyPair> keyPairs;
     private Button tmp;
-    private int line;
-
+    private Button tmp2;
+    private int lineNum; //1~4
+    private ArrayList<Image> lines;
+    private boolean line1;
+    private boolean line2;
+    private boolean line3;
+    private boolean line4;
 
     public PopUpLineUp(){
         keyPairs = new ArrayList<>();
-
+        lines = new ArrayList<>();
         this.keyPairs.add(new KeyPair(new Button(300,100,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))
                 , new Button(600,300,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))));
         this.keyPairs.add(new KeyPair(new Button(300,200,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))
@@ -27,6 +32,10 @@ public class PopUpLineUp extends PopUpTask {
                 , new Button(600,400,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"))));
         this.keyPairs.add(new KeyPair(new Button(300,400,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))
                 , new Button(600,200,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))));
+        this.line1 = false;
+        this.line2 = false;
+        this.line3 = false;
+        this.line4 = false;
     }
 
 
@@ -38,9 +47,19 @@ public class PopUpLineUp extends PopUpTask {
             keyPairs.get(i).button.paint(g);
             keyPairs.get(i).button1.paint(g);
         }
-//        switch(line){
-//
-//        }
+
+        if(line1) {
+            g.drawLine(348, 124, 600, 324);
+        }
+        if(line2){
+            g.drawLine(348,224,600,124);
+        }
+        if(line3){
+            g.drawLine(348,324,600,424);
+        }
+        if(line4){
+            g.drawLine(348,424,600,224);
+        }
     }
 
     @Override
@@ -58,21 +77,43 @@ public class PopUpLineUp extends PopUpTask {
                     for(i = 0; i < keyPairs.size(); i++) {
                         if (keyPairs.get(i).button.state(e.getPoint())) {
                             tmp = keyPairs.get(i).button1;
+                            System.out.println(tmp);
                             break;
                         }
                     }
                     if (i<keyPairs.size()){
                         break;
                     }
+//                    for(int k = 0; k < keyPairs.size(); k++) {
+//                        if (keyPairs.get(k).button1.state(e.getPoint())) {
+//                            tmp2 = keyPairs.get(k).button1;
+//                            lineNum = k+1;
+//                            if(tmp2 == tmp){
+//                                System.out.println("correct");
+//                            }
+//                            System.out.println(tmp2);
+//                            break;
+//                        }
+//                    }
                     for(int k = 0; k < keyPairs.size(); k++) {
                         if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
-                            line = k;
+                            System.out.println(keyPairs.get(k).button1);
+                            if(k == 0){
+                                line1 = true;
+                            }
+                            if(k == 1){
+                                line2 = true;
+                            }
+                            if(k == 2){
+                                line3 = true;
+                            }
+                            if(k == 3){
+                                line4 = true;
+                            }
                         }
                      }
                     tmp = null;
-
-
-
+//                    tmp2 = null;
                     break;
             }
         };

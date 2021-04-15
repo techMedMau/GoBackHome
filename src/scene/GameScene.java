@@ -463,7 +463,6 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).rightIsCollision(forGame.get(i))) {
-                        System.out.println("?");
                         aliens.get(0).translateX(-Global.MOVE_SPEED);
                         break;
                     }
