@@ -232,7 +232,6 @@ public class Alien extends GameObject implements ClickState, Range {
         switch (verticalDir) {
             case UP:
                 if (horizontalDir == Global.Direction.RIGHT) {
-                    System.out.println("!");
                     translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                     translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
                 } else if (horizontalDir == Global.Direction.LEFT) {
