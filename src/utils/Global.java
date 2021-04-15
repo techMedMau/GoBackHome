@@ -12,6 +12,8 @@ public class Global {
         public static final int START=4;
         public static final int TRAITOR=5;
         public static final int GET_ROOM=6;
+        public static final int DEATH=7;
+        public static final int TO_VOTE=8;
     }
 
     public enum Direction {

@@ -195,17 +195,8 @@ public class WaitingScene extends Scene {
             strr.add(ClientClass.getInstance().getID()+"");
             strr.add(aliens.get(0).painter().centerX()+"");
             strr.add(aliens.get(0).painter().centerY()+"");
-//            strr.add(aliens.get(0).getDir()+"");
-            /*if(aliens.get(0).getHorizontalDir() == Global.Direction.LEFT || aliens.get(0).getHorizontalDir() == Global.Direction.RIGHT) {
-                strr.add(aliens.get(0).getHorizontalDir().getValue()+"");
-            }else if(aliens.get(0).getVerticalDir() == Global.Direction.DOWN || aliens.get(0).getVerticalDir() == Global.Direction.UP){
-                strr.add(aliens.get(0).getVerticalDir().getValue()+"");
-            }else{
-                strr.add(Global.Direction.NO_DIR.getValue()+"");
-            }*/
             strr.add(aliens.get(0).getHorizontalDir().getValue()+"");
             strr.add(aliens.get(0).getVerticalDir().getValue()+"");
-            strr.add(aliens.get(0).getCurrentState().name()+"");
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
             ClientClass.getInstance().consume((serialNum, internetcommand, strs) -> {
                 switch(internetcommand){
@@ -230,19 +221,12 @@ public class WaitingScene extends Scene {
                         }
                         break;
                     case Global.InternetCommand.MOVE:
-                        for(int i=1;i<aliens.size();i++) {
-                            if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))) {
-                                //setCenter? 還是應該要是setX setY?
+                        for (int i=1;i<aliens.size();i++){
+                            if (aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
                                 aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
                                 aliens.get(i).collider().setCenter(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)));
-                                if(aliens.get(i).getHorizontalDir() == Global.Direction.LEFT || aliens.get(i).getHorizontalDir() == Global.Direction.RIGHT) {
-                                    aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
-                                }else if(aliens.get(i).getVerticalDir() == Global.Direction.DOWN || aliens.get(i).getVerticalDir() == Global.Direction.UP){
-                                    aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
-                                }else if(aliens.get(i).getNoDirection()){
-                                    aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
-                                    aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
-                                }
+                                aliens.get(i).setHorizontalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(3))));
+                                aliens.get(i).setVerticalDir(Global.Direction.getDirection(Integer.parseInt(strs.get(4))));
                                 break;
                             }
                         }
@@ -251,6 +235,7 @@ public class WaitingScene extends Scene {
                         for(int i=0;i<aliens.size();i++){
                             if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
                                 aliens.remove(i);
+                                break;
                             }
                         }
                         break;
@@ -258,6 +243,7 @@ public class WaitingScene extends Scene {
                         for(int i=0;i<aliens.size();i++){
                             if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
                                 aliens.get(i).setTraitor();
+                                break;
                             }
                         }
                         break;
@@ -273,7 +259,6 @@ public class WaitingScene extends Scene {
                             str.add(String.valueOf(waitingScene.playMax));
                             str.add(String.valueOf(waitingScene.homeOwner));
                             ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
-                            System.out.println(s);
                         });
                         break;
                 }

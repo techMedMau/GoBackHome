@@ -163,6 +163,7 @@ public class Alien extends GameObject implements ClickState, Range {
     private int ID;
     private int num;
     private boolean isTraitor;
+    private boolean alive;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -189,16 +190,19 @@ public class Alien extends GameObject implements ClickState, Range {
         horizontalDir = verticalDir = Global.Direction.NO_DIR;
         this.num = num;
         this.isTraitor=false;
+        this.alive=true;
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 54, 73);
+        if (alive){
+            stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 54, 73);
+        }
     }
 
     @Override
     public void update() {
-        if (currentState==State.DEATH){
+        if (currentState==State.DEATH||!alive){
             return;
         }
         switch (horizontalDir) {
@@ -253,13 +257,13 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     public void setVerticalDir(Global.Direction dir) {
-        if (currentState==State.DEATH){return;}
+        if (currentState==State.DEATH||!alive){return;}
         this.verticalDir = dir;
         setState();
     }
 
     public void setHorizontalDir(Global.Direction dir) {
-        if (currentState==State.DEATH){return;}
+        if (currentState==State.DEATH||!alive){return;}
         this.horizontalDir = dir;
         setState();
     }
@@ -285,7 +289,7 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     private void setState() {
-        if (currentState==State.DEATH){
+        if (currentState==State.DEATH||!alive){
             return;
         }
         State lastState = currentState;
