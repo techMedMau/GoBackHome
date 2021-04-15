@@ -46,6 +46,7 @@ public class WaitingScene extends Scene {
         str.add("500");
         str.add("500");
         str.add(num+"");
+        str.add(password);
         aliens.add(new Alien(Integer.parseInt(str.get(0)), Integer.parseInt(str.get(1)), num));
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
         aliens.get(0).setId(ClientClass.getInstance().getID());
@@ -209,13 +210,14 @@ public class WaitingScene extends Scene {
                                 break;
                             }
                         }
-                        if(!isBorn) {
+                        if(!isBorn&&strs.get(0).equals(password)) {
                             aliens.add(new Alien(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2))));
                             aliens.get(aliens.size() - 1).setId(serialNum);
                             ArrayList<String> str=new ArrayList<>();
                             str.add(aliens.get(0).painter().centerX()+"");
                             str.add(aliens.get(0).painter().centerY()+"");
                             str.add(aliens.get(0).getNum()+"");
+                            str.add(password);
                             currentPlay++;
                             ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
                         }
