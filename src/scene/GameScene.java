@@ -79,7 +79,7 @@ public class GameScene extends Scene {
                     for (int i = 0; i < taskItems.size(); i++) {
                         if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             taskController.changePopUp(taskItems.get(i).getTask());
-                            break;
+                            return;
                         }
                     }
                     for (int i = 1; i < aliens.size(); i++) {
@@ -88,7 +88,7 @@ public class GameScene extends Scene {
                             ArrayList<String> str = new ArrayList<>();
                             str.add(aliens.get(i).getId() + "");
                             ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
-                            break;
+                            return;
                         }
                     }
                     for (int i = 1; i < aliens.size(); i++) {
@@ -97,6 +97,7 @@ public class GameScene extends Scene {
                             str.add(String.valueOf(aliens.get(0).getId()));
                             ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
                             SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
+                            return;
                         }
                     }
                     break;
