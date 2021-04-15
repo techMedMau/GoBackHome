@@ -32,7 +32,7 @@ public class TaskController {
         GASOLINE(new PopUpGasoline()),
         FIND_PIC(new PopUpFindPic()),
         COLOR_CHANGE(new PopUpColorChange()),
-        PASSWORD(new PopUPPassword()),
+        PASSWORD(new PopUpPassword()),
         LINE_UP(new PopUpLineUp()),
         ROCK(new PopUpRock()),
         CENTER(new PopUpCenter()),
