@@ -8,7 +8,7 @@ public class tile extends GameObject{
     private Image img;
     public tile(int x, int y) {
         super(x, y, 64, 64);
-        this.img = ImageController.getInstance().tryGet("/tile_12.png");
+        this.img = ImageController.getInstance().tryGet("/map/tile_12.png");
     }
 
     @Override

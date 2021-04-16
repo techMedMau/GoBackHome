@@ -55,12 +55,12 @@ public class OpenScene extends Scene {
 
     @Override
     public void sceneBegin() {
-        image= ImageController.getInstance().tryGet("/mainmenu.jpg");
-        titleImg= ImageController.getInstance().tryGet("/title.png");
+        image= ImageController.getInstance().tryGet("/openScene/mainmenu.jpg");
+        titleImg= ImageController.getInstance().tryGet("/openScene/title.png");
         createRoomButton=new Button(270,300,359,113,ImageController.getInstance()
-                .tryGet("/creatRoom.png"));
+                .tryGet("/openScene/creatRoom.png"));
         inputButton=new Button(370,450,180,96,ImageController.getInstance()
-                .tryGet("/inputNum.png"));
+                .tryGet("/openScene/inputNum.png"));
         popUpConnect=new PopUpConnect();
         popUpCreateRoom=new PopUpCreateRoom();
         Server s=Server.instance();

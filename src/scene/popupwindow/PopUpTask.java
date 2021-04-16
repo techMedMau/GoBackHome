@@ -18,7 +18,7 @@ public class PopUpTask extends PopUpWindows{
 
     @Override
     public void sceneBegin() {
-        this.img = ImageController.getInstance().tryGet("/taskBackground.png");
+        this.img = ImageController.getInstance().tryGet("/sheet.png");
         close=new gameobj.button.Button(110,50,48,48, ImageController.getInstance().tryGet("/button/close.png"));
         show();
     }

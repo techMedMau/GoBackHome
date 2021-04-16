@@ -14,6 +14,9 @@ public class Button extends GameObject implements ClickState{
         this.img=img;
     }
 
+    public Image getImg() {
+        return img;
+    }
 
     @Override
     //小任務

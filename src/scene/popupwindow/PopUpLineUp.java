@@ -6,8 +6,6 @@ import utils.CommandSolver;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PopUpLineUp extends PopUpTask {
 
@@ -20,6 +18,7 @@ public class PopUpLineUp extends PopUpTask {
     private boolean line2;
     private boolean line3;
     private boolean line4;
+    private boolean isDone;//任務完成
 
     public PopUpLineUp(){
         keyPairs = new ArrayList<>();
@@ -36,6 +35,7 @@ public class PopUpLineUp extends PopUpTask {
         this.line2 = false;
         this.line3 = false;
         this.line4 = false;
+        this.isDone = false;
     }
 
 
@@ -64,7 +64,9 @@ public class PopUpLineUp extends PopUpTask {
 
     @Override
     public void update(){
-
+        if(line1 && line2 && line3 && line4){
+            this.isDone = true;
+        }
     }
 
     @Override
@@ -128,6 +130,7 @@ public class PopUpLineUp extends PopUpTask {
         }
     }
 
-
-
+    public boolean isDone() {
+        return isDone;
+    }
 }

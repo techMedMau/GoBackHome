@@ -2,6 +2,7 @@ import controllers.SceneController;
 import gameobj.Alien;
 import scene.GameScene;
 import scene.OpenScene;
+import scene.VoteScene;
 import scene.WaitingScene;
 import utils.CommandSolver;
 import utils.GameKernel;
@@ -13,11 +14,11 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-//        ArrayList<Alien> aliens = new ArrayList<>();
-//        aliens.add(new Alien(500,500,1));
-        JFrame jframe=new JFrame();
+        ArrayList<Alien> aliens = new ArrayList<>();
+        aliens.add(new Alien(500,500,1));
+        JFrame jframe = new JFrame();
         SceneController sceneController=SceneController.getInstance(); //取得單例模式的控場實體
-        sceneController.changeScene(new OpenScene()); //一開始使用開場畫面
+        sceneController.changeScene(new GameScene(aliens, "1")); //一開始使用開場畫面
         GameKernel gameKernel = new GameKernel.Builder().input(  //創建遊戲核心
                 new CommandSolver.BuildStream().mouseTrack().subscribe(sceneController).keyboardTrack()
                         .add(KeyEvent.VK_ENTER, 0) //設置ENTER按鍵為 -1

@@ -44,18 +44,18 @@ public class GameScene extends Scene {
     @Override
     public void sceneBegin() {
         map = new Map();
-        backGround = ImageController.getInstance().tryGet("/background.png");
+        backGround = ImageController.getInstance().tryGet("/map/background.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
         taskItems.add(new TaskItem("/taskBox/boxItem.png", 105, 441, TaskController.Task.GASOLINE));
-        taskItems.add(new TaskItem("/taskBox/greenBox.png", 300, 500, TaskController.Task.COLOR_CHANGE));
+        taskItems.add(new TaskItem("/taskBox/greenBox.png", 300, 500, TaskController.Task.PUSH));
         taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
         taskItems.add(new TaskItem("/taskBox/warningBox.png", 600, 600, TaskController.Task.LINE_UP));
-        taskItems.add(new TaskItem("/taskBox/woodBox.png", 1000, 66, TaskController.Task.PASSWORD));
-        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1750, 900, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/taskBox/woodBox.png", 1700, 66, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1750, 900, TaskController.Task.CENTER));
         taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
-        taskItems.add(new TaskItem("/taskBox/blackBox.png", 1100, 400, TaskController.Task.CENTER));
+        taskItems.add(new TaskItem("/taskBox/blackBox.png", 1100, 400, TaskController.Task.COLOR_CHANGE));
         taskController = TaskController.getTaskController();
         this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
         this.backgroundItem = new BackgroundItem("/arrowRight.png", 500, 500 + 32, 28, 8, 500, 500, 64, 64);
@@ -79,6 +79,7 @@ public class GameScene extends Scene {
             switch (state) {
                 case CLICKED:
                     for (int i = 0; i < taskItems.size(); i++) {
+                        System.out.println(i);
                         if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             taskController.changePopUp(taskItems.get(i).getTask());
                             return;
@@ -187,7 +188,6 @@ public class GameScene extends Scene {
         }
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).paint(g);
-
         }
         backgroundItem.paint(g);
         cam.paint(g);
@@ -256,7 +256,7 @@ public class GameScene extends Scene {
 
     public MapLoader MapGameGen() {
         try {
-            mapLoader = new MapLoader("/genMap.bmp", "/genMap.txt");
+            mapLoader = new MapLoader("/map/genMap.bmp", "/map/genMap.txt");
             ArrayList<MapInfo> test = mapLoader.combineInfo();
             forGame = new ArrayList<>();
             // to be continued

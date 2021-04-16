@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class PopUpVoteResult extends PopUpWindows{
     public PopUpVoteResult() {
-        super(0,0);
+        super(800,500);
     }
 
     @Override

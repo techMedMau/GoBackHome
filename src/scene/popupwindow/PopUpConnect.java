@@ -24,7 +24,7 @@ public class PopUpConnect extends PopUpWindows {
     @Override
     public void sceneBegin() {
         show();
-        img = ImageController.getInstance().tryGet("/enterPassword.png");
+        img = ImageController.getInstance().tryGet("/openScene/enterPassword.png");
         cancelButton = new Button(280,340,186,73,ImageController.getInstance().tryGet("/button/cancel.png"));
         confirmButton=new Button(480,340,186,73,ImageController.getInstance().tryGet("/button/confirm.png"));
         input=new Input(290,275,37,35,19);

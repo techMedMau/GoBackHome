@@ -4,7 +4,6 @@ import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.*;
 import internet.server.ClientClass;
-import internet.server.CommandReceiver;
 import maploader.MapInfo;
 import maploader.MapLoader;
 import utils.CommandSolver;
@@ -12,7 +11,6 @@ import utils.Global;
 import gameobj.button.Button;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -281,7 +279,7 @@ public class WaitingScene extends Scene {
 
         public MapLoader MapWaitGen () {
             try {
-                mapLoader = new MapLoader("/genMap_wait.bmp", "/genMap_wait.txt");
+                mapLoader = new MapLoader("/map/genMap_wait.bmp", "/map/genMap_wait.txt");
                 ArrayList<MapInfo> test = mapLoader.combineInfo();
                 forWaitingRoom = new ArrayList<>();
                 this.forWaitingRoom = mapLoader.creatObjectArray("Name", 32, test, new MapLoader.CompareClass() {
