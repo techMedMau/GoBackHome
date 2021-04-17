@@ -24,7 +24,7 @@ public class PopUpCreateRoom extends PopUpWindows{
 
     @Override
     public void sceneBegin() {
-        img= ImageController.getInstance().tryGet("/popupcreat.png");
+        img= ImageController.getInstance().tryGet("/openScene/popupcreat.png");
         show();
         traitorNums=new Nums(2,380,110);
         playNums=new Nums(8,280,230);

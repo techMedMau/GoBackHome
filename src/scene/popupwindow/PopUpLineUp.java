@@ -6,8 +6,6 @@ import utils.CommandSolver;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PopUpLineUp extends PopUpTask {
 
@@ -60,11 +58,16 @@ public class PopUpLineUp extends PopUpTask {
         if(line4){
             g.drawLine(348,424,600,224);
         }
+        if(isDone()){
+            g.drawImage(finish, 350,125,null);
+        }
     }
 
     @Override
     public void update(){
-
+        if(line1 && line2 && line3 && line4){
+            setDone(true);
+        }
     }
 
     @Override
@@ -84,17 +87,7 @@ public class PopUpLineUp extends PopUpTask {
                     if (i<keyPairs.size()){
                         break;
                     }
-//                    for(int k = 0; k < keyPairs.size(); k++) {
-//                        if (keyPairs.get(k).button1.state(e.getPoint())) {
-//                            tmp2 = keyPairs.get(k).button1;
-//                            lineNum = k+1;
-//                            if(tmp2 == tmp){
-//                                System.out.println("correct");
-//                            }
-//                            System.out.println(tmp2);
-//                            break;
-//                        }
-//                    }
+
                     for(int k = 0; k < keyPairs.size(); k++) {
                         if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
                             System.out.println(keyPairs.get(k).button1);
@@ -113,7 +106,7 @@ public class PopUpLineUp extends PopUpTask {
                         }
                      }
                     tmp = null;
-//                    tmp2 = null;
+//
                     break;
             }
         };
@@ -127,7 +120,5 @@ public class PopUpLineUp extends PopUpTask {
             this.button1 = button1;
         }
     }
-
-
 
 }

@@ -9,7 +9,7 @@ public class Num extends Button {
     private boolean show;
     private String str;
     public Num(String str,int x, int y) {
-        super(x, y, 51, 51, ImageController.getInstance().tryGet("/num.png"));
+        super(x, y, 51, 51, ImageController.getInstance().tryGet("/openScene/num.png"));
         this.str=str;
         this.show=false;
     }

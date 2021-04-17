@@ -15,9 +15,9 @@ public class TaskController {
     public PopUpWindows changePopUp(Task task){
         PopUpWindows popUpWindows=task.getPopUp();
         if (popUpWindows!=null){
-            PopUpWindows tmp=currentPopUp;
+            PopUpWindows tmp = currentPopUp;
             popUpWindows.sceneBegin();
-            this.currentPopUp=popUpWindows;
+            this.currentPopUp = popUpWindows;
             if (tmp!=null){
                 tmp.sceneEnd();
             }
@@ -29,7 +29,7 @@ public class TaskController {
         return currentPopUp;
     }
     public enum Task{
-        GASOLINE(new PopUpGasoline()),
+        FIND_DIFFERENT(new PopUpFindDifferent()),
         FIND_PIC(new PopUpFindPic()),
         COLOR_CHANGE(new PopUpColorChange()),
         PASSWORD(new PopUpPassword()),

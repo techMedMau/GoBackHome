@@ -9,7 +9,8 @@ import java.awt.*;
 public class PopUpTask extends PopUpWindows{
     public Button close;
     public Image img;
-
+    public Image finish;
+    private boolean isDone;
 
 
     public PopUpTask() {
@@ -18,8 +19,10 @@ public class PopUpTask extends PopUpWindows{
 
     @Override
     public void sceneBegin() {
-        this.img = ImageController.getInstance().tryGet("/taskBackground.png");
+        this.img = ImageController.getInstance().tryGet("/sheet.png");
+        finish = ImageController.getInstance().tryGet("/password/finish.png");
         close=new gameobj.button.Button(110,50,48,48, ImageController.getInstance().tryGet("/button/close.png"));
+        this.isDone = false;
         show();
     }
 
@@ -60,10 +63,17 @@ public class PopUpTask extends PopUpWindows{
 
     @Override
     public void update() {
-
     }
 
-//    public int left(){
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    //    public int left(){
 //        return img.
 //    }
 }
