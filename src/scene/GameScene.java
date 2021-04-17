@@ -11,6 +11,7 @@ import maploader.MapInfo;
 import maploader.MapLoader;
 import utils.CommandSolver;
 import utils.Global;
+import gameobj.Line.Point;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -165,10 +166,6 @@ public class GameScene extends Scene {
         cam.start(g);
         g.drawImage(backGround, 0, 0, null);
         Font font = new Font(Global.FONT, Font.PLAIN, 20);
-        for (int i = 0; i < forGame.size(); i++) {
-            if (cam.isCollision(forGame.get(i)))
-                forGame.get(i).paint(g);
-        }
         for (int i = 0; i < aliens.size(); i++) {
             if (aliens.get(0).isTraitor()) {
                 g.setColor(Color.RED);
@@ -185,6 +182,19 @@ public class GameScene extends Scene {
             }
             aliens.get(i).paint(g);
         }
+        g.setColor(Color.BLACK);
+        for (int i = 0; i < forGame.size(); i++) {
+            if (cam.isCollision(forGame.get(i))){
+                paintShadow(g,forGame.get(i));
+            }
+        }
+        for (int i = 0; i < forGame.size(); i++) {
+            if (cam.isCollision(forGame.get(i))){
+                forGame.get(i).paint(g);
+            }
+        }
+
+
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).paint(g);
 
@@ -550,4 +560,108 @@ public class GameScene extends Scene {
         g.drawString("Task7", 10, 150);
         g.drawString("Task8", 10, 170);
     }
+    public void paintShadow(Graphics g,GameObject obj){
+        ArrayList<Point> shadowPoints=new ArrayList<>();
+        ArrayList<Line> lines=new ArrayList<>();
+        lines.add(new Line(aliens.get(0).centerX(),aliens.get(0).centerY(),obj.left(),obj.top()));
+        lines.add(new Line(aliens.get(0).centerX(),aliens.get(0).centerY(),obj.right(),obj.top()));
+        lines.add(new Line(aliens.get(0).centerX(),aliens.get(0).centerY(),obj.left(),obj.bottom()));
+        lines.add(new Line(aliens.get(0).centerX(),aliens.get(0).centerY(),obj.right(),obj.bottom()));
+        ArrayList<Line> shadowLines=new ArrayList<>();
+        lines.forEach(line -> {
+            if (!line.collision(obj)){
+                shadowLines.add(line);
+            }
+
+        });
+        lines.clear();
+        if (shadowLines.size()>2){
+            Line tmp=shadowLines.get(0);
+            for (int i=1;i<shadowLines.size();i++){
+                if (tmp.distance()>shadowLines.get(i).distance()){
+                    tmp=shadowLines.get(i);
+                }
+            }
+            shadowPoints.add(tmp.getPoint2());
+            shadowLines.remove(tmp);
+        }
+
+        shadowPoints.add(shadowLines.get(0).getPoint2());
+        Global.Direction[] dir=new Global.Direction[2];
+        for (int i=0;i<shadowLines.size();i++){
+            Point[] points=new Point[2];
+            Global.Direction[] dirTmp=new Global.Direction[2];
+            if (shadowLines.get(i).getHorizontal()== Global.Direction.LEFT){
+                points[0]=shadowLines.get(i).getNum(cam.left(),true);
+                dirTmp[0]=Global.Direction.LEFT;
+            }else if (shadowLines.get(i).getHorizontal()== Global.Direction.RIGHT){
+                points[0]=shadowLines.get(i).getNum(cam.right(),true);
+                dirTmp[0]=Global.Direction.RIGHT;
+            }
+            if (shadowLines.get(i).getVertical()== Global.Direction.UP){
+                points[1]=shadowLines.get(i).getNum(cam.top(),false);
+                dirTmp[1]=Global.Direction.UP;
+            }else if (shadowLines.get(i).getVertical()== Global.Direction.DOWN){
+                points[1]=shadowLines.get(i).getNum(cam.bottom(),false);
+                dirTmp[1]=Global.Direction.DOWN;
+            }
+            Point point = null;
+            for (int k=0;k<points.length;k++){
+                if (points[k]==null){
+                    point=points[1-k];
+                    dir[i]=dirTmp[1-k];
+                }
+            }
+            if (point==null&&shadowLines.get(i).getPoint1().distance(points[0])<shadowLines.get(i).getPoint1().distance(points[1])){
+                point=points[0];
+                dir[i]=dirTmp[0];
+            }else if (point==null&&shadowLines.get(i).getPoint1().distance(points[0])>=shadowLines.get(i).getPoint1().distance(points[1])){
+                point=points[1];
+                dir[i]=dirTmp[1];
+            }
+            if (dir[1]!=null){
+                if ((dir[0]== Global.Direction.LEFT&&dir[1]== Global.Direction.UP)||
+                        (dir[1]== Global.Direction.LEFT&&dir[0]== Global.Direction.UP)){
+                    shadowPoints.add(new Point(cam.left(),cam.top()));
+                }else if((dir[0]== Global.Direction.RIGHT&&dir[1]== Global.Direction.UP)||
+                        (dir[1]== Global.Direction.RIGHT&&dir[0]== Global.Direction.UP)){
+                    shadowPoints.add(new Point(cam.right(),cam.top()));
+                }else if((dir[0]== Global.Direction.LEFT&&dir[1]== Global.Direction.DOWN)||
+                        (dir[1]== Global.Direction.LEFT&&dir[0]== Global.Direction.DOWN)){
+                    shadowPoints.add(new Point(cam.left(),cam.bottom()));
+                }else if((dir[0]== Global.Direction.RIGHT&&dir[1]== Global.Direction.DOWN)||
+                        (dir[1]== Global.Direction.RIGHT&&dir[0]== Global.Direction.DOWN)){
+                    shadowPoints.add(new Point(cam.right(),cam.bottom()));
+                }else if((dir[0]== Global.Direction.UP&&dir[1]== Global.Direction.DOWN)||
+                        (dir[1]== Global.Direction.UP&&dir[0]== Global.Direction.DOWN)){
+                    if (aliens.get(0).centerX()>points[shadowPoints.size()-1].getX()){
+                        shadowPoints.add(new Point(cam.left(),cam.top()));
+                        shadowPoints.add(new Point(cam.left(),cam.bottom()));
+                    }else if (aliens.get(0).centerX()<points[shadowPoints.size()-1].getX()){
+                        shadowPoints.add(new Point(cam.right(),cam.top()));
+                        shadowPoints.add(new Point(cam.right(),cam.bottom()));
+                    }
+                }else if((dir[0]== Global.Direction.LEFT&&dir[1]== Global.Direction.RIGHT)||
+                        (dir[1]== Global.Direction.LEFT&&dir[0]== Global.Direction.RIGHT)){
+                    if (aliens.get(0).centerY()>points[shadowPoints.size()-1].getY()){
+                        shadowPoints.add(new Point(cam.left(),cam.top()));
+                        shadowPoints.add(new Point(cam.right(),cam.top()));
+                    }else if (aliens.get(0).centerY()<points[shadowPoints.size()-1].getY()){
+                        shadowPoints.add(new Point(cam.left(),cam.bottom()));
+                        shadowPoints.add(new Point(cam.right(),cam.bottom()));
+                    }
+                }
+            }
+            shadowPoints.add(point);
+        }
+        shadowPoints.add(shadowLines.get(1).getPoint2());
+        Polygon p = new Polygon();
+        shadowPoints.forEach(sp->{
+            p.addPoint((int) sp.getX(),(int)sp.getY());
+        });
+        g.fillPolygon(p);
+        shadowPoints.clear();
+        shadowLines.clear();
+    }
+
 }
