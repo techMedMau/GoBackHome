@@ -48,8 +48,8 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/taskBox/boxItem.png", 105, 441, TaskController.Task.GASOLINE));
-        taskItems.add(new TaskItem("/taskBox/greenBox.png", 300, 500, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/taskBox/boxItem.png", 105, 441, TaskController.Task.FIND_DIFFERENT));
+        taskItems.add(new TaskItem("/taskBox/greenBox.png", 700, 500, TaskController.Task.PUSH));
         taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
         taskItems.add(new TaskItem("/taskBox/warningBox.png", 600, 600, TaskController.Task.LINE_UP));
         taskItems.add(new TaskItem("/taskBox/woodBox.png", 1700, 66, TaskController.Task.PASSWORD));

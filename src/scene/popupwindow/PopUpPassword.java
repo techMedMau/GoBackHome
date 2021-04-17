@@ -16,24 +16,18 @@ public class PopUpPassword extends PopUpTask {
     private boolean isShow;
     private ArrayList<Button> code;
     private ArrayList<Button> input;
-    private boolean isDone;
-    private Image finish;
-
 
     public PopUpPassword(){
         buttons = new ArrayList<>();
         code = new ArrayList<>();
         input = new ArrayList<>();
         password = ImageController.getInstance().tryGet("/password/question.png");
-        this.finish = ImageController.getInstance().tryGet("/password/finish.png");
         for(int i = 0; i < 9; i++) {
             buttons.add(new Button(390+i%3*50, 225+i/3*50, 32, 32
                     , ImageController.getInstance().tryGet("/password/"+i+".png")));
         }
         buttons.add(new Button(440, 375, 32, 32
                 , ImageController.getInstance().tryGet("/password/9.png")));
-        buttons.add(new Button(370,165,180,50
-                ,ImageController.getInstance().tryGet("/password/confirm.png")));
         this.delay = new Delay( 90);
         delay.play();
         isShow = true;
@@ -42,8 +36,6 @@ public class PopUpPassword extends PopUpTask {
         code.add(buttons.get(1));
         code.add(buttons.get(3));
         code.add(buttons.get(6));
-        code.add(buttons.get(10));
-        this.isDone = false;
     }
 
     public void paint(Graphics g){
@@ -62,7 +54,7 @@ public class PopUpPassword extends PopUpTask {
                 g.drawImage(input.get(i).getImg(), 250+i*30,450, null);
             }
         }
-        if(isDone){
+        if(isDone()){
             g.drawImage(finish, 350,125,null);
         }
     }
@@ -74,7 +66,7 @@ public class PopUpPassword extends PopUpTask {
             if(!check()){
                 input = new ArrayList<>();
             }else{
-                isDone = true;
+                setDone(true);
             }
         }
     }
@@ -116,7 +108,4 @@ public class PopUpPassword extends PopUpTask {
         return true;
     }
 
-    public boolean isDone() {
-        return isDone;
-    }
 }

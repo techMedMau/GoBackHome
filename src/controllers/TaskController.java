@@ -29,7 +29,7 @@ public class TaskController {
         return currentPopUp;
     }
     public enum Task{
-        GASOLINE(new PopUpGasoline()),
+        FIND_DIFFERENT(new PopUpFindDifferent()),
         FIND_PIC(new PopUpFindPic()),
         COLOR_CHANGE(new PopUpColorChange()),
         PASSWORD(new PopUpPassword()),

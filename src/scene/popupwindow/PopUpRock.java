@@ -12,16 +12,13 @@ import utils.Global;
 public class PopUpRock extends PopUpTask{
     private Image background;
     private ArrayList<Rock> rocks;
-    private boolean isDone;
 
-
-    public PopUpRock(){
+    public PopUpRock() {
         this.background = ImageController.getInstance().tryGet("/rock/taskBackground.png");
         this.rocks = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             rocks.add(new Rock());
         }
-        this.isDone = false;
     }
 
     @Override
@@ -48,7 +45,7 @@ public class PopUpRock extends PopUpTask{
         }
 
         if(rocks.size() == 0){
-            isDone = true;
+            setDone(true);
         }
     }
 
@@ -74,11 +71,6 @@ public class PopUpRock extends PopUpTask{
     public CommandSolver.KeyListener keyListener() {
         return null;
     }
-
-    public boolean isDone() {
-        return isDone;
-    }
-
 
 
 }

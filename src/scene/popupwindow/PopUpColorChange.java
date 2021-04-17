@@ -8,7 +8,6 @@ import java.awt.*;
 import gameobj.button.Button;
 
 public class PopUpColorChange extends PopUpTask{
-    private boolean isDone;
     private Image img;
     private Image img2;
     private Button button;
@@ -17,8 +16,11 @@ public class PopUpColorChange extends PopUpTask{
     private Image yellow;
     private boolean click;
     private boolean click2;
+    private Image finish;
+
 
     public PopUpColorChange(){
+        this.finish = ImageController.getInstance().tryGet("/password/finish.png");
         this.img = ImageController.getInstance().tryGet("/colorChange/purple.png");
         this.img2 = ImageController.getInstance().tryGet("/colorChange/red.png");
         this.green = ImageController.getInstance().tryGet("/colorChange/green.png");
@@ -27,7 +29,6 @@ public class PopUpColorChange extends PopUpTask{
                 , ImageController.getInstance().tryGet("/colorChange/greenTrans.png"));
         this.button2 = new Button(400,400, 80,80
                 , ImageController.getInstance().tryGet("/colorChange/yellowTrans.png"));
-        this.isDone = false;
     }
 
     @Override
@@ -43,13 +44,15 @@ public class PopUpColorChange extends PopUpTask{
         if(click2) {
             g.drawImage(yellow, 400, 400, null); //黃
         }
-
+        if(isDone()){
+            g.drawImage(finish, 350,125,null);
+        }
     }
 
     @Override
     public void update() {
         if(click && click2){
-            isDone = true;
+            setDone(true);
         }
     }
 
@@ -80,9 +83,5 @@ public class PopUpColorChange extends PopUpTask{
 
 
 
-
-    public boolean isDone() {
-        return isDone;
-    }
 
 }

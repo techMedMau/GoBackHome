@@ -41,7 +41,7 @@ public class Global {
         }
     }
     public static HashMap<String,WaitingScene> WAIT_SCENES = new HashMap<>();
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
     public static final String SERVE_IP="192.168.1.14";
     public static final String FONT="Times New Roman";
     public static void log(String str) {

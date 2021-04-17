@@ -18,7 +18,6 @@ public class PopUpLineUp extends PopUpTask {
     private boolean line2;
     private boolean line3;
     private boolean line4;
-    private boolean isDone;//任務完成
 
     public PopUpLineUp(){
         keyPairs = new ArrayList<>();
@@ -35,7 +34,6 @@ public class PopUpLineUp extends PopUpTask {
         this.line2 = false;
         this.line3 = false;
         this.line4 = false;
-        this.isDone = false;
     }
 
 
@@ -60,12 +58,15 @@ public class PopUpLineUp extends PopUpTask {
         if(line4){
             g.drawLine(348,424,600,224);
         }
+        if(isDone()){
+            g.drawImage(finish, 350,125,null);
+        }
     }
 
     @Override
     public void update(){
         if(line1 && line2 && line3 && line4){
-            this.isDone = true;
+            setDone(true);
         }
     }
 
@@ -86,17 +87,7 @@ public class PopUpLineUp extends PopUpTask {
                     if (i<keyPairs.size()){
                         break;
                     }
-//                    for(int k = 0; k < keyPairs.size(); k++) {
-//                        if (keyPairs.get(k).button1.state(e.getPoint())) {
-//                            tmp2 = keyPairs.get(k).button1;
-//                            lineNum = k+1;
-//                            if(tmp2 == tmp){
-//                                System.out.println("correct");
-//                            }
-//                            System.out.println(tmp2);
-//                            break;
-//                        }
-//                    }
+
                     for(int k = 0; k < keyPairs.size(); k++) {
                         if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
                             System.out.println(keyPairs.get(k).button1);
@@ -115,7 +106,7 @@ public class PopUpLineUp extends PopUpTask {
                         }
                      }
                     tmp = null;
-//                    tmp2 = null;
+//
                     break;
             }
         };
@@ -130,7 +121,4 @@ public class PopUpLineUp extends PopUpTask {
         }
     }
 
-    public boolean isDone() {
-        return isDone;
-    }
 }

@@ -1,5 +1,6 @@
 package gameobj.button;
 
+import controllers.ImageController;
 import gameobj.GameObject;
 
 
@@ -16,6 +17,10 @@ public class Button extends GameObject implements ClickState{
 
     public Image getImg() {
         return img;
+    }
+
+    public void setImg(String path) {
+        this.img = ImageController.getInstance().tryGet(path);
     }
 
     @Override

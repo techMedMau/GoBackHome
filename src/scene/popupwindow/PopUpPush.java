@@ -8,7 +8,6 @@ import gameobj.button.Button;
 
 public class PopUpPush extends PopUpTask{
     private Image img;
-    private boolean isDone;
     private Button dot;
     private Button dotTest;
 
@@ -19,18 +18,18 @@ public class PopUpPush extends PopUpTask{
                 , ImageController.getInstance().tryGet("/push/yellow.png"));
         this.dotTest = new Button(465,190,80,80
                 , ImageController.getInstance().tryGet("/push/yellow.png"));
-        this.isDone = false;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         g.drawImage(img, 310,140, null);
-        if(!isDone) {
+        if(!isDone()) {
             dot.paint(g);
         }
-        if(isDone) {
+        if(isDone()) {
             dotTest.paint(g);
+            g.drawImage(finish, 350,125,null);
         }
     }
 
@@ -49,7 +48,7 @@ public class PopUpPush extends PopUpTask{
                     super.mouseListener().mouseTrig(e,state,trigTime);
                     if(510 >= e.getPoint().getX() && e.getPoint().getX() >= 500
                             && 235 >= e.getPoint().getY() && e.getPoint().getY() >= 225){
-                        isDone = true;
+                        setDone(true);
                     }
                     break;
             }
@@ -59,13 +58,6 @@ public class PopUpPush extends PopUpTask{
     @Override
     public CommandSolver.KeyListener keyListener() {
         return null;
-    }
-
-
-
-
-    public boolean isDone() {
-        return isDone;
     }
 
 }
