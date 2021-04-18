@@ -45,7 +45,7 @@ public class Global {
 
     public static final boolean IS_DEBUG = false;
 
-    public static final String SERVE_IP="192.168.1.13";
+    public static final String SERVE_IP="192.168.1.45";
 
     public static final String FONT="Times New Roman";
     public static void log(String str) {
@@ -57,10 +57,10 @@ public class Global {
     // 視窗大小
     public static final int MAP_WIDTH = 1280;
     public static final int MAP_HEIGHT = 1280;
-    public static final int WINDOW_WIDTH = 960;
+    public static final int WINDOW_WIDTH = 1220;
     public static final int WINDOW_HEIGHT = 640;
-    public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
-    public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
+    public static final int SCREEN_X = 960;
+    public static final int SCREEN_Y = 640;
     //彈跳視窗大小
     public static final int POPUP_WIDTH = 640;
     public static final int POPUP_HEIGHT = 320;

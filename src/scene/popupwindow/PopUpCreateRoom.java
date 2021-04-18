@@ -26,10 +26,10 @@ public class PopUpCreateRoom extends PopUpWindows{
     public void sceneBegin() {
         img= ImageController.getInstance().tryGet("/openScene/popupcreat.png");
         show();
-        traitorNums=new Nums(2,380,110);
-        playNums=new Nums(8,280,230);
-        cancelButton = new Button(280,300,186,73,ImageController.getInstance().tryGet("/button/cancel.png"));
-        confirmButton=new Button(480,300,186,73,ImageController.getInstance().tryGet("/button/confirm.png"));
+        traitorNums=new Nums(2,500,110);
+        playNums=new Nums(8,400,230);
+        cancelButton = new Button(415,300,186,73,ImageController.getInstance().tryGet("/button/cancel.png"));
+        confirmButton=new Button(615,300,186,73,ImageController.getInstance().tryGet("/button/confirm.png"));
     }
 
     @Override

@@ -24,7 +24,7 @@ public class OpenScene extends Scene {
     @Override
     public void paint(Graphics g) {
         g.drawImage(image,0,0,null);
-        g.drawImage(titleImg,100,150,null);
+        g.drawImage(titleImg,260,150,null);
         createRoomButton.paint(g);
         inputButton.paint(g);
         if (popUpConnect.isShow()){
@@ -57,9 +57,9 @@ public class OpenScene extends Scene {
     public void sceneBegin() {
         image= ImageController.getInstance().tryGet("/openScene/mainmenu.jpg");
         titleImg= ImageController.getInstance().tryGet("/openScene/title.png");
-        createRoomButton=new Button(270,300,359,113,ImageController.getInstance()
+        createRoomButton=new Button(440,300,359,113,ImageController.getInstance()
                 .tryGet("/openScene/creatRoom.png"));
-        inputButton=new Button(370,450,180,96,ImageController.getInstance()
+        inputButton=new Button(530,450,180,96,ImageController.getInstance()
                 .tryGet("/openScene/inputNum.png"));
         popUpConnect=new PopUpConnect();
         popUpCreateRoom=new PopUpCreateRoom();
