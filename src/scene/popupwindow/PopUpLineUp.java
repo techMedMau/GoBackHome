@@ -11,7 +11,6 @@ public class PopUpLineUp extends PopUpTask {
 
     private ArrayList<KeyPair> keyPairs;
     private Button tmp;
-    private Button tmp2;
     private int lineNum; //1~4
     private ArrayList<Image> lines;
     private boolean line1;
@@ -80,17 +79,17 @@ public class PopUpLineUp extends PopUpTask {
                     for(i = 0; i < keyPairs.size(); i++) {
                         if (keyPairs.get(i).button.state(e.getPoint())) {
                             tmp = keyPairs.get(i).button1;
-                            System.out.println(tmp);
                             break;
                         }
                     }
                     if (i<keyPairs.size()){
+                        System.out.println("!");
                         break;
                     }
-
+                    System.out.println(tmp);
                     for(int k = 0; k < keyPairs.size(); k++) {
                         if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
-                            System.out.println(keyPairs.get(k).button1);
+//                            System.out.println(keyPairs.get(k).button1);
                             if(k == 0){
                                 line1 = true;
                             }

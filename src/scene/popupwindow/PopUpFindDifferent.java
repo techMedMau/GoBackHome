@@ -3,8 +3,6 @@ package scene.popupwindow;
 import controllers.ImageController;
 import gameobj.Card;
 import utils.CommandSolver;
-import gameobj.button.Button;
-import utils.Global;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,13 +11,7 @@ import java.util.ArrayList;
 public class PopUpFindDifferent extends PopUpTask{
     private ArrayList<KeyPair> keyPairs;
     private ArrayList<Card> cards;
-    private Button tmp;
-    private boolean a;
-    private boolean b;
-    private boolean c;
-    private boolean d;
-    private boolean e;
-    private boolean f;
+    private Card tmp;
 
     @Override
     public void sceneBegin() {
@@ -55,7 +47,7 @@ public class PopUpFindDifferent extends PopUpTask{
                 , ImageController.getInstance().tryGet("/findDifferent/star.png")),
                 new Card(550, 400,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/star.png"))));
-        a = b = c = d = e = f = false;
+        tmp = null;
     }
 
     @Override
@@ -70,49 +62,39 @@ public class PopUpFindDifferent extends PopUpTask{
                 case CLICKED:
                     super.mouseListener().mouseTrig(e,state,trigTime);
                     for(int i = 0; i < keyPairs.size(); i ++){
-                        keyPairs.get(i).button.changeState(e.getPoint());
+                        keyPairs.get(i).card.changeState(e.getPoint());
                     }
                     for(int i = 0; i < keyPairs.size(); i ++){
-                        keyPairs.get(i).button1.changeState(e.getPoint());
+                        keyPairs.get(i).card1.changeState(e.getPoint());
                     }
 
-                    int i;
-                    for(i = 0; i < keyPairs.size(); i++) {
-                        if (keyPairs.get(i).button.state(e.getPoint())) {
-                            tmp = keyPairs.get(i).button1;
+
+
+                    for(int i = 0; i < keyPairs.size(); i++) {
+                        if (keyPairs.get(i).card1.state(e.getPoint())
+                                && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card1)){
+                            keyPairs.get(i).card1.setState(Card.State.SHOW);
+                            keyPairs.get(i).card.setState(Card.State.SHOW);
+                            tmp = null;
+                            break;
+                        }else if(keyPairs.get(i).card.state(e.getPoint())
+                                && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card)){
+                            keyPairs.get(i).card1.setState(Card.State.SHOW);
+                            keyPairs.get(i).card.setState(Card.State.SHOW);
+                            tmp = null;
                             break;
                         }
-                        if(keyPairs.get(i).button1.state(e.getPoint())) {
-                            tmp = keyPairs.get(i).button;
+                    }
+
+                    for(int i = 0; i< keyPairs.size(); i++){
+                        if (keyPairs.get(i).card1.state(e.getPoint())){
+                            tmp = keyPairs.get(i).getPartner(keyPairs.get(i).card1);
+                            break;
+                        }else if(keyPairs.get(i).card.state(e.getPoint())) {
+                            tmp = keyPairs.get(i).getPartner(keyPairs.get(i).card);
                             break;
                         }
                     }
-
-                    if (i<keyPairs.size()){
-                        break;
-                    }
-
-                    for(int k = 0; k < keyPairs.size(); k++) {
-                        if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
-
-                            keyPairs.get(0).button.setState(Card.State.SHOW);
-                            keyPairs.get(0).button1.setState(Card.State.SHOW);
-
-                        }
-                        if (tmp == keyPairs.get(k).button && keyPairs.get(k).button.state(e.getPoint())) {
-                            keyPairs.get(k).button.setState(Card.State.SHOW);
-                            keyPairs.get(k).button1.setState(Card.State.SHOW);
-
-                        }
-                    }
-//                    for(int k = 0; k < keyPairs.size(); k++) {
-//                        if (tmp == keyPairs.get(k).button && keyPairs.get(k).button.state(e.getPoint())) {
-//                                keyPairs.get(k).button.setState(Card.State.SHOW);
-//                                keyPairs.get(k).button1.setState(Card.State.SHOW);
-//
-//                        }
-//                    }
-                    tmp = null;
                     break;
             }
         };
@@ -129,30 +111,39 @@ public class PopUpFindDifferent extends PopUpTask{
 
 
         for(int i = 0; i <keyPairs.size(); i++){
-            keyPairs.get(i).button.paint(g);
+            keyPairs.get(i).card.paint(g);
         }
         for(int i = 0; i <keyPairs.size(); i++){
-            keyPairs.get(i).button1.paint(g);
+            keyPairs.get(i).card1.paint(g);
         }
     }
 
     @Override
     public void update() {
         for(int i = 0; i <keyPairs.size(); i++){
-            keyPairs.get(i).button.update();
+            keyPairs.get(i).card.update();
         }
         for(int i = 0; i <keyPairs.size(); i++){
-            keyPairs.get(i).button1.update();
+            keyPairs.get(i).card1.update();
         }
 
     }
 
     private static class KeyPair{
-        private Card button;
-        private Card button1;
-        public KeyPair(Card button,Card button1){
-            this.button = button;
-            this.button1 = button1;
+        private Card card;
+        private Card card1;
+        public KeyPair(Card card,Card card1){
+            this.card = card;
+            this.card1 = card1;
+        }
+
+        public Card getPartner(Card card){
+            if(card == card){
+                return card1;
+            }else if(card == card1){
+                return card;
+            }
+            return null;
         }
     }
 

@@ -4,6 +4,7 @@ import controllers.ImageController;
 import gameobj.button.ClickState;
 import gameobj.button.Range;
 import utils.Animator;
+import utils.Delay;
 import utils.Global;
 
 import java.awt.*;
@@ -39,7 +40,9 @@ public class Alien extends GameObject implements ClickState, Range {
         B,
         C,
         D,
-        E
+        E,
+        F,
+        G
     }
 
     private static HashMap<State, Animator> getAnimator(AlienType type) {
@@ -58,7 +61,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p3_walk04.png"),
                         ImageController.getInstance().tryGet("/player/p3_walk05.png")
                 )));
-                map.put(State.DEATH, new Animator(3, Arrays.asList(
+                map.put(State.DEATH1, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/player/p3_dieBody.png")
                 )));
                 return map;
@@ -76,7 +79,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p2_walk06.png"),
                         ImageController.getInstance().tryGet("/player/p2_walk05.png")
                 )));
-                map1.put(State.DEATH, new Animator(3, Arrays.asList(
+                map1.put(State.DEATH1, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/player/p2_dieBody.png")
                 )));
                 return map1;
@@ -94,7 +97,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p1_walk05.png"),
                         ImageController.getInstance().tryGet("/player/p1_walk04.png")
                 )));
-                map2.put(State.DEATH, new Animator(3, Arrays.asList(
+                map2.put(State.DEATH1, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/player/p1_dieBody.png")
                 )));
                 return map2;
@@ -112,7 +115,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p4_walk02.png"),
                         ImageController.getInstance().tryGet("/player/p4_walk01.png")
                 )));
-                map3.put(State.DEATH, new Animator(3, Arrays.asList(
+                map3.put(State.DEATH1, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/player/p4_dieBody.png")
                 )));
                 return map3;
@@ -130,22 +133,61 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p5_walk2.png"),
                         ImageController.getInstance().tryGet("/player/p5_walk1.png")
                 )));
-                map4.put(State.DEATH, new Animator(3, Arrays.asList(
+                map4.put(State.DEATH1, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/player/p5_dieBody.png")
                 )));
                 return map4;
+            case F:
+                HashMap<State, Animator> map5 = new HashMap<>();
+                map5.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_walk1r.png"))));
+                map5.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_walk1.png"))));
+                map5.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_walk2r.png"),
+                        ImageController.getInstance().tryGet("/player/p6_walk1r.png")
+                )));
+                map5.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_walk2.png"),
+                        ImageController.getInstance().tryGet("/player/p6_walk1.png")
+                )));
+                map5.put(State.DEATH1, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_dieBody.png")
+                )));
+                return map5;
+            case G:
+                HashMap<State, Animator> map6 = new HashMap<>();
+                map6.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_walk1r.png"))));
+                map6.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_walk1.png"))));
+                map6.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_walk2r.png"),
+                        ImageController.getInstance().tryGet("/player/p7_walk1r.png")
+                )));
+                map6.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_walk2.png"),
+                        ImageController.getInstance().tryGet("/player/p7_walk1.png")
+                )));
+                map6.put(State.DEATH1, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_dieBody.png")
+                )));
+                return map6;
             default:
                 return null;
         }
     }
     // 如果要改善效能問題 存圖片路徑 載入時再導入圖片
 
+
+
     public enum State {
         STAND_LEFT,
         STAND_RIGHT,
         WALK_LEFT,
         WALK_RIGHT,
-        DEATH;
+        DEATH1,
+        DEATH2;
 
         public boolean checkWalkConflict(State lastState) {
             if (lastState != WALK_LEFT && lastState != WALK_RIGHT) {
@@ -164,6 +206,7 @@ public class Alien extends GameObject implements ClickState, Range {
     private int num;
     private boolean isTraitor;
     private boolean alive;
+    private int life;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -184,13 +227,20 @@ public class Alien extends GameObject implements ClickState, Range {
             case 5:
                 this.alienType = AlienType.E;
                 break;
+            case 6:
+                this.alienType = AlienType.F;
+                break;
+            case 7:
+                this.alienType = AlienType.G;
+                break;
         }
         stateAnimator = getAnimator(alienType);
         stateAnimator.get(currentState).play();
         horizontalDir = verticalDir = Global.Direction.NO_DIR;
         this.num = num;
-        this.isTraitor=false;
-        this.alive=true;
+        this.isTraitor = false;
+        this.alive = true;
+        this.life = 2;
     }
 
     @Override
@@ -202,67 +252,68 @@ public class Alien extends GameObject implements ClickState, Range {
 
     @Override
     public void update() {
-        if (currentState==State.DEATH||!alive){
+        if (currentState==State.DEATH2||!alive){
             return;
         }
-        switch (horizontalDir) {
-            case LEFT:
-                if (verticalDir == Global.Direction.DOWN) {
-                    translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else if (verticalDir == Global.Direction.UP) {
-                    translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else {
-                    translateX(-Global.MOVE_SPEED);
-                }
-                break;
-            case RIGHT:
-                if (verticalDir == Global.Direction.DOWN) {
-                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else if (verticalDir == Global.Direction.UP) {
-                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else {
-                    translateX(Global.MOVE_SPEED);
-                }
-                break;
-        }
-        switch (verticalDir) {
-            case UP:
-                if (horizontalDir == Global.Direction.RIGHT) {
-                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else if (horizontalDir == Global.Direction.LEFT) {
-                    translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else {
-                    translateY(-Global.MOVE_SPEED);
-                }
-                break;
-            case DOWN:
-                if (horizontalDir == Global.Direction.RIGHT) {
-                    translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else if (horizontalDir == Global.Direction.LEFT) {
-                    translateX((int) (-Global.MOVE_SPEED / (Math.sqrt(2))));
-                    translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                } else {
-                    translateY(Global.MOVE_SPEED);
-                }
-                break;
-        }
+            switch (horizontalDir) {
+                case LEFT:
+                    if (verticalDir == Global.Direction.DOWN) {
+                        translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else if (verticalDir == Global.Direction.UP) {
+                        translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else {
+                        translateX(-Global.MOVE_SPEED);
+                    }
+                    break;
+                case RIGHT:
+                    if (verticalDir == Global.Direction.DOWN) {
+                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else if (verticalDir == Global.Direction.UP) {
+                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else {
+                        translateX(Global.MOVE_SPEED);
+                    }
+                    break;
+            }
+            switch (verticalDir) {
+                case UP:
+                    if (horizontalDir == Global.Direction.RIGHT) {
+                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else if (horizontalDir == Global.Direction.LEFT) {
+                        translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else {
+                        translateY(-Global.MOVE_SPEED);
+                    }
+                    break;
+                case DOWN:
+                    if (horizontalDir == Global.Direction.RIGHT) {
+                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else if (horizontalDir == Global.Direction.LEFT) {
+                        translateX((int) (-Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                    } else {
+                        translateY(Global.MOVE_SPEED);
+                    }
+                    break;
+            }
+
     }
 
     public void setVerticalDir(Global.Direction dir) {
-        if (currentState==State.DEATH||!alive){return;}
+        if (currentState==State.DEATH2||!alive){return;}
         this.verticalDir = dir;
         setState();
     }
 
     public void setHorizontalDir(Global.Direction dir) {
-        if (currentState==State.DEATH||!alive){return;}
+        if (currentState==State.DEATH2||!alive){return;}
         this.horizontalDir = dir;
         setState();
     }
@@ -288,7 +339,7 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     private void setState() {
-        if (currentState==State.DEATH||!alive){
+        if (currentState==State.DEATH2||!alive){
             return;
         }
         State lastState = currentState;
@@ -329,7 +380,7 @@ public class Alien extends GameObject implements ClickState, Range {
         }
     }
     public void death(){
-        currentState=State.DEATH;
+        currentState=State.DEATH2;
     }
 
     public void setId(int id) {
@@ -339,4 +390,6 @@ public class Alien extends GameObject implements ClickState, Range {
     public int getId() {
         return this.ID;
     }
+
+
 }

@@ -38,7 +38,7 @@ public class WaitingScene extends Scene {
     @Override
     public void sceneBegin() {
         aliens = new ArrayList<>();
-        num = (int) (Math.random() * 5 + 1);
+        num = (int) (Math.random() * 7 + 1);
         //要傳出去的東西
         ArrayList<String> str = new ArrayList<>();
         str.add("500");

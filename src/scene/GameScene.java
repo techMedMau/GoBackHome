@@ -70,7 +70,7 @@ public class GameScene extends Scene {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (MouseEvent e, CommandSolver.MouseState state, long trigTime) -> {
-            if (state == null || aliens.get(0).getCurrentState() == Alien.State.DEATH) {
+            if (state == null || aliens.get(0).getCurrentState() == Alien.State.DEATH2) {
                 return;
             }
             if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
@@ -87,7 +87,7 @@ public class GameScene extends Scene {
                         }
                     }
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).isTraitor() &&aliens.get(i).getCurrentState()!= Alien.State.DEATH && aliens.get(0).isTriggered(aliens.get(i)) && !aliens.get(i).isTraitor() && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                        if (aliens.get(0).isTraitor() &&aliens.get(i).getCurrentState()!= Alien.State.DEATH2 && aliens.get(0).isTriggered(aliens.get(i)) && !aliens.get(i).isTraitor() && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();
                             ArrayList<String> str = new ArrayList<>();
                             str.add(password);
@@ -97,7 +97,7 @@ public class GameScene extends Scene {
                         }
                     }
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                        if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2 && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             ArrayList<String> str = new ArrayList<>();
                             str.add(password);
                             str.add(String.valueOf(aliens.get(0).getId()));
@@ -117,7 +117,7 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                if (aliens.get(0).getCurrentState() == Alien.State.DEATH) {
+                if (aliens.get(0).getCurrentState() == Alien.State.DEATH2) {
                     return;
                 }
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
@@ -139,7 +139,7 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-                if (aliens.get(0).getCurrentState() == Alien.State.DEATH) {
+                if (aliens.get(0).getCurrentState() == Alien.State.DEATH2) {
                     return;
                 }
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
@@ -174,11 +174,11 @@ public class GameScene extends Scene {
                 if (aliens.get(i).isTraitor()) {
                     g.drawString("Traitor", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
                 }
-                if (!aliens.get(i).isTraitor()&&aliens.get(i).getCurrentState()!= Alien.State.DEATH && aliens.get(0).isTriggered(aliens.get(i))) {
+                if (!aliens.get(i).isTraitor()&&aliens.get(i).getCurrentState()!= Alien.State.DEATH2 && aliens.get(0).isTriggered(aliens.get(i))) {
                     g.drawString("Kill?", aliens.get(i).painter().centerX() - 20, aliens.get(i).painter().top());
                 }
             }
-            if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH) {
+            if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2) {
                 g.drawString("Report?", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
             }
             aliens.get(i).paint(g);
