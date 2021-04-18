@@ -44,7 +44,7 @@ public class Input extends GameObject{
         }
     }
     public void add(char c){
-        if (Character.isDigit(c)){
+        if (Character.isDigit(c)&&num.length()<20){
             num+=c;
             inputLine.translateX(inputChange);
         }

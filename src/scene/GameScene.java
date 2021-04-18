@@ -47,7 +47,7 @@ public class GameScene extends Scene {
         map = new Map();
         backGround = ImageController.getInstance().tryGet("/map/background.png");
         mapLoader = MapGameGen();
-        cam = new Camera.Builder(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT).setChaseObj(aliens.get(0)).gen();
+        cam = new Camera.Builder(Global.SCREEN_X, Global.SCREEN_Y).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
         taskItems.add(new TaskItem("/taskBox/boxItem.png", 105, 441, TaskController.Task.FIND_DIFFERENT));
         taskItems.add(new TaskItem("/taskBox/greenBox.png", 700, 500, TaskController.Task.PUSH));

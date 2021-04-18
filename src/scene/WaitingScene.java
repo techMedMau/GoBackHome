@@ -27,6 +27,7 @@ public class WaitingScene extends Scene {
     private MapLoader mapLoader;
     private ArrayList<Alien> aliens;
     private int homeOwner;
+    private TalkRoomScene talkRoomScene;
     public WaitingScene(String password,int traitor,int playMax,int homeOwner){
         this.password=password;
         this.traitor=traitor;
@@ -51,6 +52,8 @@ public class WaitingScene extends Scene {
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
         mapLoader = MapWaitGen();
+        talkRoomScene=new TalkRoomScene();
+        talkRoomScene.sceneBegin();
     }
 
     @Override
@@ -91,6 +94,7 @@ public class WaitingScene extends Scene {
                             break;
                     }
                 }
+                talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
             }
 
             @Override
@@ -117,6 +121,7 @@ public class WaitingScene extends Scene {
 
             @Override
             public void keyTyped(char c, long trigTime) {
+                talkRoomScene.keyListener().keyTyped(c,trigTime);
 
             }
         };
@@ -168,6 +173,7 @@ public class WaitingScene extends Scene {
             Font numFont=new Font(Global.FONT,Font.PLAIN,20);
             g.setFont(numFont);
             g.drawString(currentPlay+"/"+playMax,445,580);
+            talkRoomScene.paint(g);
         }
 
 
