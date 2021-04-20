@@ -1,15 +1,19 @@
 package gameobj;
 
 import controllers.ImageController;
+import controllers.TaskController;
 import gameobj.button.ClickState;
 import gameobj.button.Range;
+import scene.popupwindow.PopUpTask;
 import utils.Animator;
 import utils.Delay;
 import utils.Global;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Alien extends GameObject implements ClickState, Range {
     @Override
@@ -17,7 +21,8 @@ public class Alien extends GameObject implements ClickState, Range {
         return (Math.sqrt(Math.abs((alien.painter().centerX() - this.painter().centerX()) * (alien.painter().centerX() - this.painter().centerX())
                 + (alien.painter().centerY() - this.painter().centerY()) * (alien.painter().centerY() - this.painter().centerY()))) < 90.0) ;
     }
-        @Override
+
+    @Override
     public boolean state(Point point){
         return point.getX()>painter().left() && point.getX()<painter().right()&&
                 point.getY()>painter().top() && point.getY()<painter().bottom();
@@ -35,6 +40,8 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
 
+
+
     public enum AlienType {
         A,
         B,
@@ -45,7 +52,119 @@ public class Alien extends GameObject implements ClickState, Range {
         G
     }
 
-    private static HashMap<State, Animator> getAnimator(AlienType type) {
+    private static HashMap<State, Animator> getDeathAnimator(AlienType type){
+        switch (type) {
+            case A:
+                HashMap<State, Animator> map = new HashMap<>();
+                map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png"))));
+                map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png"))));
+                map.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p3_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png")
+                )));
+                map.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p3_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png")
+                )));
+                return map;
+            case B:
+                HashMap<State, Animator> map1 = new HashMap<>();
+                map1.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p2_dieBody2.png"))));
+                map1.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p2_dieBody2.png"))));
+                map1.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p2_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p2_dieBody2.png")
+                )));
+                map1.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p2_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p2_dieBody2.png")
+                )));
+                return map1;
+            case C:
+                HashMap<State, Animator> map2 = new HashMap<>();
+                map2.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png"))));
+                map2.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png"))));
+                map2.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p1_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png")
+                )));
+                map2.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p1_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png")
+                )));
+                return map2;
+            case D:
+                HashMap<State, Animator> map3 = new HashMap<>();
+                map3.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p4_dieBody2.png"))));
+                map3.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p4_dieBody2.png"))));
+                map3.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p4_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p4_dieBody2.png")
+                )));
+                map3.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p4_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p4_dieBody2.png")
+                )));
+                return map3;
+            case E:
+                HashMap<State, Animator> map4 = new HashMap<>();
+                map4.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p5_dieBody2.png"))));
+                map4.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p5_dieBody2.png"))));
+                map4.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p5_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p5_dieBody2.png")
+                )));
+                map4.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p5_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p5_dieBody2.png")
+                )));
+                return map4;
+            case F:
+                HashMap<State, Animator> map5 = new HashMap<>();
+                map5.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_dieBody2.png"))));
+                map5.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_dieBody2.png"))));
+                map5.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p6_dieBody2.png")
+                )));
+                map5.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p6_dieBody2.png")
+                )));
+                return map5;
+            case G:
+                HashMap<State, Animator> map6 = new HashMap<>();
+                map6.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_dieBody2.png"))));
+                map6.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_dieBody2.png"))));
+                map6.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p7_dieBody2.png")
+                )));
+                map6.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p7_dieBody2.png")
+                )));
+                return map6;
+            default:
+                return null;
+        }
+    }
+
+    private static HashMap<State, Animator> getAliveAnimator(AlienType type) {
         switch (type) {
             case A:
                 HashMap<State, Animator> map = new HashMap<>();
@@ -61,9 +180,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p3_walk04.png"),
                         ImageController.getInstance().tryGet("/player/p3_walk05.png")
                 )));
-                map.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_dieBody.png")
-                )));
+
                 return map;
             case B:
                 HashMap<State, Animator> map1 = new HashMap<>();
@@ -78,9 +195,6 @@ public class Alien extends GameObject implements ClickState, Range {
                 map1.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
                         ImageController.getInstance().tryGet("/player/p2_walk06.png"),
                         ImageController.getInstance().tryGet("/player/p2_walk05.png")
-                )));
-                map1.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p2_dieBody.png")
                 )));
                 return map1;
             case C:
@@ -97,9 +211,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p1_walk05.png"),
                         ImageController.getInstance().tryGet("/player/p1_walk04.png")
                 )));
-                map2.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_dieBody.png")
-                )));
+
                 return map2;
             case D:
                 HashMap<State, Animator> map3 = new HashMap<>();
@@ -115,9 +227,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p4_walk02.png"),
                         ImageController.getInstance().tryGet("/player/p4_walk01.png")
                 )));
-                map3.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p4_dieBody.png")
-                )));
+
                 return map3;
             case E:
                 HashMap<State, Animator> map4 = new HashMap<>();
@@ -133,9 +243,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p5_walk2.png"),
                         ImageController.getInstance().tryGet("/player/p5_walk1.png")
                 )));
-                map4.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p5_dieBody.png")
-                )));
+
                 return map4;
             case F:
                 HashMap<State, Animator> map5 = new HashMap<>();
@@ -151,9 +259,7 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p6_walk2.png"),
                         ImageController.getInstance().tryGet("/player/p6_walk1.png")
                 )));
-                map5.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p6_dieBody.png")
-                )));
+
                 return map5;
             case G:
                 HashMap<State, Animator> map6 = new HashMap<>();
@@ -169,9 +275,6 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p7_walk2.png"),
                         ImageController.getInstance().tryGet("/player/p7_walk1.png")
                 )));
-                map6.put(State.DEATH1, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p7_dieBody.png")
-                )));
                 return map6;
             default:
                 return null;
@@ -179,15 +282,17 @@ public class Alien extends GameObject implements ClickState, Range {
     }
     // 如果要改善效能問題 存圖片路徑 載入時再導入圖片
 
-
+   public enum AliveState {
+        ALIVE,
+       ZOMBIE,
+       DEATH
+   }
 
     public enum State {
         STAND_LEFT,
         STAND_RIGHT,
         WALK_LEFT,
-        WALK_RIGHT,
-        DEATH1,
-        DEATH2;
+        WALK_RIGHT;
 
         public boolean checkWalkConflict(State lastState) {
             if (lastState != WALK_LEFT && lastState != WALK_RIGHT) {
@@ -197,6 +302,12 @@ public class Alien extends GameObject implements ClickState, Range {
         }
     }
 
+    public enum Role{
+        WITCH,
+        HUNTER
+    }
+
+
     private HashMap<State, Animator> stateAnimator; //丟state會給animator
     private State currentState;// 角色動畫狀態
     private Global.Direction verticalDir;// 角色方向, enum包含四方向 這樣做有風險
@@ -205,8 +316,11 @@ public class Alien extends GameObject implements ClickState, Range {
     private int ID;
     private int num;
     private boolean isTraitor;
-    private boolean alive;
-    private int life;
+    private int swordsNum;
+    private HashSet<TaskController.Task> tasks;
+    private Image sword;
+    private Role role;
+    private AliveState aliveState;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -234,25 +348,46 @@ public class Alien extends GameObject implements ClickState, Range {
                 this.alienType = AlienType.G;
                 break;
         }
-        stateAnimator = getAnimator(alienType);
+        stateAnimator = getAliveAnimator(alienType);
         stateAnimator.get(currentState).play();
         horizontalDir = verticalDir = Global.Direction.NO_DIR;
         this.num = num;
         this.isTraitor = false;
-        this.alive = true;
-        this.life = 2;
+        this.swordsNum = 0;
+        this.tasks = new HashSet<>();
+        this.sword = ImageController.getInstance().tryGet("/sword.png");
+        this.role = Role.values()[Global.random(0,1)];
+        this.aliveState = AliveState.ALIVE;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setDone(TaskController.Task task){
+        swordsNum++;
+        tasks.add(task);
+    }
+//
+    public boolean isDone(TaskController.Task task){
+        return tasks.contains(task);
+    }
+
+    public void kill(){
+        aliveState = AliveState.ZOMBIE;
+        currentState = State.STAND_RIGHT;
+        stateAnimator = getDeathAnimator(alienType);
+        stateAnimator.get(currentState).play();
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        if (alive){
-            stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 54, 73);
-        }
+        stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 54, 73);
     }
 
     @Override
     public void update() {
-        if (currentState==State.DEATH2||!alive){
+        if (aliveState == AliveState.DEATH){
             return;
         }
             switch (horizontalDir) {
@@ -303,17 +438,20 @@ public class Alien extends GameObject implements ClickState, Range {
                     }
                     break;
             }
-
     }
 
     public void setVerticalDir(Global.Direction dir) {
-        if (currentState==State.DEATH2||!alive){return;}
+        if (aliveState == AliveState.DEATH){
+            return;
+        }
         this.verticalDir = dir;
         setState();
     }
 
     public void setHorizontalDir(Global.Direction dir) {
-        if (currentState==State.DEATH2||!alive){return;}
+        if (aliveState == AliveState.DEATH){
+            return;
+        }
         this.horizontalDir = dir;
         setState();
     }
@@ -339,7 +477,7 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     private void setState() {
-        if (currentState==State.DEATH2||!alive){
+        if (aliveState == AliveState.DEATH){
             return;
         }
         State lastState = currentState;
@@ -379,8 +517,13 @@ public class Alien extends GameObject implements ClickState, Range {
             stateAnimator.get(currentState).play();
         }
     }
+
+//    public void kill(){
+//        currentState = State.DEATH1;
+//    }
+
     public void death(){
-        currentState=State.DEATH2;
+        aliveState = AliveState.DEATH;
     }
 
     public void setId(int id) {
@@ -391,5 +534,18 @@ public class Alien extends GameObject implements ClickState, Range {
         return this.ID;
     }
 
+    public void setSwordNum(int num){
+        swordsNum=num;
+    }
+    public int getSwordsNum(){
+        return swordsNum;
+    }
 
+    public Image getSword(){
+        return sword;
+    }
+
+    public AliveState getAliveState() {
+        return aliveState;
+    }
 }

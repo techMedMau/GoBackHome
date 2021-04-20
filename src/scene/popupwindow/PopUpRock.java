@@ -30,6 +30,9 @@ public class PopUpRock extends PopUpTask{
                 rocks.get(i).paint(g);
             }
         }
+        if(isDone()){
+            g.drawImage(finish, 350,125,null);
+        }
     }
 
     @Override

@@ -75,7 +75,7 @@ public class PopUpCreateRoom extends PopUpWindows{
                             strCreat.add(String.valueOf(traitorNums.getTarget()));
                             strCreat.add(String.valueOf(playNums.getTarget()));
                             strCreat.add(String.valueOf(ClientClass.getInstance().getID()));
-                            ClientClass.getInstance().sent(Global.InternetCommand.CREAT,strCreat);
+                            ClientClass.getInstance().sent(Global.InternetCommand.CREATE,strCreat);
                             SceneController.getInstance().changeScene(waitingScene);
                         }
                         break;

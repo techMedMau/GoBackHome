@@ -10,13 +10,11 @@ import java.util.ArrayList;
 
 public class PopUpFindDifferent extends PopUpTask{
     private ArrayList<KeyPair> keyPairs;
-    private ArrayList<Card> cards;
     private Card tmp;
 
     @Override
     public void sceneBegin() {
         super.sceneBegin();
-        cards = new ArrayList<>();
         this.keyPairs = new ArrayList<>();
         this.keyPairs.add(new KeyPair(new Card(270, 200,32,38
                         ,ImageController.getInstance().tryGet("/findDifferent/cloud.png"))
@@ -67,9 +65,6 @@ public class PopUpFindDifferent extends PopUpTask{
                     for(int i = 0; i < keyPairs.size(); i ++){
                         keyPairs.get(i).card1.changeState(e.getPoint());
                     }
-
-
-
                     for(int i = 0; i < keyPairs.size(); i++) {
                         if (keyPairs.get(i).card1.state(e.getPoint())
                                 && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card1)){
@@ -108,24 +103,34 @@ public class PopUpFindDifferent extends PopUpTask{
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-
-
         for(int i = 0; i <keyPairs.size(); i++){
             keyPairs.get(i).card.paint(g);
         }
         for(int i = 0; i <keyPairs.size(); i++){
             keyPairs.get(i).card1.paint(g);
         }
+        if(isDone()){
+            g.drawImage(finish, 350,125,null);
+        }
     }
 
     @Override
     public void update() {
-        for(int i = 0; i <keyPairs.size(); i++){
+        for(int i = 0; i < keyPairs.size(); i++){
             keyPairs.get(i).card.update();
-        }
-        for(int i = 0; i <keyPairs.size(); i++){
             keyPairs.get(i).card1.update();
         }
+        int i;
+        for(i = 0; i < keyPairs.size(); i++) {
+            if(keyPairs.get(i).card.getState() == Card.State.HIDE
+                    || keyPairs.get(i).card.getState() == Card.State.HIDE){
+              break;
+            }
+        }
+        if(i == keyPairs.size()){
+            setDone(true);
+        }
+
 
     }
 

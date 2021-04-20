@@ -8,12 +8,15 @@ public class Global {
         public static final int CONNECT = 0;
         public static final int MOVE = 1;
         public static final int DISCONNECT = 2;
-        public static final int CREAT = 3;
+        public static final int CREATE = 3;
         public static final int START=4;
         public static final int TRAITOR=5;
         public static final int GET_ROOM=6;
         public static final int DEATH=7;
-        public static final int TO_VOTE=8;
+        public static final int ZOMBIE = 8;
+//        public static final int TO_VOTE=8;
+        public static final int GET_NUM = 9;
+        public static final int RECEIVE_NUM = 10;
     }
 
     public enum Direction {
@@ -45,7 +48,7 @@ public class Global {
 
     public static final boolean IS_DEBUG = true;
 
-    public static final String SERVE_IP="192.168.1.45";
+    public static final String SERVE_IP="192.168.1.11";
 
 
     public static final String FONT="Times New Roman";

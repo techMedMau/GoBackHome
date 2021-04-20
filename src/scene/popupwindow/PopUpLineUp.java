@@ -1,6 +1,8 @@
 package scene.popupwindow;
 
 import controllers.ImageController;
+import controllers.TaskController;
+import gameobj.Alien;
 import gameobj.button.Button;
 import utils.CommandSolver;
 
@@ -11,12 +13,12 @@ public class PopUpLineUp extends PopUpTask {
 
     private ArrayList<KeyPair> keyPairs;
     private Button tmp;
-    private int lineNum; //1~4
     private ArrayList<Image> lines;
     private boolean line1;
     private boolean line2;
     private boolean line3;
     private boolean line4;
+    private TaskController.Task task;
 
     public PopUpLineUp(){
         keyPairs = new ArrayList<>();
@@ -33,8 +35,8 @@ public class PopUpLineUp extends PopUpTask {
         this.line2 = false;
         this.line3 = false;
         this.line4 = false;
+        this.task = TaskController.Task.LINE_UP;
     }
-
 
 
     @Override

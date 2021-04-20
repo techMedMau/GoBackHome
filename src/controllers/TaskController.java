@@ -1,10 +1,11 @@
 package controllers;
 
+import gameobj.Alien;
 import scene.popupwindow.*;
 
 public class TaskController {
     private static TaskController taskController;
-    private PopUpWindows currentPopUp;
+    private PopUpTask currentPopUp;
     public static TaskController getTaskController(){
         if (taskController==null){
             taskController=new TaskController();
@@ -12,12 +13,12 @@ public class TaskController {
         return taskController;
     }
     private TaskController(){}
-    public PopUpWindows changePopUp(Task task){
-        PopUpWindows popUpWindows=task.getPopUp();
-        if (popUpWindows!=null){
-            PopUpWindows tmp = currentPopUp;
-            popUpWindows.sceneBegin();
-            this.currentPopUp = popUpWindows;
+    public PopUpTask changePopUp(Task task){
+        PopUpTask popUpTask=task.getPopUp();
+        if (popUpTask!=null){
+            PopUpTask tmp = currentPopUp;
+            popUpTask.sceneBegin();
+            this.currentPopUp = popUpTask;
             if (tmp!=null){
                 tmp.sceneEnd();
             }
@@ -25,9 +26,10 @@ public class TaskController {
         return currentPopUp;
 
     }
-    public PopUpWindows getCurrentPopUp(){
+    public PopUpTask getCurrentPopUp(){
         return currentPopUp;
     }
+
     public enum Task{
         FIND_DIFFERENT(new PopUpFindDifferent()),
         FIND_PIC(new PopUpFindPic()),
@@ -38,12 +40,12 @@ public class TaskController {
         CENTER(new PopUpCenter()),
         PUSH(new PopUpPush());
 
-        private PopUpWindows popUpWindows;
-        Task(PopUpWindows popUpWindows){
-            this.popUpWindows=popUpWindows;
+        private PopUpTask popUpTask;
+        Task(PopUpTask popUpTask){
+            this.popUpTask=popUpTask;
         }
-        public PopUpWindows getPopUp(){
-            return popUpWindows;
+        public PopUpTask getPopUp(){
+            return popUpTask;
         }
     }
 }
