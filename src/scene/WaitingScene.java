@@ -277,7 +277,7 @@ public class WaitingScene extends Scene {
                         break;
                         //告訴別人哪個數字可以用
                     case Global.InternetCommand.GET_NUM:
-                        if(strs.get(0).equals(password)&&serialNum==homeOwner){
+                        if(strs.get(0).equals(password)&&ClientClass.getInstance().getID() == homeOwner){
                             ArrayList<String> str = new ArrayList<>();
                             int n;
                             while(true) {
@@ -302,23 +302,6 @@ public class WaitingScene extends Scene {
                     case Global.InternetCommand.MAKE_ALIENS:
                         if(strs.get(0).equals(password)){
                             if(String.valueOf(ClientClass.getInstance().getID()).equals(strs.get(2))){
-//                                boolean isExist = false;
-//                                for (int i = 0; i < aliens.size(); i++) {
-//                                    if(String.valueOf(aliens.get(i).getId()).equals(strs.get(2))){
-//                                        isExist = true;
-//                                        break;
-//                                    }
-//                                }
-//                                if(!isExist){
-//                                    ArrayList<String> str = new ArrayList<>();
-//                                    aliens.add(new Alien(400, 300, Integer.parseInt(strs.get(1))));
-//                                    str.add(String.valueOf(400));
-//                                    str.add(String.valueOf(300));
-//                                    str.add(Integer.parseInt(strs.get(1))+"");
-//                                    str.add(password);
-//                                    aliens.get(aliens.size() - 1).setId(Integer.parseInt(strs.get(2)));
-//                                    ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
-//                                }
                                 ArrayList<String> str = new ArrayList<>();
                                     aliens.add(new Alien(400, 300, Integer.parseInt(strs.get(1))));
                                     str.add(String.valueOf(400));

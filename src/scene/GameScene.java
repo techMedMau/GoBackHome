@@ -291,9 +291,6 @@ public class GameScene extends Scene {
                                 }
                             }
                             break;
-//                        case Global.InternetCommand.TO_VOTE:
-//                            SceneController.getInstance().changeScene(new VoteScene(aliens,Integer.parseInt(str.get(1))));
-//                            break;
                         case Global.InternetCommand.ZOMBIE:
                             for(int i = 0; i < aliens.size(); i ++){
                                 if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {

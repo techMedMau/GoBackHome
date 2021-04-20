@@ -14,7 +14,6 @@ public class Global {
         public static final int GET_ROOM=6;
         public static final int DEATH=7;
         public static final int ZOMBIE = 8;
-//        public static final int TO_VOTE=8;
         public static final int GET_NUM = 9;
         public static final int MAKE_ALIENS = 10;
     }
