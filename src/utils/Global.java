@@ -16,7 +16,7 @@ public class Global {
         public static final int ZOMBIE = 8;
 //        public static final int TO_VOTE=8;
         public static final int GET_NUM = 9;
-        public static final int RECEIVE_NUM = 10;
+        public static final int MAKE_ALIENS = 10;
     }
     public enum KeyCommand{
         SHIFT(5),
@@ -68,9 +68,9 @@ public class Global {
 
     public static HashMap<String,WaitingScene> WAIT_SCENES=new HashMap<>();
 
-    public static final boolean IS_DEBUG = false;
+    public static final boolean IS_DEBUG = true;
 
-    public static final String SERVE_IP="192.168.1.42";
+    public static final String SERVE_IP="192.168.1.11";
 
 
     public static final String FONT="Times New Roman";

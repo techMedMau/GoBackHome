@@ -32,13 +32,13 @@ public class GameScene extends Scene {
     private Image infoBoard;
     private BackgroundItem backgroundItem;
     private String password;
+    private static int[][] location = new int[][]{
+            {1025,1120},{1728,100},{180,150},{64,640},{288,1003}
+        ,{1220,1120},{1216,425},{1600,790},{672,224},{672, 662}};
+    private int locationNum;
 
     public GameScene(ArrayList<Alien> aliens,String password) {
         this.aliens = aliens;
-        aliens.forEach(alien -> {
-            alien.painter().setCenter(630, 200);
-            alien.collider().setCenter(630, 200);
-        });
         this.password=password;
     }
 
@@ -56,10 +56,13 @@ public class GameScene extends Scene {
         taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 450, TaskController.Task.PASSWORD));
         taskItems.add(new TaskItem("/taskBox/blueBox.png", 1755, 900, TaskController.Task.CENTER));
         taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
-        taskItems.add(new TaskItem("/taskBox/blackBox.png", 1100, 400, TaskController.Task.COLOR_CHANGE));
+        taskItems.add(new TaskItem("/taskBox/blackBox.png", 880, 370, TaskController.Task.COLOR_CHANGE));
         taskController = TaskController.getTaskController();
         this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
         this.backgroundItem = new BackgroundItem("/arrowRight.png", 500, 500 + 32, 28, 8, 500, 500, 64, 64);
+        this.locationNum =Global.random(0,9);
+        aliens.get(0).painter().setCenter(location[locationNum][0], location[locationNum][1]);
+        aliens.get(0).collider().setCenter(location[locationNum][0], location[locationNum][1]);
     }
 
     @Override
@@ -91,9 +94,11 @@ public class GameScene extends Scene {
                     }
                     //殺活人
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isTriggered(aliens.get(i))
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).ableToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).kill();
+
+                            aliens.get(0).setSwordNum();
                             ArrayList<String> str = new ArrayList<>();
                             str.add(password);
                             str.add(aliens.get(i).getId() + "");
@@ -104,9 +109,10 @@ public class GameScene extends Scene {
                     }
                     //殺zombie
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isTriggered(aliens.get(i))
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).ableToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).death();
+                            aliens.get(0).setSwordNum();
                             ArrayList<String> str = new ArrayList<>();
                             str.add(password);
                             str.add(aliens.get(i).getId() + "");
@@ -185,20 +191,19 @@ public class GameScene extends Scene {
     public void paint(Graphics g) {
         cam.start(g);
         g.drawImage(backGround, 0, 0, null);
-//        Font font = new Font(Global.FONT, Font.PLAIN, 20);
-        g.drawString(aliens.get(0).getRole().name(),aliens.get(0).painter().centerX() - 28, aliens.get(0).painter().top());
+
+        //有了屍體之後，for迴圈要只畫到玩家人數
         for (int i = 1; i < aliens.size(); i++) {
-            if (aliens.get(0).getAliveState() == Alien.AliveState.ZOMBIE) {
                 g.setColor(Color.BLACK);
-//                g.setFont(font);
                 g.drawString(aliens.get(i).getRole().name(),aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
-            }
         }
+
         for (int i = 0; i < aliens.size(); i++) {
             if(aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
                 aliens.get(i).paint(g);
             }
         }
+
 //        for (int i = 0; i < aliens.size(); i++) {
 //            if (aliens.get(0).isTraitor()) {
 //                g.setColor(Color.RED);
@@ -542,10 +547,12 @@ public class GameScene extends Scene {
                 }
                 break;
             case UP:
+
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).topIsCollision(forGame.get(i))) {
                         aliens.get(0).translateY(Global.MOVE_SPEED);
+                        System.out.println("a");
                         break;
                     }
                 }

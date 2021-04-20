@@ -66,7 +66,7 @@ public abstract class GameObject implements GameKernel.UpdateInterface,GameKerne
 
     public boolean topIsCollision(GameObject obj) {
         return collider.left()<obj.collider.right() &&
-                obj.collider.bottom()<=collider.top() &&
+                obj.collider.bottom()>=collider.top() &&
                 obj.collider.top()<collider.bottom() &&
                 obj.collider.left()<collider.right();
     }
@@ -122,6 +122,8 @@ public abstract class GameObject implements GameKernel.UpdateInterface,GameKerne
             g.setColor(Color.BLUE);
             g.drawRect(this.collider.left(), this.collider.top(), this.collider.width(), this.collider.height());
             g.setColor(Color.BLACK);
+            g.drawString(this.collider.left() + "," + this.collider.top(),
+                    this.painter.left() + 5, this.painter.top() + 10);
         }
     }
 
