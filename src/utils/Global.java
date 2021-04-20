@@ -70,7 +70,7 @@ public class Global {
 
     public static final boolean IS_DEBUG = true;
 
-    public static final String SERVE_IP="192.168.1.11";
+    public static final String SERVE_IP="192.168.1.42";
 
 
     public static final String FONT="Times New Roman";
