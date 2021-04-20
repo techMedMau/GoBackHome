@@ -39,9 +39,6 @@ public class Alien extends GameObject implements ClickState, Range {
         return isTraitor;
     }
 
-
-
-
     public enum AlienType {
         A,
         B,
@@ -321,6 +318,7 @@ public class Alien extends GameObject implements ClickState, Range {
     private Image sword;
     private Role role;
     private AliveState aliveState;
+    private Delay killDelay;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -358,6 +356,7 @@ public class Alien extends GameObject implements ClickState, Range {
         this.sword = ImageController.getInstance().tryGet("/sword.png");
         this.role = Role.values()[Global.random(0,1)];
         this.aliveState = AliveState.ALIVE;
+        this.killDelay = new Delay(300);
     }
 
     public Role getRole() {
@@ -371,13 +370,6 @@ public class Alien extends GameObject implements ClickState, Range {
 //
     public boolean isDone(TaskController.Task task){
         return tasks.contains(task);
-    }
-
-    public void kill(){
-        aliveState = AliveState.ZOMBIE;
-        currentState = State.STAND_RIGHT;
-        stateAnimator = getDeathAnimator(alienType);
-        stateAnimator.get(currentState).play();
     }
 
     @Override
@@ -518,12 +510,20 @@ public class Alien extends GameObject implements ClickState, Range {
         }
     }
 
-//    public void kill(){
-//        currentState = State.DEATH1;
-//    }
+    public void kill(){
+        aliveState = AliveState.ZOMBIE;
+        currentState = State.STAND_RIGHT;
+        stateAnimator = getDeathAnimator(alienType);
+        stateAnimator.get(currentState).play();
+    }
 
     public void death(){
         aliveState = AliveState.DEATH;
+    }
+
+    public boolean ableToKill(){
+        killDelay.play();
+        return killDelay.count();
     }
 
     public void setId(int id) {
@@ -534,8 +534,8 @@ public class Alien extends GameObject implements ClickState, Range {
         return this.ID;
     }
 
-    public void setSwordNum(int num){
-        swordsNum=num;
+    public void setSwordNum(){
+        swordsNum--;
     }
     public int getSwordsNum(){
         return swordsNum;
@@ -548,4 +548,6 @@ public class Alien extends GameObject implements ClickState, Range {
     public AliveState getAliveState() {
         return aliveState;
     }
+
+
 }

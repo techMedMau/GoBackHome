@@ -41,27 +41,23 @@ public class WaitingScene extends Scene {
     @Override
     public void sceneBegin() {
         aliens = new ArrayList<>();
-
-
         //要傳出去的東西
         //創角搬到consume
         ArrayList<String> str = new ArrayList<>();
-        num = (int) (Math.random() * 7 + 1);
-        aliens.add(new Alien(500, 500, num));
-        str.add(String.valueOf(aliens.get(0).left()));
-        str.add(String.valueOf(aliens.get(0).top()));
-        str.add(num+"");
+
+
         str.add(password);
-        //sent請幫我做這動作
-        ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+        //sent請幫我做這個動作
+        ClientClass.getInstance().sent(Global.InternetCommand.GET_NUM,str);
 //        ClientClass.getInstance().sent(Global.InternetCommand.GET_NUM,str);
         //請幫我要一個數字
-        aliens.get(0).setId(ClientClass.getInstance().getID());
+//
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
         mapLoader = MapWaitGen();
         talkRoomScene=new TalkRoomScene();
         talkRoomScene.sceneBegin();
+
     }
 
     @Override
@@ -123,9 +119,6 @@ public class WaitingScene extends Scene {
                     talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
             }
 
-
-
-
             @Override
             public void keyTyped(char c, long trigTime) {
                 talkRoomScene.keyListener().keyTyped(c,trigTime);
@@ -186,6 +179,7 @@ public class WaitingScene extends Scene {
 
         @Override
         public void update () {
+        if(aliens.size() != 0){
             aliens.get(0).update();
             if (aliens.get(0).painter().left() <= 0) {
                 aliens.get(0).translateX(2);
@@ -208,6 +202,7 @@ public class WaitingScene extends Scene {
             strr.add(aliens.get(0).getVerticalDir().getValue()+"");
             strr.add(password);
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE,strr);
+        }
             ClientClass.getInstance().consume((serialNum, internetcommand, strs) -> {
                 switch(internetcommand){
                     case Global.InternetCommand.CONNECT:
@@ -263,7 +258,6 @@ public class WaitingScene extends Scene {
                                 }
                             }
                         }
-
                         break;
                     case Global.InternetCommand.START:
                         if (strs.get(0).equals(password)){
@@ -283,11 +277,44 @@ public class WaitingScene extends Scene {
                         break;
                         //告訴別人哪個數字可以用
                     case Global.InternetCommand.GET_NUM:
+                        System.out.println("a");
                         if(strs.get(0).equals(password)){
-
+                            ArrayList<String> str = new ArrayList<>();
+                            int n;
+                            while(true) {
+                                n = Global.random(1,7);
+                                int i;
+                                for (i = 0; i < aliens.size(); i++) {
+                                    if (n == aliens.get(i).getNum()) {
+                                        break;
+                                    }
+                                }
+                                if(i == aliens.size()){
+                                  break;
+                                }
+                            }
+                            System.out.println(n);
+                            str.add(String.valueOf(password));
+                            str.add(String.valueOf(n));
+                            str.add(String.valueOf(serialNum));
+                            ClientClass.getInstance().sent(Global.InternetCommand.MAKE_ALIENS,str);
                         }
                         break;
-                    case Global.InternetCommand.RECEIVE_NUM:
+                        //給別人NUM
+                    case Global.InternetCommand.MAKE_ALIENS:
+                        if(strs.get(0).equals(password)){
+                            if(String.valueOf(ClientClass.getInstance().getID()).equals(strs.get(2))){
+                                ArrayList<String> str = new ArrayList<>();
+                                 aliens.add(new Alien(400, 300, Integer.parseInt(strs.get(1))));
+
+                                 str.add(String.valueOf(400));
+                                 str.add(String.valueOf(300));
+                                 str.add(Integer.parseInt(strs.get(1))+"");
+                                 str.add(password);
+                                 aliens.get(0).setId(ClientClass.getInstance().getID());
+                                ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+                            }
+                        }
                         break;
                 }
             });
