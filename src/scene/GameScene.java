@@ -49,12 +49,12 @@ public class GameScene extends Scene {
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.SCREEN_X, Global.SCREEN_Y).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/taskBox/boxItem.png", 105, 441, TaskController.Task.FIND_DIFFERENT));
-        taskItems.add(new TaskItem("/taskBox/greenBox.png", 700, 500, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/taskBox/boxItem.png", 100, 360, TaskController.Task.FIND_DIFFERENT));
+        taskItems.add(new TaskItem("/taskBox/greenBox.png", 32, 80, TaskController.Task.PUSH));
         taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
-        taskItems.add(new TaskItem("/taskBox/warningBox.png", 600, 600, TaskController.Task.LINE_UP));
-        taskItems.add(new TaskItem("/taskBox/woodBox.png", 1700, 66, TaskController.Task.PASSWORD));
-        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1750, 900, TaskController.Task.CENTER));
+        taskItems.add(new TaskItem("/taskBox/warningBox.png", 570, 985, TaskController.Task.LINE_UP));
+        taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 450, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1755, 900, TaskController.Task.CENTER));
         taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
         taskItems.add(new TaskItem("/taskBox/blackBox.png", 1100, 400, TaskController.Task.COLOR_CHANGE));
         taskController = TaskController.getTaskController();
@@ -70,7 +70,7 @@ public class GameScene extends Scene {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (MouseEvent e, CommandSolver.MouseState state, long trigTime) -> {
-            if (state == null || aliens.get(0).getCurrentState() == Alien.State.DEATH2) {
+            if (state == null || aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                 return;
             }
             if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
@@ -80,32 +80,51 @@ public class GameScene extends Scene {
             switch (state) {
                 case CLICKED:
                     for (int i = 0; i < taskItems.size(); i++) {
-                        System.out.println(i);
                         if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                            final TaskController.Task task = taskItems.get(i).getTask();
+//                            if (taskItems.get(i).getTask().getPopUp().isDone()){return;}
+                            if(aliens.get(0).isDone(task)){return;}
                             taskController.changePopUp(taskItems.get(i).getTask());
+                            taskController.getCurrentPopUp().setFinish(() -> aliens.get(0).setDone(task));
                             return;
                         }
                     }
+                    //殺活人
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).isTraitor() &&aliens.get(i).getCurrentState()!= Alien.State.DEATH2 && aliens.get(0).isTriggered(aliens.get(i)) && !aliens.get(i).isTraitor() && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isTriggered(aliens.get(i))
+                                && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
+                            aliens.get(i).kill();
+                            ArrayList<String> str = new ArrayList<>();
+                            str.add(password);
+                            str.add(aliens.get(i).getId() + "");
+                            //sent 是你要告訴別人
+                            ClientClass.getInstance().sent(Global.InternetCommand.ZOMBIE, str);
+                            return;
+                        }
+                    }
+                    //殺zombie
+                    for (int i = 1; i < aliens.size(); i++) {
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isTriggered(aliens.get(i))
+                                && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).death();
                             ArrayList<String> str = new ArrayList<>();
                             str.add(password);
                             str.add(aliens.get(i).getId() + "");
+                            //sent 是你要告訴別人
                             ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
                             return;
                         }
                     }
-                    for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2 && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-                            ArrayList<String> str = new ArrayList<>();
-                            str.add(password);
-                            str.add(String.valueOf(aliens.get(0).getId()));
-                            ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
-                            SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
-                            return;
-                        }
-                    }
+//                    for (int i = 1; i < aliens.size(); i++) {
+//                        if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2 && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+//                            ArrayList<String> str = new ArrayList<>();
+//                            str.add(password);
+//                            str.add(String.valueOf(aliens.get(0).getId()));
+//                            ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
+//                            SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
+//                            return;
+//                        }
+//                    }
                     break;
 
             }
@@ -117,7 +136,7 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                if (aliens.get(0).getCurrentState() == Alien.State.DEATH2) {
+                if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
                 }
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
@@ -139,7 +158,7 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-                if (aliens.get(0).getCurrentState() == Alien.State.DEATH2) {
+                if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
                 }
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
@@ -166,23 +185,36 @@ public class GameScene extends Scene {
     public void paint(Graphics g) {
         cam.start(g);
         g.drawImage(backGround, 0, 0, null);
-        Font font = new Font(Global.FONT, Font.PLAIN, 20);
-        for (int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(0).isTraitor()) {
-                g.setColor(Color.RED);
-                g.setFont(font);
-                if (aliens.get(i).isTraitor()) {
-                    g.drawString("Traitor", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
-                }
-                if (!aliens.get(i).isTraitor()&&aliens.get(i).getCurrentState()!= Alien.State.DEATH2 && aliens.get(0).isTriggered(aliens.get(i))) {
-                    g.drawString("Kill?", aliens.get(i).painter().centerX() - 20, aliens.get(i).painter().top());
-                }
+//        Font font = new Font(Global.FONT, Font.PLAIN, 20);
+        g.drawString(aliens.get(0).getRole().name(),aliens.get(0).painter().centerX() - 28, aliens.get(0).painter().top());
+        for (int i = 1; i < aliens.size(); i++) {
+            if (aliens.get(0).getAliveState() == Alien.AliveState.ZOMBIE) {
+                g.setColor(Color.BLACK);
+//                g.setFont(font);
+                g.drawString(aliens.get(i).getRole().name(),aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
             }
-            if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2) {
-                g.drawString("Report?", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
-            }
-            aliens.get(i).paint(g);
         }
+        for (int i = 0; i < aliens.size(); i++) {
+            if(aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
+                aliens.get(i).paint(g);
+            }
+        }
+//        for (int i = 0; i < aliens.size(); i++) {
+//            if (aliens.get(0).isTraitor()) {
+//                g.setColor(Color.RED);
+//                g.setFont(font);
+//                if (aliens.get(i).isTraitor()) {
+//                    g.drawString("Traitor", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
+//                }
+//                if (!aliens.get(i).isTraitor()&&aliens.get(i).getCurrentState()!= Alien.State.DEATH2 && aliens.get(0).isTriggered(aliens.get(i))) {
+//                    g.drawString("Kill?", aliens.get(i).painter().centerX() - 20, aliens.get(i).painter().top());
+//                }
+//            }
+//            if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2) {
+//                g.drawString("Report?", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
+//            }
+//            aliens.get(i).paint(g);
+//        }
         g.setColor(Color.BLACK);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))){
@@ -195,25 +227,24 @@ public class GameScene extends Scene {
             }
         }
 
-
         for (int i = 0; i < taskItems.size(); i++) {
             taskItems.get(i).paint(g);
         }
         backgroundItem.paint(g);
         cam.paint(g);
         cam.end(g);
-        drawInfo(g);
+        //畫劍
+        for(int i = 0; i < aliens.get(0).getSwordsNum();i++){
+            g.drawImage(aliens.get(0).getSword(), 0+i*50,0, null);
+        }
         if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().paint(g);
         }
-
-
     }
 
     @Override
     public void update() {
         aliens.get(0).update();
-        //colliedWithMap();
         colliedWithWall();
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
@@ -255,13 +286,22 @@ public class GameScene extends Scene {
                                 }
                             }
                             break;
-                        case Global.InternetCommand.TO_VOTE:
-                            SceneController.getInstance().changeScene(new VoteScene(aliens,Integer.parseInt(str.get(1))));
+//                        case Global.InternetCommand.TO_VOTE:
+//                            SceneController.getInstance().changeScene(new VoteScene(aliens,Integer.parseInt(str.get(1))));
+//                            break;
+                        case Global.InternetCommand.ZOMBIE:
+                            for(int i = 0; i < aliens.size(); i ++){
+                                if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {
+                                    aliens.get(i).kill();
+                                    break;
+                                }
+                            }
                             break;
                     }
                 }
             }
         });
+
     }
 
     public MapLoader MapGameGen() {
@@ -432,27 +472,6 @@ public class GameScene extends Scene {
         return mapLoader;
     }
 
-    public void colliedWithMap() {
-        for (int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(i).painter().left() <= map.painter().left()) {
-                aliens.get(i).translateX(Global.MOVE_SPEED);
-                return;
-            }
-            if (aliens.get(i).painter().top() <= map.painter().top()) {
-                aliens.get(i).translateY(Global.MOVE_SPEED);
-                return;
-            }
-            if (aliens.get(i).painter().bottom() >= map.painter().bottom()) {
-                aliens.get(i).translateY(-Global.MOVE_SPEED);
-                return;
-            }
-            if (aliens.get(i).painter().right() >= map.painter().right()) {
-                aliens.get(i).translateX(-Global.MOVE_SPEED);
-                return;
-            }
-        }
-    }
-
     public void colliedWithWall() {
         Global.Direction horizontalDir = aliens.get(0).getHorizontalDir();
         switch (horizontalDir) {
@@ -546,20 +565,6 @@ public class GameScene extends Scene {
         }
     }
 
-    public void drawInfo(Graphics g) {
-        g.drawImage(infoBoard, 0, 0, null);
-        g.setColor(Color.BLACK);
-        Font font = new Font(Global.FONT, Font.PLAIN, 15);
-        g.setFont(font);
-        g.drawString("Task1", 10, 30);
-        g.drawString("Task2", 10, 50);
-        g.drawString("Task3", 10, 70);
-        g.drawString("Task4", 10, 90);
-        g.drawString("Task5", 10, 110);
-        g.drawString("Task6", 10, 130);
-        g.drawString("Task7", 10, 150);
-        g.drawString("Task8", 10, 170);
-    }
     public void paintShadow(Graphics g,GameObject obj){
         ArrayList<Point> shadowPoints=new ArrayList<>();
         ArrayList<Line> lines=new ArrayList<>();

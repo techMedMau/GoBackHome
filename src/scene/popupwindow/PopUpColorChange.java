@@ -1,13 +1,15 @@
 package scene.popupwindow;
 
 import controllers.ImageController;
+import controllers.TaskController;
+import gameobj.Alien;
 import utils.CommandSolver;
 import scene.Scene;
 
 import java.awt.*;
 import gameobj.button.Button;
 
-public class PopUpColorChange extends PopUpTask{
+public class PopUpColorChange extends PopUpTask {
     private Image img;
     private Image img2;
     private Button button;
@@ -17,6 +19,7 @@ public class PopUpColorChange extends PopUpTask{
     private boolean click;
     private boolean click2;
     private Image finish;
+    private TaskController.Task task;
 
 
     public PopUpColorChange(){
@@ -29,6 +32,7 @@ public class PopUpColorChange extends PopUpTask{
                 , ImageController.getInstance().tryGet("/colorChange/greenTrans.png"));
         this.button2 = new Button(400,400, 80,80
                 , ImageController.getInstance().tryGet("/colorChange/yellowTrans.png"));
+        this.task = TaskController.Task.COLOR_CHANGE;
     }
 
     @Override
@@ -80,7 +84,6 @@ public class PopUpColorChange extends PopUpTask{
     public CommandSolver.KeyListener keyListener() {
         return null;
     }
-
 
 
 

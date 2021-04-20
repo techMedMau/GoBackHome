@@ -39,7 +39,7 @@ public class OpenScene extends Scene {
     public void update() {
         ClientClass.getInstance().consume((serialNum, commandCode, strs) -> {
             switch (commandCode){
-                case Global.InternetCommand.CREAT:
+                case Global.InternetCommand.CREATE:
                     if (Global.WAIT_SCENES.containsKey(strs.get(0))){
                         return;
                     }

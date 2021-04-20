@@ -11,7 +11,11 @@ public class PopUpTask extends PopUpWindows{
     public Image img;
     public Image finish;
     private boolean isDone;
+    private Finish isFinish; //裡面有一個介面 由外面去實踐
 
+    public void setFinish(Finish isFinish) {
+        this.isFinish = isFinish;
+    }
 
     public PopUpTask() {
         super(600, 500);
@@ -41,10 +45,12 @@ public class PopUpTask extends PopUpWindows{
                         break;
                     }
                     if (close.state(e.getPoint())){
+                        if(isDone&&isFinish != null){
+                            isFinish.whenFinished();
+                        }
                         disShow();
                         break;
                     }
-
                     break;
             }
         };
@@ -73,7 +79,7 @@ public class PopUpTask extends PopUpWindows{
         return isDone;
     }
 
-    //    public int left(){
-//        return img.
-//    }
+    public interface Finish{
+        public void whenFinished();
+    }
 }

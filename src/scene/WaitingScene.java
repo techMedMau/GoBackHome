@@ -28,6 +28,8 @@ public class WaitingScene extends Scene {
     private ArrayList<Alien> aliens;
     private int homeOwner;
     private TalkRoomScene talkRoomScene;
+
+
     public WaitingScene(String password,int traitor,int playMax,int homeOwner){
         this.password=password;
         this.traitor=traitor;
@@ -39,15 +41,21 @@ public class WaitingScene extends Scene {
     @Override
     public void sceneBegin() {
         aliens = new ArrayList<>();
-        num = (int) (Math.random() * 7 + 1);
+
+
         //要傳出去的東西
+        //創角搬到consume
         ArrayList<String> str = new ArrayList<>();
-        str.add("500");
-        str.add("500");
+        num = (int) (Math.random() * 7 + 1);
+        aliens.add(new Alien(500, 500, num));
+        str.add(String.valueOf(aliens.get(0).left()));
+        str.add(String.valueOf(aliens.get(0).top()));
         str.add(num+"");
         str.add(password);
-        aliens.add(new Alien(Integer.parseInt(str.get(0)), Integer.parseInt(str.get(1)), num));
+        //sent請幫我做這動作
         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+//        ClientClass.getInstance().sent(Global.InternetCommand.GET_NUM,str);
+        //請幫我要一個數字
         aliens.get(0).setId(ClientClass.getInstance().getID());
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
@@ -98,23 +106,25 @@ public class WaitingScene extends Scene {
             @Override
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-                switch (direction) {
-                    case LEFT:
-                        aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
-                        break;
-                    case RIGHT:
-                        aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
-                        break;
-                    case UP:
-                        aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
-                        break;
-                    case DOWN:
-                        aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
-                        break;
-                }
-                talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
-
+                    switch (direction) {
+                        case LEFT:
+                            aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
+                            break;
+                        case RIGHT:
+                            aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
+                            break;
+                        case UP:
+                            aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
+                            break;
+                        case DOWN:
+                            aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
+                            break;
+                    }
+                    talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
             }
+
+
+
 
             @Override
             public void keyTyped(char c, long trigTime) {
@@ -268,8 +278,16 @@ public class WaitingScene extends Scene {
                                 str.add(String.valueOf(waitingScene.traitor));
                                 str.add(String.valueOf(waitingScene.playMax));
                                 str.add(String.valueOf(waitingScene.homeOwner));
-                                ClientClass.getInstance().sent(Global.InternetCommand.CREAT,str);
+                                ClientClass.getInstance().sent(Global.InternetCommand.CREATE,str);
                             });
+                        break;
+                        //告訴別人哪個數字可以用
+                    case Global.InternetCommand.GET_NUM:
+                        if(strs.get(0).equals(password)){
+
+                        }
+                        break;
+                    case Global.InternetCommand.RECEIVE_NUM:
                         break;
                 }
             });
