@@ -15,6 +15,28 @@ public class Global {
         public static final int DEATH=7;
         public static final int TO_VOTE=8;
     }
+    public enum KeyCommand{
+        SHIFT(5),
+        BACK_SPACE(6),
+        NO_KEY(7),
+        CAPS_LOCK(8);
+        private int value;
+        KeyCommand(int value){
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+        public static KeyCommand getKeyCommand(int value){
+            for(KeyCommand d : KeyCommand.values()){
+                if(d.getValue() == value){
+                    return d;
+                }
+            }
+            return NO_KEY;
+        }
+
+    }
 
     public enum Direction {
         UP(3),
@@ -43,9 +65,9 @@ public class Global {
 
     public static HashMap<String,WaitingScene> WAIT_SCENES=new HashMap<>();
 
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
 
-    public static final String SERVE_IP="192.168.1.45";
+    public static final String SERVE_IP="192.168.1.42";
 
 
     public static final String FONT="Times New Roman";

@@ -27,7 +27,7 @@ public class PopUpConnect extends PopUpWindows {
         img = ImageController.getInstance().tryGet("/openScene/enterPassword.png");
         cancelButton = new Button(410,340,186,73,ImageController.getInstance().tryGet("/button/cancel.png"));
         confirmButton=new Button(610,340,186,73,ImageController.getInstance().tryGet("/button/confirm.png"));
-        input=new Input(420,275,37,35,19);
+        input=new Input(420,275,37,35,380,false);
     }
 
     @Override
@@ -72,10 +72,13 @@ public class PopUpConnect extends PopUpWindows {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                switch (commandCode){
-                    case 7:
+                switch (Global.KeyCommand.getKeyCommand(commandCode)){
+                    case BACK_SPACE:
                         if (input.length()==0){return;}
                         input.substring();
+                        break;
+                    case SHIFT:
+                        input.shift();
                         break;
                 }
 
@@ -83,6 +86,14 @@ public class PopUpConnect extends PopUpWindows {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
+                switch (Global.KeyCommand.getKeyCommand(commandCode)){
+                    case SHIFT:
+                        input.disShift();
+                        break;
+                    case CAPS_LOCK:
+                        input.CapsLock();
+                        break;
+                }
 
             }
 

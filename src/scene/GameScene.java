@@ -213,7 +213,7 @@ public class GameScene extends Scene {
     @Override
     public void update() {
         aliens.get(0).update();
-        colliedWithMap();
+        //colliedWithMap();
         colliedWithWall();
         ArrayList<String> str = new ArrayList<>();
         str.add(password);

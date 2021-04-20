@@ -121,7 +121,7 @@ public class OpenScene extends Scene {
                 }
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-
+                popUpConnect.keyListener().keyReleased(commandCode,trigTime);
             }
             @Override
             public void keyTyped(char c, long trigTime) {

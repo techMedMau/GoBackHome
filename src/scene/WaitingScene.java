@@ -70,7 +70,7 @@ public class WaitingScene extends Scene {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-                if(commandCode==6){  //角色斷線時發送斷線訊息
+                if(commandCode==9){  //角色斷線時發送斷線訊息
                     ArrayList<String> strs = new ArrayList<String>();
                     strs.add(String.valueOf(ClientClass.getInstance().getID()));
                     strs.add(password);
@@ -78,21 +78,19 @@ public class WaitingScene extends Scene {
                     ClientClass.getInstance().disConnect();
                     System.exit(0);
                 }
-                for(int i = 0; i< aliens.size(); i ++) {
-                    switch (direction) {
-                        case LEFT:
-                            aliens.get(i).setHorizontalDir(direction);
-                            break;
-                        case RIGHT:
-                            aliens.get(i).setHorizontalDir(direction);
-                            break;
-                        case UP:
-                            aliens.get(i).setVerticalDir(direction);
-                            break;
-                        case DOWN:
-                            aliens.get(i).setVerticalDir(direction);
-                            break;
-                    }
+                switch (direction) {
+                    case LEFT:
+                        aliens.get(0).setHorizontalDir(direction);
+                        break;
+                    case RIGHT:
+                        aliens.get(0).setHorizontalDir(direction);
+                        break;
+                    case UP:
+                        aliens.get(0).setVerticalDir(direction);
+                        break;
+                    case DOWN:
+                        aliens.get(0).setVerticalDir(direction);
+                        break;
                 }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
             }
@@ -100,22 +98,21 @@ public class WaitingScene extends Scene {
             @Override
             public void keyReleased(int commandCode, long trigTime) {
                 Global.Direction direction = Global.Direction.getDirection(commandCode);
-                for(int i = 0; i< aliens.size(); i ++) {
-                    switch (direction) {
-                        case LEFT:
-                            aliens.get(i).setHorizontalDir(Global.Direction.NO_DIR);
-                            break;
-                        case RIGHT:
-                            aliens.get(i).setHorizontalDir(Global.Direction.NO_DIR);
-                            break;
-                        case UP:
-                            aliens.get(i).setVerticalDir(Global.Direction.NO_DIR);
-                            break;
-                        case DOWN:
-                            aliens.get(i).setVerticalDir(Global.Direction.NO_DIR);
-                            break;
-                    }
+                switch (direction) {
+                    case LEFT:
+                        aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case RIGHT:
+                        aliens.get(0).setHorizontalDir(Global.Direction.NO_DIR);
+                        break;
+                    case UP:
+                        aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
+                        break;
+                    case DOWN:
+                        aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
+                        break;
                 }
+                talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
 
             }
 
@@ -179,25 +176,20 @@ public class WaitingScene extends Scene {
 
         @Override
         public void update () {
-            for (int i = 0; i < aliens.size(); i++) {
-                if (aliens.get(i).painter().left() <= 0) {
-                    aliens.get(i).translateX(2);
-                    return;
-                }
-                if (aliens.get(i).painter().top() <= 0) {
-                    aliens.get(i).translateY(2);
-                    return;
-                }
-                if (aliens.get(i).painter().bottom() >= Global.SCREEN_Y) {
-                    aliens.get(i).translateY(-2);
-                    return;
-                }
-                if (aliens.get(i).painter().right() >= Global.SCREEN_X) {
-                    aliens.get(i).translateX(-2);
-                    return;
-                }
-                aliens.get(i).update();
+            aliens.get(0).update();
+            if (aliens.get(0).painter().left() <= 0) {
+                aliens.get(0).translateX(2);
             }
+            if (aliens.get(0).painter().top() <= 0) {
+                aliens.get(0).translateY(2);
+            }
+            if (aliens.get(0).painter().bottom() >= Global.SCREEN_Y) {
+                aliens.get(0).translateY(-2);
+            }
+            if (aliens.get(0).painter().right() >= Global.SCREEN_X) {
+                aliens.get(0).translateX(-2);
+            }
+
             ArrayList<String> strr = new ArrayList<>();
             strr.add(ClientClass.getInstance().getID()+"");
             strr.add(aliens.get(0).painter().centerX()+"");
