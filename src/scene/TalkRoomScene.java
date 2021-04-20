@@ -1,5 +1,6 @@
 package scene;
 
+import controllers.ImageController;
 import gameobj.Input;
 import gameobj.TalkFrame;
 import utils.CommandSolver;
@@ -8,12 +9,16 @@ import utils.Global;
 import java.awt.*;
 
 public class TalkRoomScene extends Scene{
+    private Image title;
     private TalkFrame talkFrame;
     private Input input;
+    private String header;
     @Override
     public void sceneBegin() {
-        talkFrame=new TalkFrame(961,441);
+        talkFrame=new TalkFrame(960,36,20);
         input=new Input(965,445,20,20,240,true);
+        title= ImageController.getInstance().tryGet("/talkRoom/talkRoomTitle.jpg");
+        header="";
 
     }
 
@@ -57,6 +62,7 @@ public class TalkRoomScene extends Scene{
 
             @Override
             public void keyTyped(char c, long trigTime) {
+                input.setWrite(()->talkFrame.getMessage(header,input.writeStrings()));
                 input.add(c);
             }
         };
@@ -68,6 +74,7 @@ public class TalkRoomScene extends Scene{
         g.fillRect(960,0,260,640);
         talkFrame.paint(g);
         input.paint(g);
+        g.drawImage(title,960,0,null);
 
     }
 

@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public class Input extends GameObject {
+public class Input extends GameObject  {
     private InputLine inputLine;
     private Delay delay;
     private String num;
@@ -17,6 +17,7 @@ public class Input extends GameObject {
     private int stringLimit;
     private boolean canNewline;
     private ArrayList<String> strings;
+    private Write write;
 
     public Input(int x, int y, int size, int lineHeight, int stringLimit, boolean canNewline) {
         super(x, y, lineHeight, lineHeight);
@@ -33,8 +34,20 @@ public class Input extends GameObject {
     public void paintComponent(Graphics g) {
         Font fn = new Font(Global.FONT, Font.PLAIN, size);
         g.setFont(fn);
+        g.setColor(Color.BLACK);
         if (g.getFontMetrics().stringWidth(num)>=stringLimit){
-            newline();
+            if (!canNewline||strings.size()>8){
+                if (num.length()==0){
+                    if (strings.size()==0){return;}
+                    num=strings.get(strings.size()-1);
+                    strings.remove(strings.size()-1);
+                }
+                if (num.length()!=0) {
+                    num = num.substring(0, num.length() - 1);
+                }
+            }else {
+                newline();
+            }
         }
         inputLine.setString(g.getFontMetrics().stringWidth(num),g.getFontMetrics().getAscent()*strings.size());
         inputLine.paint(g);
@@ -74,7 +87,6 @@ public class Input extends GameObject {
             num = new String();
             return;
         }
-        num = num.substring(0, num.length() - 1);
 
     }
 
@@ -90,6 +102,9 @@ public class Input extends GameObject {
             if (pressShift) {
                 switch (c) {
                     case 10:
+                        if (!canNewline||strings.size()>8){
+                            return;
+                        }
                         newline();
                         return;
                     case '/':
@@ -158,6 +173,9 @@ public class Input extends GameObject {
             if (c >= 65 && c <= 90 && !pressCapsLock) {
                 c += 32;
             }
+            if (c==10&&canNewline){
+                write.write();
+            }
             num += c;
 
         }
@@ -177,7 +195,20 @@ public class Input extends GameObject {
 
     public void CapsLock() {
         pressCapsLock = !pressCapsLock;
+    }
+    public ArrayList<String> writeStrings(){
+        strings.add(num);
+        ArrayList<String> tmp=strings;
+        num=new String();
+        strings=new ArrayList<>();
+        return tmp;
+    }
+    public void setWrite(Write write){
+        this.write=write;
+    }
 
+    public interface Write{
+        void write();
     }
 
 }
