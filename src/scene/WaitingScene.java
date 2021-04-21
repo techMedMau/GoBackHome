@@ -19,10 +19,9 @@ import java.util.logging.Logger;
 public class WaitingScene extends Scene {
     private int currentPlay;
     private int playMax;
-    private int traitor;
     private String password;
     private Button startButton;
-    private int num;
+//    private int num;
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Alien> aliens;
@@ -30,10 +29,9 @@ public class WaitingScene extends Scene {
     private TalkRoomScene talkRoomScene;
 
 
-    public WaitingScene(String password,int traitor,int playMax,int homeOwner){
+    public WaitingScene(String password,int playMax,int homeOwner){
         this.password=password;
-        this.traitor=traitor;
-        this.playMax=playMax;
+        this.playMax = playMax;
         this.homeOwner=homeOwner;
         this.currentPlay=1;
     }
@@ -41,19 +39,13 @@ public class WaitingScene extends Scene {
     @Override
     public void sceneBegin() {
         aliens = new ArrayList<>();
-        //要傳出去的東西
-        //創角搬到consume
         ArrayList<String> str = new ArrayList<>();
-
-
         str.add(password);
         //sent請幫我做這個動作
         ClientClass.getInstance().sent(Global.InternetCommand.GET_NUM,str);
-//        ClientClass.getInstance().sent(Global.InternetCommand.GET_NUM,str);
         //請幫我要一個數字
-//
-        startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
-                .tryGet("/Picture1.png"));
+        startButton = new Button(390, 490, 150,69, ImageController.getInstance()
+                .tryGet("/startButton.png"));
         mapLoader = MapWaitGen();
         talkRoomScene=new TalkRoomScene();
         talkRoomScene.sceneBegin();
@@ -122,7 +114,6 @@ public class WaitingScene extends Scene {
             @Override
             public void keyTyped(char c, long trigTime) {
                 talkRoomScene.keyListener().keyTyped(c,trigTime);
-
             }
         };
     }
@@ -132,24 +123,24 @@ public class WaitingScene extends Scene {
         return (e, state, trigTime) -> {
             if (state == CommandSolver.MouseState.CLICKED) {
                 if (ClientClass.getInstance().getID()==homeOwner&&startButton.state(e.getPoint())) {
-                    for (int i=0;i<traitor;i++){
-                        while (true){
-                            int select=Global.random(0,aliens.size()-1);
-                            if (!aliens.get(select).isTraitor()){
-                                aliens.get(select).setTraitor();
-                                ArrayList<String> str=new ArrayList<>();
-                                str.add(String.valueOf(aliens.get(select).getId()));
-                                str.add(password);
-                                ClientClass.getInstance().sent(Global.InternetCommand.TRAITOR,str);
-                                break;
-                            }
-                        }
-                    }
+//                    for (int i=0;i<traitor;i++){
+//                        while (true){
+//                            int select=Global.random(0,aliens.size()-1);
+//                            if (!aliens.get(select).isTraitor()){
+//                                aliens.get(select).setTraitor();
+//                                ArrayList<String> str=new ArrayList<>();
+//                                str.add(String.valueOf(aliens.get(select).getId()));
+//                                str.add(password);
+//                                ClientClass.getInstance().sent(Global.InternetCommand.TRAITOR,str);
+//                                break;
+//                            }
+//                        }
+//                    }
                     ArrayList<String> str=new ArrayList<>();
                     str.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.START,str);
                     Global.WAIT_SCENES.remove(password,this);
-                    SceneController.getInstance().changeScene(new GameScene(aliens,password));
+                    SceneController.getInstance().changeScene(new GameScene(aliens,password,homeOwner,playMax));
                 }
             }
         };
@@ -249,11 +240,11 @@ public class WaitingScene extends Scene {
                             }
                         }
                         break;
-                    case Global.InternetCommand.TRAITOR:
+                    case Global.InternetCommand.WITCH:
                         if (strs.get(1).equals(password)){
                             for(int i=0;i<aliens.size();i++){
                                 if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
-                                    aliens.get(i).setTraitor();
+                                    aliens.get(i).setRole();
                                     break;
                                 }
                             }
@@ -262,16 +253,17 @@ public class WaitingScene extends Scene {
                     case Global.InternetCommand.START:
                         if (strs.get(0).equals(password)){
                             Global.WAIT_SCENES.remove(strs.get(0),Global.WAIT_SCENES.get(strs.get(0)));
-                            SceneController.getInstance().changeScene(new GameScene(aliens,password));
+                            SceneController.getInstance().changeScene(new GameScene(aliens,password,homeOwner,playMax));
                         }
                         break;
                     case Global.InternetCommand.GET_ROOM:
                             Global.WAIT_SCENES.forEach((s, waitingScene) -> {
                                 ArrayList<String> str=new ArrayList<>();
                                 str.add(s);
-                                str.add(String.valueOf(waitingScene.traitor));
+//                                str.add(String.valueOf(waitingScene.traitor));
                                 str.add(String.valueOf(waitingScene.playMax));
                                 str.add(String.valueOf(waitingScene.homeOwner));
+                                //where is my create????
                                 ClientClass.getInstance().sent(Global.InternetCommand.CREATE,str);
                             });
                         break;
@@ -281,7 +273,7 @@ public class WaitingScene extends Scene {
                             ArrayList<String> str = new ArrayList<>();
                             int n;
                             while(true) {
-                                n = Global.random(1,7);
+                                n = Global.random(1,8);
                                 int i;
                                 for (i = 0; i < aliens.size(); i++) {
                                     if (n == aliens.get(i).getNum()) {
