@@ -1,6 +1,4 @@
 import controllers.SceneController;
-import gameobj.Alien;
-import scene.GameScene;
 import scene.OpenScene;
 
 import utils.CommandSolver;
@@ -9,7 +7,6 @@ import utils.Global;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {

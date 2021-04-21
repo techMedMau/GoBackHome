@@ -36,6 +36,7 @@ public class GameScene extends Scene {
             {1025,1120},{1728,100},{180,150},{64,640},{288,1003}
         ,{1220,1120},{1216,425},{1600,790},{672,224},{672, 662}};
     private int locationNum;
+    private TalkRoomScene talkRoomScene;
 
     public GameScene(ArrayList<Alien> aliens,String password) {
         this.aliens = aliens;
@@ -44,6 +45,9 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        talkRoomScene=new TalkRoomScene(password);
+        talkRoomScene.sceneBegin();
+        talkRoomScene.setHeader(String.valueOf(aliens.get(0).getNum()));
         map = new Map();
         backGround = ImageController.getInstance().tryGet("/map/background.png");
         mapLoader = MapGameGen();
@@ -63,6 +67,7 @@ public class GameScene extends Scene {
         this.locationNum =Global.random(0,9);
         aliens.get(0).painter().setCenter(location[locationNum][0], location[locationNum][1]);
         aliens.get(0).collider().setCenter(location[locationNum][0], location[locationNum][1]);
+
     }
 
     @Override
@@ -160,6 +165,7 @@ public class GameScene extends Scene {
                         aliens.get(0).setVerticalDir(direction);
                         break;
                 }
+                talkRoomScene.keyListener().keyPressed(commandCode,trigTime);
             }
 
             @Override
@@ -178,10 +184,12 @@ public class GameScene extends Scene {
                         aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
                         break;
                 }
+                talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
             }
 
             @Override
             public void keyTyped(char c, long trigTime) {
+                talkRoomScene.keyListener().keyTyped(c,trigTime);
 
             }
         };
@@ -245,6 +253,7 @@ public class GameScene extends Scene {
         if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().paint(g);
         }
+        talkRoomScene.paint(g);
     }
 
     @Override
@@ -299,10 +308,19 @@ public class GameScene extends Scene {
                                 }
                             }
                             break;
+                        case Global.InternetCommand.Message:
+                            if (password==strs.get(0)&&serialNum!=ClientClass.getInstance().getID()){
+                                String header=strs.get(1);
+                                strs.remove(0);
+                                strs.remove(1);
+                                talkRoomScene.getTalkFrame().getMessage(header, strs);
+                            }
+                            break;
                     }
                 }
             }
         });
+        talkRoomScene.update();
 
     }
 

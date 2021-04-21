@@ -55,7 +55,7 @@ public class WaitingScene extends Scene {
         startButton = new Button(400, 500, 120, 55, ImageController.getInstance()
                 .tryGet("/Picture1.png"));
         mapLoader = MapWaitGen();
-        talkRoomScene=new TalkRoomScene();
+        talkRoomScene=new TalkRoomScene(password);
         talkRoomScene.sceneBegin();
 
     }
@@ -303,18 +303,28 @@ public class WaitingScene extends Scene {
                         if(strs.get(0).equals(password)){
                             if(String.valueOf(ClientClass.getInstance().getID()).equals(strs.get(2))){
                                 ArrayList<String> str = new ArrayList<>();
-                                    aliens.add(new Alien(400, 300, Integer.parseInt(strs.get(1))));
-                                    str.add(String.valueOf(400));
-                                    str.add(String.valueOf(300));
-                                    str.add(Integer.parseInt(strs.get(1))+"");
-                                    str.add(password);
-                                    aliens.get(aliens.size() - 1).setId(Integer.parseInt(strs.get(2)));
-                                    ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
+                                talkRoomScene.setHeader(strs.get(1));
+                                aliens.add(new Alien(400, 300, Integer.parseInt(strs.get(1))));
+                                str.add(String.valueOf(400));
+                                str.add(String.valueOf(300));
+                                str.add(strs.get(1));
+                                str.add(password);
+                                aliens.get(aliens.size() - 1).setId(Integer.parseInt(strs.get(2)));
+                                ClientClass.getInstance().sent(Global.InternetCommand.CONNECT,str);
                             }
+                        }
+                        break;
+                    case Global.InternetCommand.Message:
+                        if (password==strs.get(0)&&serialNum!=ClientClass.getInstance().getID()){
+                            String header=strs.get(1);
+                            strs.remove(0);
+                            strs.remove(1);
+                            talkRoomScene.getTalkFrame().getMessage(header, strs);
                         }
                         break;
                 }
             });
+        talkRoomScene.update();
         }
 
         public MapLoader MapWaitGen () {

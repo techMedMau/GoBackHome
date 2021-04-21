@@ -16,6 +16,7 @@ public class Global {
         public static final int ZOMBIE = 8;
         public static final int GET_NUM = 9;
         public static final int MAKE_ALIENS = 10;
+        public static final int Message = 11;
     }
     public enum KeyCommand{
         SHIFT(5),

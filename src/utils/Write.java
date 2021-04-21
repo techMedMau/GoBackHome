@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Write {
     private String dataPath;
     public Write(String dataPath){
+        this.dataPath=new String();
         this.dataPath= getClass().getResource(dataPath).getFile();
     }
     public void write(ArrayList<String> strings){

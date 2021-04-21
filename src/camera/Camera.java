@@ -94,7 +94,7 @@ public class Camera extends GameObject implements KeyListener{
         collider().setRight(right);
         painter().setRight(right);
     }
-    private void resetY(int top, int bottom){
+    public void resetY(int top, int bottom){
         collider().setTop(top);
         painter().setTop(top);
         collider().setBottom(bottom);

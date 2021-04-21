@@ -54,16 +54,16 @@ public class Alien extends GameObject implements ClickState, Range {
             case A:
                 HashMap<State, Animator> map = new HashMap<>();
                 map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png"))));
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png"))));
                 map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png"))));
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png"))));
                 map.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_dieBody.png"),
-                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png")
+                        ImageController.getInstance().tryGet("/player/p1_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png")
                 )));
                 map.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_dieBody.png"),
-                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png")
+                        ImageController.getInstance().tryGet("/player/p1_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png")
                 )));
                 return map;
             case B:
@@ -84,16 +84,16 @@ public class Alien extends GameObject implements ClickState, Range {
             case C:
                 HashMap<State, Animator> map2 = new HashMap<>();
                 map2.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png"))));
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png"))));
                 map2.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png"))));
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png"))));
                 map2.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_dieBody.png"),
-                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png")
+                        ImageController.getInstance().tryGet("/player/p3_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png")
                 )));
                 map2.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_dieBody.png"),
-                        ImageController.getInstance().tryGet("/player/p1_dieBody2.png")
+                        ImageController.getInstance().tryGet("/player/p3_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p3_dieBody2.png")
                 )));
                 return map2;
             case D:
@@ -166,16 +166,16 @@ public class Alien extends GameObject implements ClickState, Range {
             case A:
                 HashMap<State, Animator> map = new HashMap<>();
                 map.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_walk04r.png"))));
+                        ImageController.getInstance().tryGet("/player/p1_walk04r.png"))));
                 map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_walk04.png"))));
+                        ImageController.getInstance().tryGet("/player/p1_walk04.png"))));
                 map.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_walk04r.png"),
-                        ImageController.getInstance().tryGet("/player/p3_walk05r.png")
+                        ImageController.getInstance().tryGet("/player/p1_walk04r.png"),
+                        ImageController.getInstance().tryGet("/player/p1_walk05r.png")
                 )));
                 map.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p3_walk04.png"),
-                        ImageController.getInstance().tryGet("/player/p3_walk05.png")
+                        ImageController.getInstance().tryGet("/player/p1_walk04.png"),
+                        ImageController.getInstance().tryGet("/player/p1_walk05.png")
                 )));
 
                 return map;
@@ -197,16 +197,16 @@ public class Alien extends GameObject implements ClickState, Range {
             case C:
                 HashMap<State, Animator> map2 = new HashMap<>();
                 map2.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_walk04r.png"))));
+                        ImageController.getInstance().tryGet("/player/p3_walk04r.png"))));
                 map2.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_walk04.png"))));
+                        ImageController.getInstance().tryGet("/player/p3_walk04.png"))));
                 map2.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_walk05r.png"),
-                        ImageController.getInstance().tryGet("/player/p1_walk04r.png")
+                        ImageController.getInstance().tryGet("/player/p3_walk05r.png"),
+                        ImageController.getInstance().tryGet("/player/p3_walk04r.png")
                 )));
                 map2.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
-                        ImageController.getInstance().tryGet("/player/p1_walk05.png"),
-                        ImageController.getInstance().tryGet("/player/p1_walk04.png")
+                        ImageController.getInstance().tryGet("/player/p3_walk05.png"),
+                        ImageController.getInstance().tryGet("/player/p3_walk04.png")
                 )));
 
                 return map2;
