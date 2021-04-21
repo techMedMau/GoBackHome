@@ -46,7 +46,8 @@ public class Alien extends GameObject implements ClickState, Range {
         D,
         E,
         F,
-        G
+        G,
+        H
     }
 
     private static HashMap<State, Animator> getDeathAnimator(AlienType type){
@@ -156,6 +157,21 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p7_dieBody2.png")
                 )));
                 return map6;
+            case H:
+                HashMap<State, Animator> map7 = new HashMap<>();
+                map7.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_dieBody2.png"))));
+                map7.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_dieBody2.png"))));
+                map7.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p8_dieBody2.png")
+                )));
+                map7.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_dieBody.png"),
+                        ImageController.getInstance().tryGet("/player/p8_dieBody2.png")
+                )));
+                return map7;
             default:
                 return null;
         }
@@ -273,6 +289,21 @@ public class Alien extends GameObject implements ClickState, Range {
                         ImageController.getInstance().tryGet("/player/p7_walk1.png")
                 )));
                 return map6;
+            case H:
+                HashMap<State, Animator> map7 = new HashMap<>();
+                map7.put(State.STAND_LEFT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_walk1r.png"))));
+                map7.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_walk1.png"))));
+                map7.put(State.WALK_LEFT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_walk2r.png"),
+                        ImageController.getInstance().tryGet("/player/p8_walk1r.png")
+                )));
+                map7.put(State.WALK_RIGHT, new Animator(3, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8_walk2.png"),
+                        ImageController.getInstance().tryGet("/player/p8_walk1.png")
+                )));
+                return map7;
             default:
                 return null;
         }
@@ -345,6 +376,9 @@ public class Alien extends GameObject implements ClickState, Range {
             case 7:
                 this.alienType = AlienType.G;
                 break;
+            case 8:
+                this.alienType = AlienType.H;
+                break;
         }
         stateAnimator = getAliveAnimator(alienType);
         stateAnimator.get(currentState).play();
@@ -354,9 +388,13 @@ public class Alien extends GameObject implements ClickState, Range {
         this.swordsNum = 0;
         this.tasks = new HashSet<>();
         this.sword = ImageController.getInstance().tryGet("/sword.png");
-        this.role = Role.values()[Global.random(0,1)];
+        this.role = Role.values()[1];
         this.aliveState = AliveState.ALIVE;
         this.killDelay = new Delay(300);
+    }
+
+    public void setRole() {
+        this.role = Role.values()[0];;
     }
 
     public Role getRole() {
@@ -549,5 +587,11 @@ public class Alien extends GameObject implements ClickState, Range {
         return aliveState;
     }
 
-
+    public void setAliveState(AliveState aliveState) {
+        this.aliveState = aliveState;
+        if(aliveState == AliveState.ZOMBIE){
+            stateAnimator = getDeathAnimator(alienType);
+            stateAnimator.get(currentState).play();
+        }
+    }
 }

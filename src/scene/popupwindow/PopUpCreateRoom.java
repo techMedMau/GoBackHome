@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class PopUpCreateRoom extends PopUpWindows{
     private Image img;
-    private Nums traitorNums;
     private Nums playNums;
     private Button cancelButton;
     private Button confirmButton;
@@ -24,10 +23,10 @@ public class PopUpCreateRoom extends PopUpWindows{
 
     @Override
     public void sceneBegin() {
-        img= ImageController.getInstance().tryGet("/openScene/popupcreat.png");
+        img= ImageController.getInstance().tryGet("/openScene/popupcreate.png");
         show();
-        traitorNums=new Nums(2,500,110);
-        playNums=new Nums(8,400,230);
+        //顯示數字的地方
+        playNums=new Nums(6,225,210);
         cancelButton = new Button(415,300,186,73,ImageController.getInstance().tryGet("/button/cancel.png"));
         confirmButton=new Button(615,300,186,73,ImageController.getInstance().tryGet("/button/confirm.png"));
     }
@@ -62,17 +61,18 @@ public class PopUpCreateRoom extends PopUpWindows{
                             for (int i=0;i<5;i++){
                                 str+=Global.random(0,9);
                             }
+                            //不用懂
                             if (!Global.WAIT_SCENES.containsKey(str)){
                                 break;
                             }
                         }
-                        if (traitorNums.getTarget()<playNums.getTarget()&&traitorNums.getTarget()!=0){
+
+                        if (playNums.getTarget() != 0){
                             sceneEnd();
-                            WaitingScene waitingScene=new WaitingScene(str,traitorNums.getTarget(),playNums.getTarget(),ClientClass.getInstance().getID());
+                            WaitingScene waitingScene=new WaitingScene(str,playNums.getTarget(),ClientClass.getInstance().getID());
                             Global.WAIT_SCENES.put(str,waitingScene);
                             ArrayList<String> strCreat=new ArrayList<>();
                             strCreat.add(str);
-                            strCreat.add(String.valueOf(traitorNums.getTarget()));
                             strCreat.add(String.valueOf(playNums.getTarget()));
                             strCreat.add(String.valueOf(ClientClass.getInstance().getID()));
                             ClientClass.getInstance().sent(Global.InternetCommand.CREATE,strCreat);
@@ -80,7 +80,7 @@ public class PopUpCreateRoom extends PopUpWindows{
                         }
                         break;
                     }
-                    traitorNums.show(e.getPoint());
+
                     playNums.show(e.getPoint());
                     break;
             }
@@ -92,7 +92,6 @@ public class PopUpCreateRoom extends PopUpWindows{
         g.drawImage(img,(Global.WINDOW_WIDTH - getWidth()) / 2, (Global.WINDOW_HEIGHT - getHeight()) / 2, null);
         cancelButton.paint(g);
         confirmButton.paint(g);
-        traitorNums.paint(g);
         playNums.paint(g);
     }
 

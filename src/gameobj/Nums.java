@@ -12,13 +12,14 @@ public class Nums {
     public Nums(int quantity,int x,int y){
         this.quantity=quantity;
         nums=new ArrayList<>();
-        for (int i=0;i<this.quantity;i++){
-            nums.add(new Num(String.valueOf(i+1),x+51*i,y));
+        for (int i=3;i<=this.quantity;i++){
+            nums.add(new Num(String.valueOf(i),x+80*i,y));
         }
     }
     public void paint(Graphics g){
         nums.forEach(num -> num.paint(g));
     }
+
     public void show(Point point){
         for (int i=0;i<nums.size();i++){
             if (nums.get(i).state(point)){

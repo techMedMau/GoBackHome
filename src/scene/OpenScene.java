@@ -44,12 +44,10 @@ public class OpenScene extends Scene {
                         return;
                     }
                     Global.WAIT_SCENES.put(strs.get(0),
-                            new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3))));
+                            new WaitingScene(strs.get(0),Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2))));
                     break;
-
             }
         });
-
 
     }
 
@@ -93,7 +91,6 @@ public class OpenScene extends Scene {
                     if (createRoomButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpCreateRoom.sceneBegin();
                         break;
-
                     }
                     if (inputButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpConnect.sceneBegin();

@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 public class GameScene extends Scene {
     private ArrayList<Alien> aliens;
+    private ArrayList<Alien> deadBody;
     private Camera cam;
     private Map map;
     private Image backGround;
@@ -29,18 +30,22 @@ public class GameScene extends Scene {
     private MapLoader mapLoader;
     private ArrayList<TaskItem> taskItems;
     private TaskController taskController;
-    private Image infoBoard;
+    private int homeOwner;
     private BackgroundItem backgroundItem;
     private String password;
+    private int playMax;
+    private int witchNum;
     private static int[][] location = new int[][]{
             {1025,1120},{1728,100},{180,150},{64,640},{288,1003}
         ,{1220,1120},{1216,425},{1600,790},{672,224},{672, 662}};
     private int locationNum;
     private TalkRoomScene talkRoomScene;
 
-    public GameScene(ArrayList<Alien> aliens,String password) {
+    public GameScene(ArrayList<Alien> aliens,String password, int homeOwner, int playMax) {
         this.aliens = aliens;
-        this.password=password;
+        this.password = password;
+        this.homeOwner = homeOwner;
+        this.playMax = playMax;
     }
 
     @Override
@@ -49,25 +54,97 @@ public class GameScene extends Scene {
         talkRoomScene.sceneBegin();
         talkRoomScene.setHeader(String.valueOf(aliens.get(0).getNum()));
         map = new Map();
+        deadBody = new ArrayList<>();
         backGround = ImageController.getInstance().tryGet("/map/background.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.SCREEN_X, Global.SCREEN_Y).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
-        taskItems.add(new TaskItem("/taskBox/boxItem.png", 100, 360, TaskController.Task.FIND_DIFFERENT));
-        taskItems.add(new TaskItem("/taskBox/greenBox.png", 32, 80, TaskController.Task.PUSH));
-        taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
-        taskItems.add(new TaskItem("/taskBox/warningBox.png", 570, 985, TaskController.Task.LINE_UP));
-        taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 450, TaskController.Task.PASSWORD));
-        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1755, 900, TaskController.Task.CENTER));
-        taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
-        taskItems.add(new TaskItem("/taskBox/blackBox.png", 880, 370, TaskController.Task.COLOR_CHANGE));
+        createTaskBox();
         taskController = TaskController.getTaskController();
-        this.infoBoard = ImageController.getInstance().tryGet("/infoBoard.png");
         this.backgroundItem = new BackgroundItem("/arrowRight.png", 500, 500 + 32, 28, 8, 500, 500, 64, 64);
-        this.locationNum =Global.random(0,9);
+        this.locationNum = Global.random(0,9);
         aliens.get(0).painter().setCenter(location[locationNum][0], location[locationNum][1]);
         aliens.get(0).collider().setCenter(location[locationNum][0], location[locationNum][1]);
+        //-----做屍體
+        if(aliens.get(0).getId() == homeOwner && (playMax == 3 || playMax == 5)){
+            for(int i = 0; i < 3; i++){
+                createDeadBody();
+            }
+        }
+        if(aliens.get(0).getId() == homeOwner && (playMax == 4 || playMax == 6)){
+            for(int i = 0; i < 2; i++){
+                createDeadBody();
+            }
+        }
+        //-----分職業
+        assignRole();
+    }
 
+    //分職業
+    public void assignRole(){
+        int n = Global.random(0,witchNum);
+        for(int i = 0; i < n; i++){
+            while(true){
+                int select = Global.random(0,aliens.size()-1);
+                if(aliens.get(select).getRole() != Alien.Role.WITCH) {
+                    aliens.get(select).setRole();
+                    ArrayList<String> str = new ArrayList<>();
+                    str.add(String.valueOf(aliens.get(select).getId()));
+                    str.add(password);
+                    ClientClass.getInstance().sent(Global.InternetCommand.WITCH,str);
+                    break;
+                }
+            }
+        }
+        for(int i = 0 ; i < witchNum-n; i ++){
+            while(true){
+                int select = Global.random(0,deadBody.size()-1);
+                if(deadBody.get(select).getRole() != Alien.Role.WITCH) {
+                    deadBody.get(select).setRole();
+                    ArrayList<String> str = new ArrayList<>();
+                    str.add(String.valueOf(deadBody.get(select)));
+                    str.add(password);
+                    ClientClass.getInstance().sent(Global.InternetCommand.WITCH,str);
+                    break;
+                }
+            }
+        }
+    }
+
+    //-----做屍體  屍體好像會random到同樣的顏色(?)
+    public void createDeadBody(){
+        this.locationNum = Global.random(0,9);
+        int n;
+        while(true) {
+            n = Global.random(1,8);
+            int i;
+            int k = 0;
+            for (i = 0; i < aliens.size(); i++) {
+                if (n == aliens.get(i).getNum()) {
+                    break;
+                }
+            }
+            if(deadBody.size() != 0) {
+                for (k = 0; k < deadBody.size(); k++) {
+                    if (n == deadBody.get(k).getNum()) {
+                        break;
+                    }
+                }
+            }
+            if(i == aliens.size() && k == deadBody.size()){
+                break;
+            }
+        }
+        Alien tmp = new Alien(location[locationNum][0], location[locationNum][1], n);
+        tmp.setAliveState(Alien.AliveState.ZOMBIE);
+        deadBody.add(tmp);
+        ArrayList<String> str = new ArrayList<>();
+        str.add(password);
+        str.add(String.valueOf(tmp.left()));
+        str.add(String.valueOf(tmp.top()));
+        str.add(String.valueOf(n));
+        str.add(String.valueOf(tmp.getAliveState().ordinal()));
+        ClientClass.getInstance().sent(Global.InternetCommand.DEAD_BODY, str);
     }
 
     @Override
@@ -102,7 +179,6 @@ public class GameScene extends Scene {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).ableToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).kill();
-
                             aliens.get(0).setSwordNum();
                             ArrayList<String> str = new ArrayList<>();
                             str.add(password);
@@ -199,17 +275,25 @@ public class GameScene extends Scene {
     public void paint(Graphics g) {
         cam.start(g);
         g.drawImage(backGround, 0, 0, null);
-
-        //有了屍體之後，for迴圈要只畫到玩家人數
         for (int i = 1; i < aliens.size(); i++) {
+            g.setColor(Color.BLACK);
+            g.drawString(aliens.get(i).getRole().name(), aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
+        }
+        //變成zombie可以看到屍體的職業
+        if(aliens.get(0).getAliveState() == Alien.AliveState.ZOMBIE){
+            for (int i = 1; i < deadBody.size(); i++) {
                 g.setColor(Color.BLACK);
-                g.drawString(aliens.get(i).getRole().name(),aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
+                g.drawString(deadBody.get(i).getRole().name(), deadBody.get(i).painter().centerX() - 28, deadBody.get(i).painter().top());
+            }
         }
 
         for (int i = 0; i < aliens.size(); i++) {
             if(aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
                 aliens.get(i).paint(g);
             }
+        }
+        for (int i = 0; i < deadBody.size(); i++) {
+             deadBody.get(i).paint(g);
         }
 
 //        for (int i = 0; i < aliens.size(); i++) {
@@ -316,12 +400,40 @@ public class GameScene extends Scene {
                                 talkRoomScene.getTalkFrame().getMessage(header, strs);
                             }
                             break;
+                        case Global.InternetCommand.WITCH:
+                            if (strs.get(1).equals(password)){
+                                for(int i=0;i<aliens.size();i++){
+                                    if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                        aliens.get(i).setRole();
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case Global.InternetCommand.DEAD_BODY:
+                            for(int i = 0; i < deadBody.size(); i ++){
+                                Alien tmp = new Alien(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3)));
+                                deadBody.add(tmp);
+                                tmp.setAliveState(Alien.AliveState.values()[Integer.parseInt(strs.get(4))]);
+                            break;
+
                     }
                 }
-            }
+            } }
         });
         talkRoomScene.update();
 
+    }
+
+    public void createTaskBox(){
+        taskItems.add(new TaskItem("/taskBox/boxItem.png", 100, 360, TaskController.Task.FIND_DIFFERENT));
+        taskItems.add(new TaskItem("/taskBox/greenBox.png", 32, 80, TaskController.Task.PUSH));
+        taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
+        taskItems.add(new TaskItem("/taskBox/warningBox.png", 570, 985, TaskController.Task.LINE_UP));
+        taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 450, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/taskBox/blueBox.png", 1755, 900, TaskController.Task.CENTER));
+        taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
+        taskItems.add(new TaskItem("/taskBox/blackBox.png", 880, 370, TaskController.Task.COLOR_CHANGE));
     }
 
     public MapLoader MapGameGen() {
@@ -562,12 +674,10 @@ public class GameScene extends Scene {
                 }
                 break;
             case UP:
-
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).topIsCollision(forGame.get(i))) {
                         aliens.get(0).translateY(Global.MOVE_SPEED);
-                        System.out.println("a");
                         break;
                     }
                 }
