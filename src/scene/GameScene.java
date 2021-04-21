@@ -175,8 +175,8 @@ public class GameScene extends Scene {
                         }
                     }
                     //殺活人
-                    for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).ableToKill() && aliens.get(0).isTriggered(aliens.get(i))
+                    for (int i = 1; i < aliens.size(); i++) {//&& aliens.get(0).ableToKill()
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH  && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).kill();
                             aliens.get(0).setSwordNum();
@@ -190,7 +190,7 @@ public class GameScene extends Scene {
                     }
                     //殺zombie
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).ableToKill() && aliens.get(0).isTriggered(aliens.get(i))
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).death();
                             aliens.get(0).setSwordNum();

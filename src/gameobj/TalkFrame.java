@@ -49,11 +49,9 @@ public class TalkFrame extends GameObject{
                 count++;
             }
         }
-        System.out.println(painter().bottom());
         if (painter().top()+messages.size()*HEAD_H+(count+1)*height+GAP*(messages.size()+count)>painter().bottom()){
             painter().setBottom(painter().top()+messages.size()*HEAD_H+(count+1)*height+GAP*(messages.size()+count));
             collider().setBottom(painter().top()+messages.size()*HEAD_H+(count+1)*height+GAP*(messages.size()+count));
-            System.out.println(painter().bottom());
         }
 
     }
