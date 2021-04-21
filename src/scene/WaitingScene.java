@@ -297,7 +297,7 @@ public class WaitingScene extends Scene {
                         }
                         break;
                     case Global.InternetCommand.Message:
-                        if (password==strs.get(0)&&serialNum!=ClientClass.getInstance().getID()){
+                        if (password.equals(strs.get(0))&&serialNum!=ClientClass.getInstance().getID()){
                             String header=strs.get(1);
                             strs.remove(0);
                             strs.remove(1);
