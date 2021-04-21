@@ -89,8 +89,8 @@ public class GameScene extends Scene {
                 if(aliens.get(select).getRole() != Alien.Role.WITCH) {
                     aliens.get(select).setRole();
                     ArrayList<String> str = new ArrayList<>();
-                    str.add(String.valueOf(aliens.get(select).getId()));
                     str.add(password);
+                    str.add(String.valueOf(aliens.get(select).getId()));
                     ClientClass.getInstance().sent(Global.InternetCommand.WITCH,str);
                     break;
                 }
@@ -102,8 +102,8 @@ public class GameScene extends Scene {
                 if(deadBody.get(select).getRole() != Alien.Role.WITCH) {
                     deadBody.get(select).setRole();
                     ArrayList<String> str = new ArrayList<>();
-                    str.add(String.valueOf(deadBody.get(select)));
                     str.add(password);
+                    str.add(String.valueOf(deadBody.get(select)));
                     ClientClass.getInstance().sent(Global.InternetCommand.WITCH,str);
                     break;
                 }
@@ -175,8 +175,8 @@ public class GameScene extends Scene {
                         }
                     }
                     //殺活人
-                    for (int i = 1; i < aliens.size(); i++) {//&& aliens.get(0).ableToKill()
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH  && aliens.get(0).isTriggered(aliens.get(i))
+                    for (int i = 1; i < aliens.size(); i++) {
+                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())){
                             aliens.get(i).kill();
                             aliens.get(0).setSwordNum();
@@ -401,21 +401,21 @@ public class GameScene extends Scene {
                             }
                             break;
                         case Global.InternetCommand.WITCH:
-                            if (strs.get(1).equals(password)){
                                 for(int i=0;i<aliens.size();i++){
-                                    if(aliens.get(i).getId()==Integer.parseInt(strs.get(0))){
+                                    if(aliens.get(i).getId()==Integer.parseInt(strs.get(1))){
                                         aliens.get(i).setRole();
                                         break;
                                     }
                                 }
-                            }
                             break;
                         case Global.InternetCommand.DEAD_BODY:
-                            for(int i = 0; i < deadBody.size(); i ++){
-                                Alien tmp = new Alien(Integer.parseInt(strs.get(1)),Integer.parseInt(strs.get(2)),Integer.parseInt(strs.get(3)));
+                            if(serialNum!=ClientClass.getInstance().getID()){
+                            for(int i = 0; i < deadBody.size(); i ++) {
+                                Alien tmp = new Alien(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)), Integer.parseInt(strs.get(3)));
                                 deadBody.add(tmp);
                                 tmp.setAliveState(Alien.AliveState.values()[Integer.parseInt(strs.get(4))]);
-                            break;
+                                break;
+                            }
 
                     }
                 }

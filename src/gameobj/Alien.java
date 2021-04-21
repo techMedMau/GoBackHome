@@ -559,6 +559,7 @@ public class Alien extends GameObject implements ClickState, Range {
         aliveState = AliveState.DEATH;
     }
 
+    //寫錯了
     public boolean ableToKill(){
         killDelay.play();
         return killDelay.count();
