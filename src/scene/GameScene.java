@@ -396,7 +396,7 @@ public class GameScene extends Scene {
                             if (password.equals(strs.get(0))&&serialNum!=ClientClass.getInstance().getID()){
                                 String header=strs.get(1);
                                 strs.remove(0);
-                                strs.remove(1);
+                                strs.remove(0);
                                 talkRoomScene.getTalkFrame().getMessage(header, strs);
                             }
                             break;
@@ -410,12 +410,11 @@ public class GameScene extends Scene {
                             break;
                         case Global.InternetCommand.DEAD_BODY:
                             if(serialNum!=ClientClass.getInstance().getID()){
-                            for(int i = 0; i < deadBody.size(); i ++) {
                                 Alien tmp = new Alien(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)), Integer.parseInt(strs.get(3)));
-                                deadBody.add(tmp);
                                 tmp.setAliveState(Alien.AliveState.values()[Integer.parseInt(strs.get(4))]);
+                                deadBody.add(tmp);
                                 break;
-                            }
+
 
                     }
                 }
