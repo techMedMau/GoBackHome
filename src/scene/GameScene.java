@@ -257,7 +257,6 @@ public class GameScene extends Scene {
                         aliens.get(0).setVerticalDir(direction);
                         break;
                 }
-
             }
 
             @Override
