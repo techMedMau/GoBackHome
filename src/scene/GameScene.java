@@ -2,7 +2,6 @@ package scene;
 
 import camera.Camera;
 import controllers.ImageController;
-import controllers.SceneController;
 import controllers.TaskController;
 import gameobj.*;
 import internet.server.ClientClass;
@@ -84,10 +83,7 @@ public class GameScene extends Scene {
     //分職業
     public void assignRole(){
         int n = Global.random(0,witchNum);
-//        System.out.println(n);
-//        System.out.println(witchNum+"  witchNum");
         for(int i = 0; i < n; i++){
-//            System.out.println("!");
             while(true){
             int select = Global.random(0,aliens.size()-1);
                 if(aliens.get(select).getRole() != Alien.Role.WITCH) {
@@ -206,16 +202,6 @@ public class GameScene extends Scene {
                             return;
                         }
                     }
-//                    for (int i = 1; i < aliens.size(); i++) {
-//                        if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2 && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-//                            ArrayList<String> str = new ArrayList<>();
-//                            str.add(password);
-//                            str.add(String.valueOf(aliens.get(0).getId()));
-//                            ClientClass.getInstance().sent(Global.InternetCommand.TO_VOTE, str);
-//                            SceneController.getInstance().changeScene(new VoteScene(aliens,aliens.get(0).getId()));
-//                            return;
-//                        }
-//                    }
                     break;
 
             }
@@ -227,6 +213,7 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
+                talkRoomScene.keyListener().keyPressed(commandCode,trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
                 }
@@ -245,11 +232,12 @@ public class GameScene extends Scene {
                         aliens.get(0).setVerticalDir(direction);
                         break;
                 }
-                talkRoomScene.keyListener().keyPressed(commandCode,trigTime);
+
             }
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
+                talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
                 }
@@ -264,7 +252,7 @@ public class GameScene extends Scene {
                         aliens.get(0).setVerticalDir(Global.Direction.NO_DIR);
                         break;
                 }
-                talkRoomScene.keyListener().keyReleased(commandCode,trigTime);
+
             }
 
             @Override
@@ -299,22 +287,6 @@ public class GameScene extends Scene {
              deadBody.get(i).paint(g);
         }
 
-//        for (int i = 0; i < aliens.size(); i++) {
-//            if (aliens.get(0).isTraitor()) {
-//                g.setColor(Color.RED);
-//                g.setFont(font);
-//                if (aliens.get(i).isTraitor()) {
-//                    g.drawString("Traitor", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
-//                }
-//                if (!aliens.get(i).isTraitor()&&aliens.get(i).getCurrentState()!= Alien.State.DEATH2 && aliens.get(0).isTriggered(aliens.get(i))) {
-//                    g.drawString("Kill?", aliens.get(i).painter().centerX() - 20, aliens.get(i).painter().top());
-//                }
-//            }
-//            if (aliens.get(0).isTriggered(aliens.get(i)) && aliens.get(i).getCurrentState() == Alien.State.DEATH2) {
-//                g.drawString("Report?", aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
-//            }
-//            aliens.get(i).paint(g);
-//        }
         g.setColor(Color.BLACK);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))){

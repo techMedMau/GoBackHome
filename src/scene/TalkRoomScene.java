@@ -1,13 +1,10 @@
 package scene;
 
 import camera.Camera;
-import camera.MapInformation;
 import controllers.ImageController;
 import gameobj.Input;
-import gameobj.Rect;
 import gameobj.TalkFrame;
 import internet.server.ClientClass;
-import internet.server.CommandReceiver;
 import utils.CommandSolver;
 import utils.Global;
 
