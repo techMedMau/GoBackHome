@@ -37,7 +37,7 @@ public class GameScene extends Scene {
     private int witchNum;
     private static int[][] location = new int[][]{
             {1025,1120},{1728,100},{180,150},{64,640},{288,1003}
-        ,{1220,1120},{1216,425},{1600,790},{672,224},{672, 662}};
+        ,{1220,1120},{1216,425},{1600,790},{672,224},{672, 652}};
     private int locationNum;
     private TalkRoomScene talkRoomScene;
 
@@ -77,20 +77,24 @@ public class GameScene extends Scene {
             }
         }
         //-----分職業
+        witchNum = (aliens.size()+deadBody.size()) / 2;
         assignRole();
     }
 
     //分職業
     public void assignRole(){
         int n = Global.random(0,witchNum);
+//        System.out.println(n);
+//        System.out.println(witchNum+"  witchNum");
         for(int i = 0; i < n; i++){
+//            System.out.println("!");
             while(true){
-                int select = Global.random(0,aliens.size()-1);
+            int select = Global.random(0,aliens.size()-1);
                 if(aliens.get(select).getRole() != Alien.Role.WITCH) {
                     aliens.get(select).setRole();
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
-                    str.add(String.valueOf(aliens.get(select).getId()));
+                    str.add(aliens.get(select).getId()+"");
                     ClientClass.getInstance().sent(Global.InternetCommand.WITCH,str);
                     break;
                 }
@@ -103,8 +107,8 @@ public class GameScene extends Scene {
                     deadBody.get(select).setRole();
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
-                    str.add(String.valueOf(deadBody.get(select)));
-                    ClientClass.getInstance().sent(Global.InternetCommand.WITCH,str);
+                    str.add(deadBody.get(select).toString());
+                    ClientClass.getInstance().sent(Global.InternetCommand.WITCH_DEAD,str);
                     break;
                 }
             }
@@ -279,9 +283,8 @@ public class GameScene extends Scene {
             g.setColor(Color.BLACK);
             g.drawString(aliens.get(i).getRole().name(), aliens.get(i).painter().centerX() - 28, aliens.get(i).painter().top());
         }
-        //變成zombie可以看到屍體的職業
         if(aliens.get(0).getAliveState() == Alien.AliveState.ZOMBIE){
-            for (int i = 1; i < deadBody.size(); i++) {
+            for (int i = 0; i < deadBody.size(); i++) {
                 g.setColor(Color.BLACK);
                 g.drawString(deadBody.get(i).getRole().name(), deadBody.get(i).painter().centerX() - 28, deadBody.get(i).painter().top());
             }
@@ -404,19 +407,23 @@ public class GameScene extends Scene {
                                 for(int i=0;i<aliens.size();i++){
                                     if(aliens.get(i).getId()==Integer.parseInt(strs.get(1))){
                                         aliens.get(i).setRole();
-                                        break;
                                     }
                                 }
+
+                            break;
+                        case Global.InternetCommand.WITCH_DEAD:
+                            for(int i = 0; i < deadBody.size(); i++){
+                                if(deadBody.get(i).toString() == strs.get(1)){
+                                    deadBody.get(i).setRole();
+                                }
+                            }
                             break;
                         case Global.InternetCommand.DEAD_BODY:
                             if(serialNum!=ClientClass.getInstance().getID()){
-                            for(int i = 0; i < deadBody.size(); i ++) {
                                 Alien tmp = new Alien(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)), Integer.parseInt(strs.get(3)));
-                                deadBody.add(tmp);
                                 tmp.setAliveState(Alien.AliveState.values()[Integer.parseInt(strs.get(4))]);
+                                deadBody.add(tmp);
                                 break;
-                            }
-
                     }
                 }
             } }

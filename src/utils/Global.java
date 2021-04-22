@@ -11,6 +11,7 @@ public class Global {
         public static final int CREATE = 3;
         public static final int START=4;
         public static final int WITCH=5;
+        public static final int WITCH_DEAD = 13;
         public static final int GET_ROOM=6;
         public static final int DEATH=7;
         public static final int ZOMBIE = 8;
