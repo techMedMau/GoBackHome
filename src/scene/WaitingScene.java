@@ -300,7 +300,7 @@ public class WaitingScene extends Scene {
                         if (password.equals(strs.get(0))&&serialNum!=ClientClass.getInstance().getID()){
                             String header=strs.get(1);
                             strs.remove(0);
-                            strs.remove(1);
+                            strs.remove(0);
                             talkRoomScene.getTalkFrame().getMessage(header, strs);
                         }
                         break;
