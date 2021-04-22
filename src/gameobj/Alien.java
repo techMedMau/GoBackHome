@@ -350,6 +350,7 @@ public class Alien extends GameObject implements ClickState, Range {
     private Role role;
     private AliveState aliveState;
     private Delay killDelay;
+    private boolean ableToKill;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -391,6 +392,7 @@ public class Alien extends GameObject implements ClickState, Range {
         this.role = Role.values()[1];
         this.aliveState = AliveState.ALIVE;
         this.killDelay = new Delay(300);
+        ableToKill = true;
     }
 
     public void setRole() {
@@ -560,9 +562,18 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     //寫錯了
-    public boolean ableToKill(){
+
+
+    public boolean isAbleToKill() {
+        return ableToKill;
+    }
+
+    public void useSword(){
         killDelay.play();
-        return killDelay.count();
+        ableToKill = false;
+        if(killDelay.count()){
+            ableToKill = true;
+        }
     }
 
     public void setId(int id) {
