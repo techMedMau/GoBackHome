@@ -332,7 +332,7 @@ public class Alien extends GameObject implements ClickState, Range {
 
     public enum Role{
         WITCH,
-        HUNTER
+        HUNTER;
     }
 
 

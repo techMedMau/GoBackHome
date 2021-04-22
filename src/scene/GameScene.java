@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import gameobj.button.Button;
 
 public class GameScene extends Scene {
     private ArrayList<Alien> aliens;
@@ -39,6 +40,7 @@ public class GameScene extends Scene {
             , {1220, 1120}, {1216, 425}, {1600, 790}, {672, 224}, {672, 652}};
     private int locationNum;
     private TalkRoomScene talkRoomScene;
+    private Button declare;
 
     public GameScene(ArrayList<Alien> aliens, String password, int homeOwner, int playMax) {
         this.aliens = aliens;
@@ -97,6 +99,7 @@ public class GameScene extends Scene {
             witchNum = (aliens.size() + deadBody.size()) / 2;
             assignRole();
         }
+        declare=new Button(867,543,92,96,ImageController.getInstance().tryGet("/button/declare.png"));
     }
 
     //分職業
@@ -132,7 +135,6 @@ public class GameScene extends Scene {
 
     //做屍體
     public void createDeadBody(int z) {
-//        this.locationNum = Global.random(0, 7);
         int n;
         while (true) {
             n = Global.random(1, 8);
@@ -188,7 +190,6 @@ public class GameScene extends Scene {
                     for (int i = 0; i < taskItems.size(); i++) {
                         if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             final TaskController.Task task = taskItems.get(i).getTask();
-//                            if (taskItems.get(i).getTask().getPopUp().isDone()){return;}
                             if (aliens.get(0).isDone(task)) {
                                 return;
                             }
@@ -226,6 +227,14 @@ public class GameScene extends Scene {
                             ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
                             return;
                         }
+                    }
+                    if (declare.state(e.getPoint())){
+                        for (int i=1;i<aliens.size();i++){
+                            if (aliens.get(0).getRole()!=aliens.get(i).getRole()){
+                                return;
+                            }
+                        }
+                        return;
                     }
                     break;
 
@@ -338,6 +347,9 @@ public class GameScene extends Scene {
             taskController.getCurrentPopUp().paint(g);
         }
         talkRoomScene.paint(g);
+        if (aliens.get(0).getAliveState()!= Alien.AliveState.DEATH){
+            declare.paint(g);
+        }
     }
 
     @Override

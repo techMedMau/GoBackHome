@@ -21,7 +21,6 @@ public class WaitingScene extends Scene {
     private int playMax;
     private String password;
     private Button startButton;
-    //    private int num;
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Alien> aliens;
@@ -132,23 +131,11 @@ public class WaitingScene extends Scene {
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
             if (aliens.size() == 0) {
+                System.out.println(aliens.size());
                 return;
             }
             if (state == CommandSolver.MouseState.CLICKED) {
                 if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())) {
-//                    for (int i=0;i<traitor;i++){
-//                        while (true){
-//                            int select=Global.random(0,aliens.size()-1);
-//                            if (!aliens.get(select).isTraitor()){
-//                                aliens.get(select).setTraitor();
-//                                ArrayList<String> str=new ArrayList<>();
-//                                str.add(String.valueOf(aliens.get(select).getId()));
-//                                str.add(password);
-//                                ClientClass.getInstance().sent(Global.InternetCommand.TRAITOR,str);
-//                                break;
-//                            }
-//                        }
-//                    }
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.START, str);
@@ -263,10 +250,8 @@ public class WaitingScene extends Scene {
                     Global.WAIT_SCENES.forEach((s, waitingScene) -> {
                         ArrayList<String> str = new ArrayList<>();
                         str.add(s);
-//                                str.add(String.valueOf(waitingScene.traitor));
                         str.add(String.valueOf(waitingScene.playMax));
                         str.add(String.valueOf(waitingScene.homeOwner));
-                        //where is my create????
                         ClientClass.getInstance().sent(Global.InternetCommand.CREATE, str);
                     });
                     break;
