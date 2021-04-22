@@ -1,5 +1,6 @@
 package scene;
 
+import controllers.AudioResourceController;
 import controllers.ImageController;
 import gameobj.button.Button;
 import internet.server.ClientClass;
