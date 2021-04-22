@@ -470,6 +470,9 @@ public class Alien extends GameObject implements ClickState, Range {
                     }
                     break;
             }
+        if(killDelay.count()){
+            ableToKill = true;
+        }
     }
 
     public void setVerticalDir(Global.Direction dir) {
@@ -571,9 +574,6 @@ public class Alien extends GameObject implements ClickState, Range {
     public void useSword(){
         killDelay.play();
         ableToKill = false;
-        if(killDelay.count()){
-            ableToKill = true;
-        }
     }
 
     public void setId(int id) {

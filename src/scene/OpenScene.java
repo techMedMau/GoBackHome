@@ -54,6 +54,7 @@ public class OpenScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop("/sound/startBGM.wav",-1);
         image= ImageController.getInstance().tryGet("/openScene/mainmenu.jpg");
         titleImg= ImageController.getInstance().tryGet("/openScene/title.png");
         createRoomButton=new Button(440,300,359,113,ImageController.getInstance()
@@ -115,16 +116,21 @@ public class OpenScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                popUpConnect.keyListener().keyPressed(commandCode,trigTime);
+                if (popUpConnect.isShow()){
+                    popUpConnect.keyListener().keyPressed(commandCode,trigTime);
+                }
                 }
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-                popUpConnect.keyListener().keyReleased(commandCode,trigTime);
+                if (popUpConnect.isShow()){
+                    popUpConnect.keyListener().keyReleased(commandCode,trigTime);
+                }
             }
             @Override
             public void keyTyped(char c, long trigTime) {
-                popUpConnect.keyListener().keyTyped(c,trigTime);
-
+                if (popUpConnect.isShow()){
+                    popUpConnect.keyListener().keyTyped(c,trigTime);
+                }
             }
         };
     }

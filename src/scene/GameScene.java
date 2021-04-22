@@ -65,38 +65,38 @@ public class GameScene extends Scene {
         aliens.get(0).painter().setCenter(location[locationNum][0], location[locationNum][1]);
         aliens.get(0).collider().setCenter(location[locationNum][0], location[locationNum][1]);
         //-----做屍體
-        if (aliens.get(0).getId() == homeOwner && (playMax == 3 || playMax == 5)) {
+        if (aliens.get(0).getId() == homeOwner) {
             ArrayList<Integer> locations = new ArrayList<>();
-            int k;
-            for (int i = 0; i < 3; i++) {
-                while (true) {
-                    k = Global.random(0, 9);
-                    if (!locations.contains(k)) {
-                        locations.add(k);
-                        break;
-                    }
+            if (playMax == 3 || playMax == 5) {
+                int k;
+                for (int i = 0; i < 3; i++) {
+                    while (true) {
+                        k = Global.random(0, 9);
+                        if (!locations.contains(k)) {
+                            locations.add(k);
+                            break;
+                        }
 
-                }
-                createDeadBody(k);
-            }
-        }
-        if (aliens.get(0).getId() == homeOwner && (playMax == 4 || playMax == 6)) {
-            ArrayList<Integer> locations = new ArrayList<>();
-            int g;
-            for (int i = 0; i < 2; i++) {
-                while (true) {
-                    g = Global.random(0, 9);
-                    if (!locations.contains(g)) {
-                        locations.add(g);
-                        break;
                     }
+                    createDeadBody(k);
                 }
-                createDeadBody(g);
             }
+            if (playMax == 4 || playMax == 6) {
+                int g;
+                for (int i = 0; i < 2; i++) {
+                    while (true) {
+                        g = Global.random(0, 9);
+                        if (!locations.contains(g)) {
+                            locations.add(g);
+                            break;
+                        }
+                    }
+                    createDeadBody(g);
+                }
+            }
+            witchNum = (aliens.size() + deadBody.size()) / 2;
+            assignRole();
         }
-        //-----分職業
-        witchNum = (aliens.size() + deadBody.size()) / 2;
-        assignRole();
     }
 
     //分職業
