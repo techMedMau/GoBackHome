@@ -1,5 +1,6 @@
 package scene;
 
+import controllers.AudioResourceController;
 import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.*;
@@ -37,6 +38,7 @@ public class WaitingScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop("/sound/waitingScene.wav",-1);
         aliens = new ArrayList<>();
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
@@ -53,7 +55,8 @@ public class WaitingScene extends Scene {
 
     @Override
     public void sceneEnd() {
-
+        AudioResourceController.getInstance().stop("/sound/waitingScene.wav");
+        AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
     }
 
     public boolean canEnter() {
@@ -135,6 +138,7 @@ public class WaitingScene extends Scene {
                 return;
             }
             if (state == CommandSolver.MouseState.CLICKED) {
+                AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
                 if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())) {
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);

@@ -1,6 +1,7 @@
 package scene;
 
 import camera.Camera;
+import controllers.AudioResourceController;
 import controllers.ImageController;
 import controllers.SceneController;
 import controllers.TaskController;
@@ -13,6 +14,7 @@ import utils.CommandSolver;
 import utils.Delay;
 import utils.Global;
 import gameobj.Line.Point;
+import gameobj.button.Button;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import gameobj.button.Button;
 
 public class GameScene extends Scene {
@@ -38,6 +41,11 @@ public class GameScene extends Scene {
     private int playMax;
     private int witchNum;
     private Alien.Role winRole;
+    private Button ruleButton;
+    private boolean tutorial;
+    private Button exitButton;
+    private Image tutorialImg;
+    public Button tutorialClose;
     private static int[][] location = new int[][]{
             {1025, 1120}, {1728, 100}, {180, 150}, {64, 640}, {288, 1003}
             , {1220, 1120}, {1216, 425}, {1600, 790}, {672, 224}, {672, 652}};
@@ -55,7 +63,12 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop("/sound/openScene.wav", -1);
+        ruleButton = new Button(810, 555, 150, 70, ImageController.getInstance().tryGet("/tutorial.png"));
+        exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
+        tutorialClose = new gameobj.button.Button(0, 20, 48, 48, ImageController.getInstance().tryGet("/button/close.png"));
         talkRoomScene = new TalkRoomScene(password);
+        tutorialImg = ImageController.getInstance().tryGet("/rule.png");
         talkRoomScene.sceneBegin();
         talkRoomScene.setHeader(String.valueOf(aliens.get(0).getNum()));
         map = new Map();
@@ -103,8 +116,9 @@ public class GameScene extends Scene {
             witchNum = (aliens.size() + deadBody.size()) / 2;
             assignRole();
         }
-        declare=new Button(867,543,92,96,ImageController.getInstance().tryGet("/button/declare.png"));
-        winPicture=new Delay(300);
+
+        declare = new Button(855, 390, 92, 96, ImageController.getInstance().tryGet("/button/declare.png"));
+        winPicture = new Delay(300);
     }
 
     //分職業
@@ -177,7 +191,8 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneEnd() {
-
+        AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
+        AudioResourceController.getInstance().stop("/sound/killppl.wav");
     }
 
     @Override
@@ -198,6 +213,7 @@ public class GameScene extends Scene {
                             if (aliens.get(0).isDone(task)) {
                                 return;
                             }
+                            AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
                             taskController.changePopUp(taskItems.get(i).getTask());
                             taskController.getCurrentPopUp().setFinish(() -> aliens.get(0).setDone(task));
                             return;
@@ -208,6 +224,7 @@ public class GameScene extends Scene {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).kill();
+                            AudioResourceController.getInstance().shot("/sound/killppl.wav");
                             aliens.get(0).setSwordNum();
                             aliens.get(0).useSword();
                             ArrayList<String> str = new ArrayList<>();
@@ -223,6 +240,7 @@ public class GameScene extends Scene {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();
+                            AudioResourceController.getInstance().shot("/sound/killppl.wav");
                             aliens.get(0).setSwordNum();
                             aliens.get(0).useSword();
                             ArrayList<String> str = new ArrayList<>();
@@ -233,33 +251,42 @@ public class GameScene extends Scene {
                             return;
                         }
                     }
-                    if (declare.state(e.getPoint())){
+                    if (declare.state(e.getPoint())) {
                         winPicture.play();
-                        for (int i=1;i<aliens.size();i++){
-                            if (aliens.get(0).getRole()!=aliens.get(i).getRole()){
-                                winRole=aliens.get(i).getRole();
+                        for (int i = 1; i < aliens.size(); i++) {
+                            if (aliens.get(0).getRole() != aliens.get(i).getRole()) {
+                                winRole = aliens.get(i).getRole();
                                 break;
                             }
                         }
-                        if (winRole==null){
-                            winRole=aliens.get(0).getRole();
+                        if (winRole == null) {
+                            winRole = aliens.get(0).getRole();
                         }
-                        ArrayList<String> str=new ArrayList<>();
+                        ArrayList<String> str = new ArrayList<>();
                         str.add(password);
                         str.add(winRole.name());
-                        ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE,str);
+                        ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE, str);
+                        return;
+                    }
+
+                    if (ruleButton.state(e.getPoint())) {
+                        tutorial = true;
+                    }
+                    if (tutorialClose.state(e.getPoint())) {
+                        tutorial = false;
                     }
                     break;
-
             }
         };
     }
+
 
     @Override
     public CommandSolver.KeyListener keyListener() {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
+                AudioResourceController.getInstance().play("/sound/walk.wav");
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -283,6 +310,7 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
+                AudioResourceController.getInstance().stop("/sound/walk.wav");
                 talkRoomScene.keyListener().keyReleased(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -311,9 +339,9 @@ public class GameScene extends Scene {
     @Override
     public void paint(Graphics g) {
         talkRoomScene.paint(g);
-        if (winRole!=null){
-            paintVictory(g,winRole);
-            if (winPicture.count()){
+        if (winRole != null) {
+            paintVictory(g, winRole);
+            if (winPicture.count()) {
                 SceneController.getInstance().changeScene(new OpenScene());
             }
             return;
@@ -342,11 +370,7 @@ public class GameScene extends Scene {
         }
 
         g.setColor(Color.BLACK);
-        for (int i = 0; i < forGame.size(); i++) {
-            if (cam.isCollision(forGame.get(i))) {
-                paintShadow(g, forGame.get(i));
-            }
-        }
+
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
                 forGame.get(i).paint(g);
@@ -357,6 +381,11 @@ public class GameScene extends Scene {
             taskItems.get(i).paint(g);
         }
         backgroundItem.paint(g);
+        for (int i = 0; i < forGame.size(); i++) {
+            if (cam.isCollision(forGame.get(i))) {
+                paintShadow(g, forGame.get(i));
+            }
+        }
         cam.paint(g);
         cam.end(g);
         //畫劍
@@ -366,7 +395,14 @@ public class GameScene extends Scene {
         if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().paint(g);
         }
-        if (aliens.get(0).getAliveState()!= Alien.AliveState.DEATH){
+        ruleButton.paint(g);
+        exitButton.paint(g);
+        if (tutorial) {
+            g.drawImage(tutorialImg, 50, 20, null);
+            tutorialClose.paint(g);
+        }
+        talkRoomScene.paint(g);
+        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH) {
             declare.paint(g);
         }
     }
@@ -455,10 +491,10 @@ public class GameScene extends Scene {
                             }
                             break;
                         case Global.InternetCommand.WIN_ROLE:
-                            if (winRole!=null){
+                            if (winRole != null) {
                                 break;
                             }
-                            winRole= Alien.Role.valueOf(strs.get(1));
+                            winRole = Alien.Role.valueOf(strs.get(1));
                             winPicture.play();
                             break;
                     }
@@ -466,18 +502,18 @@ public class GameScene extends Scene {
             }
         });
         talkRoomScene.update();
-        int count=0;
+        int count = 0;
         Alien tmp = null;
-        for (int i=0;i<aliens.size();i++){
-            if (aliens.get(i).getAliveState()!= Alien.AliveState.DEATH){
+        for (int i = 0; i < aliens.size(); i++) {
+            if (aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
                 count++;
-                tmp=aliens.get(i);
+                tmp = aliens.get(i);
             }
         }
-        if (count==1&&tmp!=null){
-            winRole=tmp.getRole();
-            winPicture.play();
-        }
+//        if (count == 1 && tmp != null) {
+//            winRole = tmp.getRole();
+//            winPicture.play();
+//        }
 
     }
 
@@ -856,19 +892,20 @@ public class GameScene extends Scene {
         shadowPoints.clear();
         shadowLines.clear();
     }
-    public void paintVictory(Graphics g,Alien.Role role){
+
+    public void paintVictory(Graphics g, Alien.Role role) {
         role.getVictoryBG(g);
-        int[][] tmp={{399,290},{299,270},{499,270},{199,250},{599,250},{99,230}};
-        for (int i=0;i<aliens.size();i++){
-            if (aliens.get(i).getRole()==winRole){
+        int[][] tmp = {{399, 290}, {299, 270}, {499, 270}, {199, 250}, {599, 250}, {99, 230}};
+        for (int i = 0; i < aliens.size(); i++) {
+            if (aliens.get(i).getRole() == winRole) {
                 aliens.get(i).painter().setTop(tmp[i][1]);
                 aliens.get(i).painter().setLeft(tmp[i][0]);
-                aliens.get(i).painter().setRight(tmp[i][0]+162);
-                aliens.get(i).painter().setBottom(tmp[i][1]+219);
+                aliens.get(i).painter().setRight(tmp[i][0] + 162);
+                aliens.get(i).painter().setBottom(tmp[i][1] + 219);
             }
         }
-        for (int i=aliens.size()-1;i>=0;i--){
-            if (aliens.get(i).getRole()==winRole){
+        for (int i = aliens.size() - 1; i >= 0; i--) {
+            if (aliens.get(i).getRole() == winRole) {
                 aliens.get(i).paintComponent(g);
             }
         }

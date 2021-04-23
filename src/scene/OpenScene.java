@@ -54,7 +54,7 @@ public class OpenScene extends Scene {
 
     @Override
     public void sceneBegin() {
-        AudioResourceController.getInstance().loop("/sound/startBGM.wav",-1);
+
         image= ImageController.getInstance().tryGet("/openScene/mainmenu.jpg");
         titleImg= ImageController.getInstance().tryGet("/openScene/title.png");
         createRoomButton=new Button(440,300,359,113,ImageController.getInstance()
@@ -75,11 +75,13 @@ public class OpenScene extends Scene {
             ee.printStackTrace();
         }
         ClientClass.getInstance().sent(Global.InternetCommand.GET_ROOM,new ArrayList<String>());
+        AudioResourceController.getInstance().loop("/sound/bgm.wav",-1);
     }
 
     @Override
     public void sceneEnd() {
-
+        AudioResourceController.getInstance().stop("/sound/bgm.wav");
+        AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
     }
 
     @Override
@@ -90,6 +92,7 @@ public class OpenScene extends Scene {
             }
             switch (state){
                 case CLICKED:
+                    AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
                     if (createRoomButton.state(e.getPoint())&&!popUpConnect.isShow()&&!popUpCreateRoom.isShow()){
                         popUpCreateRoom.sceneBegin();
                         break;

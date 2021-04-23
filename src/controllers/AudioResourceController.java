@@ -47,7 +47,7 @@ public class AudioResourceController {
         if (this.soundMap.containsKey(fileName)) {
             final ClipThread ct = this.soundMap.get(fileName);
             if (!ct.isDead()) {
-                ct.playSound();
+//                ct.playSound();
                 return;
             }
         }
