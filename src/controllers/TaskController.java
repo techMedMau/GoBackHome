@@ -39,7 +39,6 @@ public class TaskController {
         ROCK(new PopUpRock()),
         CENTER(new PopUpCenter()),
         PUSH(new PopUpPush());
-
         private PopUpTask popUpTask;
         Task(PopUpTask popUpTask){
             this.popUpTask=popUpTask;

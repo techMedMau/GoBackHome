@@ -6,7 +6,7 @@ import utils.CommandSolver;
 
 import java.awt.*;
 
-public class PopUpTask extends PopUpWindows{
+public abstract class PopUpTask extends PopUpWindows{
     public Button close;
     public Image img;
     public Image finish;
@@ -32,6 +32,11 @@ public class PopUpTask extends PopUpWindows{
 
     @Override
     public void sceneEnd() {
+        disShow();
+        close=null;
+        img=null;
+        finish=null;
+        isFinish=null;
 
     }
 

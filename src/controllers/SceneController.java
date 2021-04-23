@@ -21,12 +21,13 @@ public class SceneController implements GameKernel.UpdateInterface,GameKernel.Pa
 
     //換場機制
     public void changeScene(Scene scene){
-        if(this.currentScene!=null){
-            currentScene.sceneEnd();
-        }
+        Scene tmp=currentScene;
         if(scene!=null){
             scene.sceneBegin(); //傳進來的場景初始化
             currentScene=scene; //並換成當前場景
+            if(tmp!=null){
+                tmp.sceneEnd();
+            }
         }
     }
     @Override

@@ -11,15 +11,16 @@ public class Global {
         public static final int CREATE = 3;
         public static final int START=4;
         public static final int WITCH=5;
-        public static final int WITCH_DEAD = 13;
         public static final int GET_ROOM=6;
         public static final int DEATH=7;
         public static final int ZOMBIE = 8;
         public static final int GET_NUM = 9;
         public static final int MAKE_ALIENS = 10;
-        public static final int Message = 11;
+        public static final int MESSAGE = 11;
         public static final int DEAD_BODY = 12;
+        public static final int WITCH_DEAD = 13;
         public static final int WIN_ROLE = 14;
+        public static final int EXIT = 15;
     }
     public enum KeyCommand{
         SHIFT(5),

@@ -65,14 +65,16 @@ public class OpenScene extends Scene {
         popUpCreateRoom=new PopUpCreateRoom();
         Server s=Server.instance();
         System.out.println(s.getLocalAddress()[0]);
-        if (s.getLocalAddress()[0].equals(Global.SERVE_IP)){
-            s.create(12345);
-            s.start();
-        }
-        try {
-            ClientClass.getInstance().connect(Global.SERVE_IP,12345);
-        } catch (IOException ee) {
-            ee.printStackTrace();
+        if (ClientClass.getInstance().getID()==0){
+            if (s.getLocalAddress()[0].equals(Global.SERVE_IP)){
+                s.create(12345);
+                s.start();
+            }
+            try {
+                ClientClass.getInstance().connect(Global.SERVE_IP,12345);
+            } catch (IOException ee) {
+                ee.printStackTrace();
+            }
         }
         ClientClass.getInstance().sent(Global.InternetCommand.GET_ROOM,new ArrayList<String>());
         AudioResourceController.getInstance().loop("/sound/bgm.wav",-1);
@@ -80,6 +82,12 @@ public class OpenScene extends Scene {
 
     @Override
     public void sceneEnd() {
+        image=null;
+        titleImg=null;
+        createRoomButton=null;
+        inputButton=null;
+        popUpConnect=null;
+        popUpCreateRoom=null;
         AudioResourceController.getInstance().stop("/sound/bgm.wav");
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
     }

@@ -27,6 +27,7 @@ public class WaitingScene extends Scene {
     private ArrayList<Alien> aliens;
     private int homeOwner;
     private TalkRoomScene talkRoomScene;
+    private Button exitButton;
 
 
     public WaitingScene(String password, int playMax, int homeOwner) {
@@ -38,7 +39,7 @@ public class WaitingScene extends Scene {
 
     @Override
     public void sceneBegin() {
-        AudioResourceController.getInstance().loop("/sound/waitingScene.wav",-1);
+        AudioResourceController.getInstance().loop("/sound/waitingScene.wav", -1);
         aliens = new ArrayList<>();
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
@@ -50,6 +51,7 @@ public class WaitingScene extends Scene {
         mapLoader = MapWaitGen();
         talkRoomScene = new TalkRoomScene(password);
         talkRoomScene.sceneBegin();
+        exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
 
     }
 
@@ -57,6 +59,13 @@ public class WaitingScene extends Scene {
     public void sceneEnd() {
         AudioResourceController.getInstance().stop("/sound/waitingScene.wav");
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
+        aliens=null;
+        startButton=null;
+        mapLoader=null;
+        talkRoomScene.sceneEnd();
+        talkRoomScene=null;
+        exitButton=null;
+
     }
 
     public boolean canEnter() {
@@ -134,7 +143,6 @@ public class WaitingScene extends Scene {
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
             if (aliens.size() == 0) {
-                System.out.println(aliens.size());
                 return;
             }
             if (state == CommandSolver.MouseState.CLICKED) {
@@ -145,6 +153,19 @@ public class WaitingScene extends Scene {
                     ClientClass.getInstance().sent(Global.InternetCommand.START, str);
                     Global.WAIT_SCENES.remove(password, this);
                     SceneController.getInstance().changeScene(new GameScene(aliens, password, homeOwner, playMax));
+                    return;
+                }
+                if (exitButton.state(e.getPoint())) {
+                    if (aliens.get(0).getId() == homeOwner && aliens.size() > 1) {
+                        homeOwner = aliens.get(1).getId();
+                    }
+                    ArrayList<String> str = new ArrayList<>();
+                    str.add(password);
+                    str.add(String.valueOf(aliens.get(0).getId()));
+                    ClientClass.getInstance().sent(Global.InternetCommand.EXIT, str);
+                    aliens.remove(0);
+                    SceneController.getInstance().changeScene(new OpenScene());
+                    return;
                 }
             }
         };
@@ -298,12 +319,22 @@ public class WaitingScene extends Scene {
                         }
                     }
                     break;
-                case Global.InternetCommand.Message:
+                case Global.InternetCommand.MESSAGE:
                     if (password.equals(strs.get(0)) && serialNum != ClientClass.getInstance().getID()) {
                         String header = strs.get(1);
                         strs.remove(0);
                         strs.remove(0);
                         talkRoomScene.getTalkFrame().getMessage(header, strs);
+                    }
+                    break;
+                case Global.InternetCommand.EXIT:
+                    if (password.equals(strs.get(0)) && serialNum != ClientClass.getInstance().getID()) {
+                        for (int i = 1; i < aliens.size(); i++) {
+                            if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
+                                aliens.remove(i);
+                                break;
+                            }
+                        }
                     }
                     break;
             }

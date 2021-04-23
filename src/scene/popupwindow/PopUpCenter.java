@@ -54,6 +54,9 @@ public class PopUpCenter extends PopUpTask{
 
     @Override
     public void sceneEnd() {
+        super.sceneEnd();
+        aim=null;
+        img=null;
 
     }
 

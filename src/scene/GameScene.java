@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gameobj.button.Button;
-
 public class GameScene extends Scene {
     private ArrayList<Alien> aliens;
     private ArrayList<Alien> deadBody;
@@ -193,6 +191,26 @@ public class GameScene extends Scene {
     public void sceneEnd() {
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
         AudioResourceController.getInstance().stop("/sound/killppl.wav");
+        aliens=null;
+        deadBody=null;
+        cam=null;
+        map=null;
+        backGround=null;
+        forGame=null;
+        mapLoader=null;
+        taskItems=null;
+        taskController=null;
+        backgroundItem=null;
+        password=null;
+        winRole=null;
+        ruleButton=null;
+        exitButton=null;
+        tutorialImg=null;
+        tutorialClose=null;
+        talkRoomScene=null;
+        declare=null;
+        winPicture=null;
+
     }
 
     @Override
@@ -271,9 +289,19 @@ public class GameScene extends Scene {
 
                     if (ruleButton.state(e.getPoint())) {
                         tutorial = true;
+                        return;
                     }
                     if (tutorialClose.state(e.getPoint())) {
                         tutorial = false;
+                        return;
+                    }
+                    if (exitButton.state(e.getPoint())){
+                        ArrayList<String> str=new ArrayList<>();
+                        str.add(password);
+                        str.add(String.valueOf(aliens.get(0).getId()));
+                        ClientClass.getInstance().sent(Global.InternetCommand.EXIT,str);
+                        aliens.remove(0);
+                        SceneController.getInstance().changeScene(new OpenScene());
                     }
                     break;
             }
@@ -370,6 +398,11 @@ public class GameScene extends Scene {
         }
 
         g.setColor(Color.BLACK);
+        for (int i = 0; i < forGame.size(); i++) {
+            if (cam.isCollision(forGame.get(i))) {
+                paintShadow(g, forGame.get(i));
+            }
+        }
 
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
@@ -381,11 +414,7 @@ public class GameScene extends Scene {
             taskItems.get(i).paint(g);
         }
         backgroundItem.paint(g);
-        for (int i = 0; i < forGame.size(); i++) {
-            if (cam.isCollision(forGame.get(i))) {
-                paintShadow(g, forGame.get(i));
-            }
-        }
+
         cam.paint(g);
         cam.end(g);
         //畫劍
@@ -459,7 +488,7 @@ public class GameScene extends Scene {
                                 }
                             }
                             break;
-                        case Global.InternetCommand.Message:
+                        case Global.InternetCommand.MESSAGE:
                             if (password.equals(strs.get(0)) && serialNum != ClientClass.getInstance().getID()) {
                                 String header = strs.get(1);
                                 strs.remove(0);
@@ -496,6 +525,14 @@ public class GameScene extends Scene {
                             }
                             winRole = Alien.Role.valueOf(strs.get(1));
                             winPicture.play();
+                            break;
+                        case Global.InternetCommand.EXIT:
+                            for (int i=0;i<aliens.size();i++){
+                                if (Integer.parseInt(strs.get(1))==aliens.get(i).getId()){
+                                    aliens.remove(i);
+                                    break;
+                                }
+                            }
                             break;
                     }
                 }

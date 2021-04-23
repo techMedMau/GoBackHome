@@ -47,6 +47,12 @@ public class TalkRoomScene extends Scene {
 
     @Override
     public void sceneEnd() {
+        title=null;
+        talkFrame=null;
+        input=null;
+        header=null;
+        cam=null;
+        password=null;
 
     }
 
@@ -92,7 +98,7 @@ public class TalkRoomScene extends Scene {
                     message.add(password);
                     message.add(header);
                     message.addAll(tmp);
-                    ClientClass.getInstance().sent(Global.InternetCommand.Message,message);
+                    ClientClass.getInstance().sent(Global.InternetCommand.MESSAGE,message);
                 });
                 input.add(c);
             }
