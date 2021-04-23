@@ -29,7 +29,6 @@ public class WaitingScene extends Scene {
     private TalkRoomScene talkRoomScene;
     private Button exitButton;
 
-
     public WaitingScene(String password, int playMax, int homeOwner) {
         this.password = password;
         this.playMax = playMax;
@@ -185,9 +184,11 @@ public class WaitingScene extends Scene {
         }
         Font font = new Font(Global.FONT, Font.PLAIN, 30);
         g.setFont(font);
-        g.drawString(password, 425, 480);
+        g.setColor(Color.WHITE);
+        g.drawString(password, 417, 480);
         Font numFont = new Font(Global.FONT, Font.PLAIN, 20);
         g.setFont(numFont);
+        g.setColor(Color.WHITE);
         g.drawString(currentPlay + "/" + playMax, 445, 580);
         talkRoomScene.paint(g);
     }

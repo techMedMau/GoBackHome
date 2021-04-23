@@ -10,6 +10,7 @@ import internet.server.ClientClass;
 import internet.server.CommandReceiver;
 import maploader.MapInfo;
 import maploader.MapLoader;
+import scene.popupwindow.PopUpTask;
 import utils.CommandSolver;
 import utils.Delay;
 import utils.Global;
@@ -61,7 +62,7 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneBegin() {
-        AudioResourceController.getInstance().loop("/sound/openScene.wav", -1);
+//        AudioResourceController.getInstance().loop("/sound/openScene.wav", -1);
         ruleButton = new Button(810, 555, 150, 70, ImageController.getInstance().tryGet("/tutorial.png"));
         exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
         tutorialClose = new gameobj.button.Button(0, 20, 48, 48, ImageController.getInstance().tryGet("/button/close.png"));
@@ -314,7 +315,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                AudioResourceController.getInstance().play("/sound/walk.wav");
+                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+                    AudioResourceController.getInstance().play("/sound/walk.wav");
+                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -338,7 +341,9 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-                AudioResourceController.getInstance().stop("/sound/walk.wav");
+                if(AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+                    AudioResourceController.getInstance().stop("/sound/walk.wav");
+                }
                 talkRoomScene.keyListener().keyReleased(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;

@@ -1,5 +1,6 @@
 package scene.popupwindow;
 
+import controllers.AudioResourceController;
 import controllers.ImageController;
 import gameobj.button.Button;
 import utils.CommandSolver;
@@ -74,6 +75,9 @@ public abstract class PopUpTask extends PopUpWindows{
 
     @Override
     public void update() {
+        if(isDone){
+            AudioResourceController.getInstance().shot("/sound/don.wav");
+        }
     }
 
     public void setDone(boolean done) {

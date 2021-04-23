@@ -21,7 +21,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioResourceController {
 
     private static AudioResourceController irc;
-    private Map<String, ClipThread> soundMap;
+    private final Map<String, ClipThread> soundMap = new HashMap<>();
     private final ClipThread.FinishHandler finishHandler = (String fileName, Clip clip) -> {
         if (this.soundMap.containsKey(fileName)) {
             if (this.soundMap.get(fileName).framePos == -1) {
@@ -32,24 +32,31 @@ public class AudioResourceController {
             clip.close();
         }
     };
+
     private AudioResourceController() {
-        this.soundMap = new HashMap<>();
     }
 
-    public static AudioResourceController getInstance() {
+    public static synchronized AudioResourceController getInstance() {
         if (irc == null) {
             irc = new AudioResourceController();
         }
         return irc;
     }
 
+    public boolean isPlaying(final String fileName) {
+        if (this.soundMap.containsKey(fileName)) {
+            return this.soundMap.get(fileName).isPlaying();
+        }
+        return false;
+    }
+
     public void play(final String fileName) {
         if (this.soundMap.containsKey(fileName)) {
-            final ClipThread ct = this.soundMap.get(fileName);
-            if (!ct.isDead()) {
-//                ct.playSound();
-                return;
-            }
+//                final ClipThread ct = this.soundMap.get(fileName);
+//                if (!ct.isDead()) {
+//                    ct.playSound();
+//                }
+            return;
         }
         final ClipThread ct = new ClipThread(fileName, 1, this.finishHandler);
         this.soundMap.put(fileName, ct);
@@ -57,13 +64,17 @@ public class AudioResourceController {
     }
 
     public void shot(final String fileName) {
-        new ClipThread(fileName, 1, this.finishHandler).start();
+        synchronized (soundMap) {
+            new ClipThread(fileName, 1, this.finishHandler).start();
+        }
     }
 
     public void loop(final String fileName, final int count) {
-        final ClipThread ct = new ClipThread(fileName, count, this.finishHandler);
-        this.soundMap.put(fileName, ct);
-        ct.start();
+        synchronized (soundMap) {
+            final ClipThread ct = new ClipThread(fileName, count, this.finishHandler);
+            this.soundMap.put(fileName, ct);
+            ct.start();
+        }
     }
 
     public void pause(final String fileName) {
@@ -81,7 +92,7 @@ public class AudioResourceController {
         }
         final ClipThread ct = this.soundMap.get(fileName);
         ct.stopSound();
-        this.soundMap.remove(fileName);
+//        this.soundMap.remove(fileName);
     }
 
     // 單例
@@ -92,6 +103,7 @@ public class AudioResourceController {
         private final FinishHandler finishHandler;
         private Clip clip;
         private int framePos;
+
         public ClipThread(final String fileName, final int count, final FinishHandler finishHandler) {
             this.fileName = fileName;
             this.count = count;
@@ -119,6 +131,10 @@ public class AudioResourceController {
             } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException | URISyntaxException ex) {
                 Logger.getLogger(AudioResourceController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+
+        public boolean isPlaying() {
+            return clip != null && clip.isRunning();
         }
 
         public void playSound() {

@@ -57,6 +57,7 @@ public class PopUpColorChange extends PopUpTask {
 
     @Override
     public void update() {
+        super.update();
         if(click && click2){
             setDone(true);
         }

@@ -26,6 +26,7 @@ public class PopUpCenter extends PopUpTask{
 
     @Override
     public void update() {
+        super.update();
         if(450<aim.collider().centerX()&&aim.collider().centerX()<470&&
                 aim.collider().centerY()>290&&aim.collider().centerY()<310){
             setDone(true);
