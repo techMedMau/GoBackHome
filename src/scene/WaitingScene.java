@@ -22,7 +22,6 @@ public class WaitingScene extends Scene {
     private int playMax;
     private String password;
     private Button startButton;
-    //    private int num;
     private ArrayList<GameObject> forWaitingRoom;
     private MapLoader mapLoader;
     private ArrayList<Alien> aliens;
@@ -135,6 +134,7 @@ public class WaitingScene extends Scene {
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
             if (aliens.size() == 0) {
+                System.out.println(aliens.size());
                 return;
             }
             if (state == CommandSolver.MouseState.CLICKED) {
@@ -254,10 +254,8 @@ public class WaitingScene extends Scene {
                     Global.WAIT_SCENES.forEach((s, waitingScene) -> {
                         ArrayList<String> str = new ArrayList<>();
                         str.add(s);
-//                                str.add(String.valueOf(waitingScene.traitor));
                         str.add(String.valueOf(waitingScene.playMax));
                         str.add(String.valueOf(waitingScene.homeOwner));
-                        //where is my create????
                         ClientClass.getInstance().sent(Global.InternetCommand.CREATE, str);
                     });
                     break;
