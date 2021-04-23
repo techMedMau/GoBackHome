@@ -20,20 +20,31 @@ public class OpenScene extends Scene {
     private Image titleImg;
     private Button createRoomButton;
     private Button inputButton;
+    private Button tutorialButton;
     private PopUpConnect popUpConnect;
     private PopUpCreateRoom popUpCreateRoom;
+    private boolean tutorial;
+    private Image img;
+    public Button tutorialClose;
     @Override
     public void paint(Graphics g) {
         g.drawImage(image,0,0,null);
-        g.drawImage(titleImg,260,150,null);
+        g.drawImage(titleImg,95,80,null);
         createRoomButton.paint(g);
         inputButton.paint(g);
+        tutorialButton.paint(g);
+
+        if(tutorial){
+            g.drawImage(img, 10,5,null);
+            tutorialClose.paint(g);
+        }
         if (popUpConnect.isShow()){
             popUpConnect.paint(g);
         }
         if (popUpCreateRoom.isShow()){
             popUpCreateRoom.paint(g);
         }
+
     }
 
     @Override
@@ -49,17 +60,20 @@ public class OpenScene extends Scene {
                     break;
             }
         });
-
     }
 
     @Override
     public void sceneBegin() {
-
+        tutorialClose = new gameobj.button.Button(0, 0, 48, 48
+                , ImageController.getInstance().tryGet("/button/close.png"));
+        img = ImageController.getInstance().tryGet("/openScene/rule.png");
         image= ImageController.getInstance().tryGet("/openScene/mainmenu.jpg");
         titleImg= ImageController.getInstance().tryGet("/openScene/title.png");
-        createRoomButton=new Button(440,300,359,113,ImageController.getInstance()
+        tutorialButton = new Button(440,220,359,112
+                , ImageController.getInstance().tryGet("/openScene/tutorial.png"));
+        createRoomButton=new Button(440,360,359,113,ImageController.getInstance()
                 .tryGet("/openScene/creatRoom.png"));
-        inputButton=new Button(530,450,180,96,ImageController.getInstance()
+        inputButton=new Button(530,490,180,96,ImageController.getInstance()
                 .tryGet("/openScene/inputNum.png"));
         popUpConnect=new PopUpConnect();
         popUpCreateRoom=new PopUpCreateRoom();
@@ -116,6 +130,14 @@ public class OpenScene extends Scene {
                     if (popUpConnect.isShow()){
                         popUpConnect.mouseListener().mouseTrig(e,state,trigTime);
                         break;
+                    }
+                    if(tutorialButton.state(e.getPoint())){
+                        tutorial = true;
+                        break;
+                    }
+                    if (tutorialClose.state(e.getPoint())) {
+                        tutorial = false;
+                        return;
                     }
                     break;
             }

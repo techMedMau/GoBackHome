@@ -44,6 +44,7 @@ public class GameScene extends Scene {
     private Button exitButton;
     private Image tutorialImg;
     public Button tutorialClose;
+
     private static int[][] location = new int[][]{
             {1025, 1120}, {1728, 100}, {180, 150}, {64, 640}, {288, 1003}
             , {1220, 1120}, {1216, 425}, {1600, 790}, {672, 224}, {672, 652}};
@@ -63,7 +64,8 @@ public class GameScene extends Scene {
     public void sceneBegin() {
         ruleButton = new Button(810, 555, 150, 70, ImageController.getInstance().tryGet("/tutorial.png"));
         exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
-        tutorialClose = new gameobj.button.Button(0, 20, 48, 48, ImageController.getInstance().tryGet("/button/close.png"));
+        tutorialClose = new gameobj.button.Button(0, 20, 48, 48
+                , ImageController.getInstance().tryGet("/button/close.png"));
         talkRoomScene = new TalkRoomScene(password);
         tutorialImg = ImageController.getInstance().tryGet("/rule.png");
         talkRoomScene.sceneBegin();
