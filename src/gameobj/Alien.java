@@ -396,7 +396,7 @@ public class Alien extends GameObject implements ClickState, Range {
         this.sword = ImageController.getInstance().tryGet("/sword.png");
         this.role = Role.values()[1];
         this.aliveState = AliveState.ALIVE;
-        this.killDelay = new Delay(300);
+        this.killDelay = new Delay(480);
         ableToKill = true;
     }
 
@@ -478,6 +478,10 @@ public class Alien extends GameObject implements ClickState, Range {
         if(killDelay.count()){
             ableToKill = true;
         }
+    }
+
+    public Delay getKillDelay() {
+        return killDelay;
     }
 
     public void setVerticalDir(Global.Direction dir) {
@@ -563,6 +567,8 @@ public class Alien extends GameObject implements ClickState, Range {
         currentState = State.STAND_RIGHT;
         stateAnimator = getDeathAnimator(alienType);
         stateAnimator.get(currentState).play();
+        Global.reduceSPEED();
+        collider().setTop(top()+20);
     }
 
     public void death(){

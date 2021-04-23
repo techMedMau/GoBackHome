@@ -53,7 +53,6 @@ public class TalkRoomScene extends Scene {
         header=null;
         cam=null;
         password=null;
-
     }
 
     @Override

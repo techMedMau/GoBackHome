@@ -129,21 +129,21 @@ public abstract class GameObject implements GameKernel.UpdateInterface,GameKerne
 
     public abstract void paintComponent(Graphics g);
     public int centerX(){
-        return painter.centerX();
+        return collider.centerX();
     }
     public int centerY(){
-        return painter.centerY();
+        return collider.centerY();
     }
     public int left(){
-        return painter.left();
+        return collider.left();
     }
     public int top(){
-        return painter.top();
+        return collider.top();
     }
     public int right(){
-        return painter.right();
+        return collider.right();
     }
     public int bottom(){
-        return painter.bottom();
+        return collider.bottom();
     }
 }

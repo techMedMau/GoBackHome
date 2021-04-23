@@ -63,4 +63,7 @@ public class Delay {
         count++; //記時
         return false;   //還不要觸發我們要的動作
     }
+    public int getCount(){
+        return count;
+    }
 }

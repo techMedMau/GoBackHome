@@ -10,7 +10,6 @@ import internet.server.ClientClass;
 import internet.server.CommandReceiver;
 import maploader.MapInfo;
 import maploader.MapLoader;
-import scene.popupwindow.PopUpTask;
 import utils.CommandSolver;
 import utils.Delay;
 import utils.Global;
@@ -62,7 +61,6 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneBegin() {
-//        AudioResourceController.getInstance().loop("/sound/openScene.wav", -1);
         ruleButton = new Button(810, 555, 150, 70, ImageController.getInstance().tryGet("/tutorial.png"));
         exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
         tutorialClose = new gameobj.button.Button(0, 20, 48, 48, ImageController.getInstance().tryGet("/button/close.png"));
@@ -239,8 +237,8 @@ public class GameScene extends Scene {
                         }
                     }
                     //殺活人
-                    for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
+                    for (int i = 0; i < aliens.size(); i++) {
+                        if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).kill();
                             AudioResourceController.getInstance().shot("/sound/killppl.wav");
@@ -256,7 +254,7 @@ public class GameScene extends Scene {
                     }
                     //殺zombie
                     for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
+                        if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();
                             AudioResourceController.getInstance().shot("/sound/killppl.wav");
@@ -303,6 +301,7 @@ public class GameScene extends Scene {
                         ClientClass.getInstance().sent(Global.InternetCommand.EXIT,str);
                         aliens.remove(0);
                         SceneController.getInstance().changeScene(new OpenScene());
+                        return;
                     }
                     break;
             }
@@ -390,12 +389,21 @@ public class GameScene extends Scene {
         if (aliens.get(0).getAliveState() == Alien.AliveState.ZOMBIE) {
             for (int i = 0; i < deadBody.size(); i++) {
                 g.setColor(Color.BLACK);
-                g.drawString(deadBody.get(i).getRole().name(), deadBody.get(i).painter().centerX() - 28, deadBody.get(i).painter().top());
+                g.drawString(deadBody.get(i).getRole().name(), deadBody.get(i).painter().centerX() - 32, deadBody.get(i).painter().centerY());
             }
         }
         for (int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
                 aliens.get(i).paint(g);
+                if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH&&aliens.get(0).getSwordsNum()>0){
+                    g.setColor(Color.RED);
+                    if (aliens.get(0).getKillDelay().isPlaying()){
+                        g.drawString(String.valueOf(aliens.get(0).getKillDelay().getCount()/60), aliens.get(i).painter().centerX() - 8, aliens.get(i).painter().top()-8);
+                    }else {
+                        g.drawString("Kill?", aliens.get(i).painter().centerX() - 17, aliens.get(i).painter().top()-8);
+                    }
+                    g.setColor(Color.BLACK);
+                }
             }
         }
         for (int i = 0; i < deadBody.size(); i++) {
@@ -467,6 +475,9 @@ public class GameScene extends Scene {
                 if (strs.get(0).equals(password)) {
                     switch (commandCode) {
                         case Global.InternetCommand.MOVE:
+                            if (aliens==null){
+                                return;
+                            }
                             for (int i = 1; i < aliens.size(); i++) {
                                 if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {
                                     aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(2)), Integer.parseInt(strs.get(3)));
@@ -507,7 +518,6 @@ public class GameScene extends Scene {
                                     aliens.get(i).setRole();
                                 }
                             }
-
                             break;
                         case Global.InternetCommand.WITCH_DEAD:
                             for (int i = 0; i < deadBody.size(); i++) {

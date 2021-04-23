@@ -245,6 +245,9 @@ public class WaitingScene extends Scene {
                     break;
                 case Global.InternetCommand.MOVE:
                     if (strs.get(5).equals(password)) {
+                        if (aliens==null){
+                            return;
+                        }
                         for (int i = 1; i < aliens.size(); i++) {
                             if (aliens.get(i).getId() == Integer.parseInt(strs.get(0))) {
                                 aliens.get(i).painter().setCenter(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
@@ -270,6 +273,7 @@ public class WaitingScene extends Scene {
                     if (strs.get(0).equals(password)) {
                         Global.WAIT_SCENES.remove(strs.get(0), Global.WAIT_SCENES.get(strs.get(0)));
                         SceneController.getInstance().changeScene(new GameScene(aliens, password, homeOwner, playMax));
+                        return;
                     }
                     break;
                 case Global.InternetCommand.GET_ROOM:
