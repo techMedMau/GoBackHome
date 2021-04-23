@@ -11,10 +11,12 @@ import java.util.ArrayList;
 public class PopUpFindDifferent extends PopUpTask{
     private ArrayList<KeyPair> keyPairs;
     private Card tmp;
+    private Image img;
 
     @Override
     public void sceneBegin() {
         super.sceneBegin();
+        this.img = ImageController.getInstance().tryGet("/findDifferent/back.png");
         this.keyPairs = new ArrayList<>();
         this.keyPairs.add(new KeyPair(new Card(270, 200,32,38
                         ,ImageController.getInstance().tryGet("/findDifferent/cloud.png"))
@@ -103,6 +105,7 @@ public class PopUpFindDifferent extends PopUpTask{
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        g.drawImage(img, 205,100,null);
         for(int i = 0; i <keyPairs.size(); i++){
             keyPairs.get(i).card.paint(g);
         }
