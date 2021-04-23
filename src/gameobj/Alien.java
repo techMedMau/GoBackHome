@@ -4,13 +4,11 @@ import controllers.ImageController;
 import controllers.TaskController;
 import gameobj.button.ClickState;
 import gameobj.button.Range;
-import scene.popupwindow.PopUpTask;
 import utils.Animator;
 import utils.Delay;
 import utils.Global;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -331,8 +329,15 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     public enum Role{
-        WITCH,
-        HUNTER;
+        WITCH(ImageController.getInstance().tryGet("/witchesWin.png")),
+        HUNTER(ImageController.getInstance().tryGet("/huntersWin.png"));
+        private Image victoryBG;
+        Role(Image victoryBG){
+            this.victoryBG=victoryBG;
+        }
+        public void getVictoryBG(Graphics g){
+            g.drawImage(victoryBG,0,0,null);
+        }
     }
 
 
@@ -396,7 +401,7 @@ public class Alien extends GameObject implements ClickState, Range {
     }
 
     public void setRole() {
-        this.role = Role.values()[0];;
+        this.role = Role.values()[0];
     }
 
     public Role getRole() {
@@ -414,7 +419,7 @@ public class Alien extends GameObject implements ClickState, Range {
 
     @Override
     public void paintComponent(Graphics g) {
-        stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), 54, 73);
+        stateAnimator.get(currentState).paintComponent(g, painter().left(), painter().top(), painter().width(), painter().height());
     }
 
     @Override
