@@ -66,6 +66,7 @@ public class PopUpLineUp extends PopUpTask {
 
     @Override
     public void update(){
+        super.update();
         if(line1 && line2 && line3 && line4){
             setDone(true);
         }

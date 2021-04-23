@@ -35,8 +35,7 @@ public class PopUpPush extends PopUpTask{
 
     @Override
     public void update() {
-
-
+        super.update();
     }
 
 

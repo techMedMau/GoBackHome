@@ -37,6 +37,7 @@ public class PopUpRock extends PopUpTask{
 
     @Override
     public void update() {
+        super.update();
         for(int i = 0; i < rocks.size(); i++) {
             rocks.get(i).update();
             if(rocks.get(i).isOutside()){

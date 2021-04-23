@@ -116,6 +116,7 @@ public class PopUpFindDifferent extends PopUpTask{
 
     @Override
     public void update() {
+        super.update();
         for(int i = 0; i < keyPairs.size(); i++){
             keyPairs.get(i).card.update();
             keyPairs.get(i).card1.update();

@@ -73,9 +73,9 @@ public class Global {
 
     public static final boolean IS_DEBUG = false;
 
-    public static final String SERVE_IP="192.168.1.59";
+    public static final String SERVE_IP="192.168.1.12";
 
-    public static final String FONT="Times New Roman";
+    public static final String FONT="Carlibri";
     public static void log(String str) {
         if (IS_DEBUG) {
             System.out.println(str);

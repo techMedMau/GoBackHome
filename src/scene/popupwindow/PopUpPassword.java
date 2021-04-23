@@ -62,6 +62,7 @@ public class PopUpPassword extends PopUpTask {
 
     @Override
     public void update(){
+        super.update();
         if(input.size() == code.size()){
             if(!check()){
                 input = new ArrayList<>();

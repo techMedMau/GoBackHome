@@ -60,6 +60,7 @@ public class PopUpFindPic extends PopUpTask{
 
     @Override
     public void update() {
+        super.update();
            if(tmp == buttons.get(1)){
                setDone(true);
            }
