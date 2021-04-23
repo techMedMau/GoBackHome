@@ -1,5 +1,6 @@
 package scene;
 
+import controllers.AudioResourceController;
 import controllers.ImageController;
 import controllers.SceneController;
 import gameobj.*;
@@ -38,6 +39,7 @@ public class WaitingScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop("/sound/waitingScene.wav",-1);
         aliens = new ArrayList<>();
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
@@ -54,7 +56,8 @@ public class WaitingScene extends Scene {
 
     @Override
     public void sceneEnd() {
-
+        AudioResourceController.getInstance().stop("/sound/waitingScene.wav");
+        AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
     }
 
     public boolean canEnter() {
@@ -135,20 +138,8 @@ public class WaitingScene extends Scene {
                 return;
             }
             if (state == CommandSolver.MouseState.CLICKED) {
+                AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
                 if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())) {
-//                    for (int i=0;i<traitor;i++){
-//                        while (true){
-//                            int select=Global.random(0,aliens.size()-1);
-//                            if (!aliens.get(select).isTraitor()){
-//                                aliens.get(select).setTraitor();
-//                                ArrayList<String> str=new ArrayList<>();
-//                                str.add(String.valueOf(aliens.get(select).getId()));
-//                                str.add(password);
-//                                ClientClass.getInstance().sent(Global.InternetCommand.TRAITOR,str);
-//                                break;
-//                            }
-//                        }
-//                    }
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.START, str);

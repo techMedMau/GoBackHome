@@ -1,6 +1,7 @@
 package scene;
 
 import camera.Camera;
+import controllers.AudioResourceController;
 import controllers.ImageController;
 import controllers.TaskController;
 import gameobj.*;
@@ -11,6 +12,7 @@ import maploader.MapLoader;
 import utils.CommandSolver;
 import utils.Global;
 import gameobj.Line.Point;
+import gameobj.button.Button;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -34,6 +36,11 @@ public class GameScene extends Scene {
     private String password;
     private int playMax;
     private int witchNum;
+    private Button ruleButton;
+    private boolean tutorial;
+    private Button exitButton;
+    private Image tutorialImg;
+    public Button tutorialClose;
     private static int[][] location = new int[][]{
             {1025, 1120}, {1728, 100}, {180, 150}, {64, 640}, {288, 1003}
             , {1220, 1120}, {1216, 425}, {1600, 790}, {672, 224}, {672, 652}};
@@ -49,7 +56,12 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop("/sound/openScene.wav",-1);
+        ruleButton = new Button(810,555,150,70,ImageController.getInstance().tryGet("/tutorial.png"));
+        exitButton = new Button(810,485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
+        tutorialClose=new gameobj.button.Button(0,20,48,48, ImageController.getInstance().tryGet("/button/close.png"));
         talkRoomScene = new TalkRoomScene(password);
+        tutorialImg = ImageController.getInstance().tryGet("/rule.png");
         talkRoomScene.sceneBegin();
         talkRoomScene.setHeader(String.valueOf(aliens.get(0).getNum()));
         map = new Map();
@@ -170,7 +182,8 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneEnd() {
-
+        AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
+        AudioResourceController.getInstance().stop("/sound/killppl.wav");
     }
 
     @Override
@@ -192,6 +205,7 @@ public class GameScene extends Scene {
                             if (aliens.get(0).isDone(task)) {
                                 return;
                             }
+                            AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
                             taskController.changePopUp(taskItems.get(i).getTask());
                             taskController.getCurrentPopUp().setFinish(() -> aliens.get(0).setDone(task));
                             return;
@@ -202,6 +216,7 @@ public class GameScene extends Scene {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).kill();
+                            AudioResourceController.getInstance().shot("/sound/killppl.wav");
                             aliens.get(0).setSwordNum();
                             aliens.get(0).useSword();
                             ArrayList<String> str = new ArrayList<>();
@@ -217,6 +232,7 @@ public class GameScene extends Scene {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();
+                            AudioResourceController.getInstance().shot("/sound/killppl.wav");
                             aliens.get(0).setSwordNum();
                             aliens.get(0).useSword();
                             ArrayList<String> str = new ArrayList<>();
@@ -226,6 +242,12 @@ public class GameScene extends Scene {
                             ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
                             return;
                         }
+                    }
+                    if(ruleButton.state(e.getPoint())){
+                        tutorial = true;
+                    }
+                    if(tutorialClose.state(e.getPoint())){
+                        tutorial = false;
                     }
                     break;
 
@@ -238,6 +260,7 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
+                AudioResourceController.getInstance().play("/sound/walk.wav");
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -261,6 +284,7 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
+                AudioResourceController.getInstance().stop("/sound/walk.wav");
                 talkRoomScene.keyListener().keyReleased(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -312,11 +336,7 @@ public class GameScene extends Scene {
         }
 
         g.setColor(Color.BLACK);
-        for (int i = 0; i < forGame.size(); i++) {
-            if (cam.isCollision(forGame.get(i))) {
-                paintShadow(g, forGame.get(i));
-            }
-        }
+
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
                 forGame.get(i).paint(g);
@@ -327,6 +347,11 @@ public class GameScene extends Scene {
             taskItems.get(i).paint(g);
         }
         backgroundItem.paint(g);
+        for (int i = 0; i < forGame.size(); i++) {
+            if (cam.isCollision(forGame.get(i))) {
+                paintShadow(g, forGame.get(i));
+            }
+        }
         cam.paint(g);
         cam.end(g);
         //畫劍
@@ -335,6 +360,12 @@ public class GameScene extends Scene {
         }
         if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().paint(g);
+        }
+        ruleButton.paint(g);
+        exitButton.paint(g);
+        if(tutorial){
+            g.drawImage(tutorialImg, 50,20,null);
+            tutorialClose.paint(g);
         }
         talkRoomScene.paint(g);
     }
