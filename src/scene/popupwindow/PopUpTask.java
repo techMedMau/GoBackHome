@@ -76,7 +76,7 @@ public abstract class PopUpTask extends PopUpWindows{
     @Override
     public void update() {
         if(isDone){
-            AudioResourceController.getInstance().shot("/sound/don.wav");
+//            AudioResourceController.getInstance().shot("/sound/don.wav");
         }
     }
 

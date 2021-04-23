@@ -45,6 +45,7 @@ public class GameScene extends Scene {
     private Button exitButton;
     private Image tutorialImg;
     public Button tutorialClose;
+
     private static int[][] location = new int[][]{
             {1025, 1120}, {1728, 100}, {180, 150}, {64, 640}, {288, 1003}
             , {1220, 1120}, {1216, 425}, {1600, 790}, {672, 224}, {672, 652}};
@@ -65,7 +66,8 @@ public class GameScene extends Scene {
 //        AudioResourceController.getInstance().loop("/sound/openScene.wav", -1);
         ruleButton = new Button(810, 555, 150, 70, ImageController.getInstance().tryGet("/tutorial.png"));
         exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
-        tutorialClose = new gameobj.button.Button(0, 20, 48, 48, ImageController.getInstance().tryGet("/button/close.png"));
+        tutorialClose = new gameobj.button.Button(0, 20, 48, 48
+                , ImageController.getInstance().tryGet("/button/close.png"));
         talkRoomScene = new TalkRoomScene(password);
         tutorialImg = ImageController.getInstance().tryGet("/rule.png");
         talkRoomScene.sceneBegin();
@@ -239,7 +241,7 @@ public class GameScene extends Scene {
                         }
                     }
                     //殺活人
-                    for (int i = 1; i < aliens.size(); i++) {
+                    for (int i = 0; i < aliens.size(); i++) {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).kill();
@@ -255,7 +257,7 @@ public class GameScene extends Scene {
                         }
                     }
                     //殺zombie
-                    for (int i = 1; i < aliens.size(); i++) {
+                    for (int i = 0; i < aliens.size(); i++) {
                         if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
                             aliens.get(i).death();

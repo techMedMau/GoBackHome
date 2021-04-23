@@ -58,12 +58,12 @@ public class WaitingScene extends Scene {
     public void sceneEnd() {
         AudioResourceController.getInstance().stop("/sound/waitingScene.wav");
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
-        aliens=null;
-        startButton=null;
-        mapLoader=null;
-        talkRoomScene.sceneEnd();
-        talkRoomScene=null;
-        exitButton=null;
+//        aliens=null;
+//        startButton=null;
+//        mapLoader=null;
+//        talkRoomScene.sceneEnd();
+//        talkRoomScene=null;
+//        exitButton=null;
 
     }
 
