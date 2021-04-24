@@ -40,7 +40,11 @@ public class PopUpFindPic extends PopUpTask{
 
     @Override
     public void sceneEnd() {
-
+        img=null;
+        buttons=null;
+        buttonsAfter=null;
+        tmp=null;
+        super.sceneEnd();
     }
 
     @Override
@@ -71,13 +75,15 @@ public class PopUpFindPic extends PopUpTask{
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
                     for(int i = 0 ; i < buttons.size(); i ++){
                         if(buttons.get(i).state(e.getPoint())){
                             tmp = buttons.get(i);
+                            return;
                         }
                     }
+                    super.mouseListener().mouseTrig(e,state,trigTime);
                     break;
+
             }
         };
     }

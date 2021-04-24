@@ -16,7 +16,6 @@ public class PopUpColorChange extends PopUpTask {
     private boolean click;
     private boolean click2;
     private Image finish;
-    private TaskController.Task task;
 
     @Override
     public void sceneBegin() {
@@ -30,10 +29,17 @@ public class PopUpColorChange extends PopUpTask {
                 , ImageController.getInstance().tryGet("/colorChange/greenTrans.png"));
         this.button2 = new Button(400,400, 80,80
                 , ImageController.getInstance().tryGet("/colorChange/yellowTrans.png"));
-        this.task = TaskController.Task.COLOR_CHANGE;
     }
     @Override
     public void sceneEnd(){
+        img=null;
+        img2=null;
+        button=null;
+        button2=null;
+        green=null;
+        yellow=null;
+        finish=null;
+        super.sceneEnd();
 
     }
 
@@ -69,7 +75,6 @@ public class PopUpColorChange extends PopUpTask {
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
                     if(button.state(e.getPoint())){
                         click = true;
                         return;
@@ -78,6 +83,7 @@ public class PopUpColorChange extends PopUpTask {
                         click2 = true;
                         return;
                     }
+                    super.mouseListener().mouseTrig(e,state,trigTime);
                     break;
             }
         };

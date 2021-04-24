@@ -26,7 +26,7 @@ public abstract class PopUpTask extends PopUpWindows{
     public void sceneBegin() {
         this.img = ImageController.getInstance().tryGet("/sheet.png");
         finish = ImageController.getInstance().tryGet("/password/finish.png");
-        close=new gameobj.button.Button(110,50,48,48, ImageController.getInstance().tryGet("/button/close.png"));
+        close=new Button(110,50,48,48, ImageController.getInstance().tryGet("/button/close.png"));
         this.isDone = false;
         show();
     }
@@ -54,7 +54,7 @@ public abstract class PopUpTask extends PopUpWindows{
                         if(isDone&&isFinish != null){
                             isFinish.whenFinished();
                         }
-                        disShow();
+                        sceneEnd();
                         break;
                     }
                     break;

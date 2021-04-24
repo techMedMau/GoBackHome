@@ -34,6 +34,10 @@ public class PopUpCreateRoom extends PopUpWindows{
     @Override
     public void sceneEnd() {
         disShow();
+        img=null;
+        playNums=null;
+        cancelButton=null;
+        confirmButton=null;
 
     }
 
@@ -68,7 +72,6 @@ public class PopUpCreateRoom extends PopUpWindows{
                         }
 
                         if (playNums.getTarget() != 0){
-                            sceneEnd();
                             WaitingScene waitingScene=new WaitingScene(str,playNums.getTarget(),ClientClass.getInstance().getID());
                             Global.WAIT_SCENES.put(str,waitingScene);
                             ArrayList<String> strCreat=new ArrayList<>();
@@ -77,6 +80,7 @@ public class PopUpCreateRoom extends PopUpWindows{
                             strCreat.add(String.valueOf(ClientClass.getInstance().getID()));
                             ClientClass.getInstance().sent(Global.InternetCommand.CREATE,strCreat);
                             SceneController.getInstance().changeScene(waitingScene);
+                            sceneEnd();
                             return;
                         }
                         break;

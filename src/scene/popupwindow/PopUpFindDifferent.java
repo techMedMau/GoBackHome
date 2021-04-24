@@ -50,6 +50,9 @@ public class PopUpFindDifferent extends PopUpTask{
 
     @Override
     public void sceneEnd() {
+        keyPairs.clear();
+        tmp=null;
+        super.sceneEnd();
 
     }
 
@@ -58,7 +61,6 @@ public class PopUpFindDifferent extends PopUpTask{
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
                     for(int i = 0; i < keyPairs.size(); i ++){
                         keyPairs.get(i).card.changeState(e.getPoint());
                     }
@@ -90,6 +92,7 @@ public class PopUpFindDifferent extends PopUpTask{
                             break;
                         }
                     }
+                    super.mouseListener().mouseTrig(e,state,trigTime);
                     break;
             }
         };

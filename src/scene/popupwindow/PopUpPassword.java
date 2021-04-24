@@ -17,7 +17,9 @@ public class PopUpPassword extends PopUpTask {
     private ArrayList<Button> code;
     private ArrayList<Button> input;
 
-    public PopUpPassword(){
+    @Override
+    public void sceneBegin(){
+        super.sceneBegin();
         buttons = new ArrayList<>();
         code = new ArrayList<>();
         input = new ArrayList<>();
@@ -36,6 +38,15 @@ public class PopUpPassword extends PopUpTask {
         code.add(buttons.get(1));
         code.add(buttons.get(3));
         code.add(buttons.get(6));
+    }
+    @Override
+    public void sceneEnd(){
+        password=null;
+        buttons=null;
+        delay=null;
+        code=null;
+        input=null;
+        super.sceneEnd();
     }
 
     public void paint(Graphics g){
@@ -78,7 +89,6 @@ public class PopUpPassword extends PopUpTask {
         return (e, state, trigTime) -> {
             switch (state) {
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e, state, trigTime);
                     int i;
                     for( i = 0; i < buttons.size(); i ++){
                         if(buttons.get(i).state(e.getPoint())){
@@ -86,15 +96,10 @@ public class PopUpPassword extends PopUpTask {
                             break;
                         }
                     }
-//                    檢查測試用
-//                    for(int k = 0; k < input.size(); k++){
-//                        System.out.println(input.get(k));
-//                    }
-
                     if (i<buttons.size()){
                         break;
                     }
-
+                    super.mouseListener().mouseTrig(e, state, trigTime);
                     break;
             }
         };

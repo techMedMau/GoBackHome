@@ -11,13 +11,21 @@ public class PopUpPush extends PopUpTask{
     private Button dot;
     private Button dotTest;
 
-
-    public PopUpPush(){
+    @Override
+    public void sceneBegin(){
+        super.sceneBegin();
         this.img = ImageController.getInstance().tryGet("/push/push.png");
         this.dot = new Button(465,350,80,80
                 , ImageController.getInstance().tryGet("/push/yellow.png"));
         this.dotTest = new Button(465,190,80,80
                 , ImageController.getInstance().tryGet("/push/yellow.png"));
+    }
+    @Override
+    public void sceneEnd(){
+        img=null;
+        dot=null;
+        dotTest=null;
+        super.sceneEnd();
     }
 
     @Override
@@ -44,11 +52,11 @@ public class PopUpPush extends PopUpTask{
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
                     if(510 >= e.getPoint().getX() && e.getPoint().getX() >= 500
                             && 235 >= e.getPoint().getY() && e.getPoint().getY() >= 225){
                         setDone(true);
                     }
+                    super.mouseListener().mouseTrig(e,state,trigTime);
                     break;
             }
         };
