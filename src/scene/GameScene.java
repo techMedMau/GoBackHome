@@ -62,6 +62,7 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop("/sound/bgm.wav", -1);
         ruleButton = new Button(810, 555, 150, 70, ImageController.getInstance().tryGet("/tutorial.png"));
         exitButton = new Button(810, 485, 150, 70, ImageController.getInstance().tryGet("/exit.png"));
         tutorialClose = new gameobj.button.Button(0, 20, 48, 48
@@ -316,9 +317,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-                    AudioResourceController.getInstance().play("/sound/walk.wav");
-                }
+//                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+//                    AudioResourceController.getInstance().play("/sound/walk.wav");
+//                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
