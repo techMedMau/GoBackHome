@@ -12,13 +12,19 @@ import utils.Global;
 public class PopUpRock extends PopUpTask{
     private Image background;
     private ArrayList<Rock> rocks;
-
-    public PopUpRock() {
+    @Override
+    public void sceneBegin(){
         this.background = ImageController.getInstance().tryGet("/rock/taskBackground.png");
         this.rocks = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             rocks.add(new Rock());
         }
+    }
+    @Override
+    public void sceneEnd(){
+        background=null;
+        rocks=null;
+        super.sceneEnd();
     }
 
     @Override
@@ -59,13 +65,13 @@ public class PopUpRock extends PopUpTask{
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
                     for(int i = 0; i < rocks.size(); i++){
                         if(rocks.get(i).isClicked(e.getPoint())){
                             rocks.remove(i);
                             break;
                         }
                     }
+                    super.mouseListener().mouseTrig(e,state,trigTime);
                     break;
             }
         };

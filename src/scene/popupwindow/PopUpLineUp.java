@@ -18,9 +18,11 @@ public class PopUpLineUp extends PopUpTask {
     private boolean line2;
     private boolean line3;
     private boolean line4;
-    private TaskController.Task task;
 
-    public PopUpLineUp(){
+
+    @Override
+    public void sceneBegin(){
+        super.sceneBegin();
         keyPairs = new ArrayList<>();
         lines = new ArrayList<>();
         this.keyPairs.add(new KeyPair(new Button(300,100,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))
@@ -35,7 +37,13 @@ public class PopUpLineUp extends PopUpTask {
         this.line2 = false;
         this.line3 = false;
         this.line4 = false;
-        this.task = TaskController.Task.LINE_UP;
+    }
+    @Override
+    public void sceneEnd(){
+        keyPairs=null;
+        tmp=null;
+        lines=null;
+        super.sceneEnd();
     }
 
 
@@ -77,7 +85,6 @@ public class PopUpLineUp extends PopUpTask {
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
                     int i;
                     for(i = 0; i < keyPairs.size(); i++) {
                         if (keyPairs.get(i).button.state(e.getPoint())) {
@@ -92,7 +99,6 @@ public class PopUpLineUp extends PopUpTask {
                     System.out.println(tmp);
                     for(int k = 0; k < keyPairs.size(); k++) {
                         if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
-//                            System.out.println(keyPairs.get(k).button1);
                             if(k == 0){
                                 line1 = true;
                             }
@@ -108,7 +114,7 @@ public class PopUpLineUp extends PopUpTask {
                         }
                      }
                     tmp = null;
-//
+                    super.mouseListener().mouseTrig(e,state,trigTime);
                     break;
             }
         };

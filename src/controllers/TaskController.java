@@ -16,12 +16,8 @@ public class TaskController {
     public PopUpTask changePopUp(Task task){
         PopUpTask popUpTask=task.getPopUp();
         if (popUpTask!=null){
-            PopUpTask tmp = currentPopUp;
             popUpTask.sceneBegin();
             this.currentPopUp = popUpTask;
-            if (tmp!=null){
-                tmp.sceneEnd();
-            }
         }
         return currentPopUp;
 
