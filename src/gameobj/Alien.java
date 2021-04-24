@@ -48,6 +48,53 @@ public class Alien extends GameObject implements ClickState, Range {
         H
     }
 
+    private static HashMap<State, Animator> getDeadAnimator(AlienType type) {
+        switch (type) {
+            case A:
+                HashMap<State, Animator> map = new HashMap<>();
+                map.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p1.png"))));
+                return map;
+            case B:
+                HashMap<State, Animator> map1 = new HashMap<>();
+                map1.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p2.png"))));
+                return map1;
+            case C:
+                HashMap<State, Animator> map2 = new HashMap<>();
+                map2.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p3.png"))));
+                return map2;
+            case D:
+                HashMap<State, Animator> map3 = new HashMap<>();
+                map3.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p4.png"))));
+                return map3;
+            case E:
+                HashMap<State, Animator> map4 = new HashMap<>();
+                map4.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p5.png"))));
+                return map4;
+            case F:
+                HashMap<State, Animator> map5 = new HashMap<>();
+                map5.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p6.png"))));
+                return map5;
+            case G:
+                HashMap<State, Animator> map6 = new HashMap<>();
+                map6.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p7.png"))));
+                return map6;
+            case H:
+                HashMap<State, Animator> map7 = new HashMap<>();
+                map7.put(State.STAND_RIGHT, new Animator(1, Arrays.asList(
+                        ImageController.getInstance().tryGet("/player/p8.png"))));
+                return map7;
+            default:
+                return null;
+        }
+    }
+
     private static HashMap<State, Animator> getDeathAnimator(AlienType type){
         switch (type) {
             case A:
@@ -598,6 +645,7 @@ public class Alien extends GameObject implements ClickState, Range {
     public void setSwordNum(){
         swordsNum--;
     }
+
     public int getSwordsNum(){
         return swordsNum;
     }
