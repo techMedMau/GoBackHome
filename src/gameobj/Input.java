@@ -67,6 +67,7 @@ public class Input extends GameObject  {
         return num.length();
     }
 
+    //delete
     public void substring() {
         delay.loop();
         if (delay.count()){
