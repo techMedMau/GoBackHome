@@ -50,22 +50,21 @@ public class PopUpLineUp extends PopUpTask {
     @Override
     public void paint(Graphics g){
         super.paint(g);
+        if(line1) {
+            g.drawLine(324, 124, 624, 324);
+        }
+        if(line2){
+            g.drawLine(324,224,624,124);
+        }
+        if(line3){
+            g.drawLine(324,324,624,424);
+        }
+        if(line4){
+            g.drawLine(324,424,624,224);
+        }
         for(int i = 0; i < keyPairs.size(); i ++){
             keyPairs.get(i).button.paint(g);
             keyPairs.get(i).button1.paint(g);
-        }
-
-        if(line1) {
-            g.drawLine(348, 124, 600, 324);
-        }
-        if(line2){
-            g.drawLine(348,224,600,124);
-        }
-        if(line3){
-            g.drawLine(348,324,600,424);
-        }
-        if(line4){
-            g.drawLine(348,424,600,224);
         }
         if(isDone()){
             g.drawImage(finish, 350,125,null);
@@ -83,40 +82,45 @@ public class PopUpLineUp extends PopUpTask {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
-            switch (state){
-                case CLICKED:
-                    int i;
-                    for(i = 0; i < keyPairs.size(); i++) {
-                        if (keyPairs.get(i).button.state(e.getPoint())) {
-                            tmp = keyPairs.get(i).button1;
-                            break;
+            if (!isDone()){
+                switch (state){
+                    case CLICKED:
+                        int i;
+                        for(i = 0; i < keyPairs.size(); i++) {
+                            if (tmp==null){
+                                if (keyPairs.get(i).button.state(e.getPoint())) {
+                                    tmp = keyPairs.get(i).button1;
+                                    return;
+                                }
+                                if (keyPairs.get(i).button1.state(e.getPoint())) {
+                                    tmp = keyPairs.get(i).button;
+                                    return;
+                                }
+                            }
                         }
-                    }
-                    if (i<keyPairs.size()){
-                        System.out.println("!");
+                        for(int k = 0; k < keyPairs.size(); k++) {
+                            if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())||
+                                    tmp == keyPairs.get(k).button && keyPairs.get(k).button.state(e.getPoint())) {
+                                if(k == 0){
+                                    line1 = true;
+                                }
+                                if(k == 1){
+                                    line2 = true;
+                                }
+                                if(k == 2){
+                                    line3 = true;
+                                }
+                                if(k == 3){
+                                    line4 = true;
+                                }
+                                break;
+                            }
+                        }
+                        tmp = null;
                         break;
-                    }
-                    System.out.println(tmp);
-                    for(int k = 0; k < keyPairs.size(); k++) {
-                        if (tmp == keyPairs.get(k).button1 && keyPairs.get(k).button1.state(e.getPoint())) {
-                            if(k == 0){
-                                line1 = true;
-                            }
-                            if(k == 1){
-                                line2 = true;
-                            }
-                            if(k == 2){
-                                line3 = true;
-                            }
-                            if(k == 3){
-                                line4 = true;
-                            }
-                        }
-                     }
-                    tmp = null;
-                    super.mouseListener().mouseTrig(e,state,trigTime);
-                    break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 

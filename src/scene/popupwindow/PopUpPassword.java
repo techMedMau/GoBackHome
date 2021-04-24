@@ -87,21 +87,23 @@ public class PopUpPassword extends PopUpTask {
     public CommandSolver.MouseListener mouseListener() {
 
         return (e, state, trigTime) -> {
-            switch (state) {
-                case CLICKED:
-                    int i;
-                    for( i = 0; i < buttons.size(); i ++){
-                        if(buttons.get(i).state(e.getPoint())){
-                            input.add(buttons.get(i));
+            if (!isDone()){
+                switch (state) {
+                    case CLICKED:
+                        int i;
+                        for( i = 0; i < buttons.size(); i ++){
+                            if(buttons.get(i).state(e.getPoint())){
+                                input.add(buttons.get(i));
+                                break;
+                            }
+                        }
+                        if (i<buttons.size()){
                             break;
                         }
-                    }
-                    if (i<buttons.size()){
                         break;
-                    }
-                    super.mouseListener().mouseTrig(e, state, trigTime);
-                    break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 

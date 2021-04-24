@@ -65,28 +65,28 @@ public class PopUpCenter extends PopUpTask{
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
-            switch (state){
-                case CLICKED:
-                    super.mouseListener().mouseTrig(e,state,trigTime);
-                    break;
-                case DRAGGED:
-                    if(isControlled){
-                        x = (int)(e.getPoint().getX());
-                        y = (int)(e.getPoint().getY());
-                        aim.collider().setCenter(x,y);
-                        aim.painter().setCenter(x,y);
-                    }
-                    break;
-                case PRESSED:
-                    if(e.getPoint().getX()<aim.collider().right() && e.getPoint().getX()>aim.collider().left()
-                    && e.getPoint().getY()>aim.collider().top() && e.getPoint().getY()<aim.collider().bottom()){
-                        isControlled = true;
-                    }
-                    break;
-                case RELEASED:
-                    isControlled = false;
-                    break;
+            if (!isDone()){
+                switch (state){
+                    case DRAGGED:
+                        if(isControlled){
+                            x = (int)(e.getPoint().getX());
+                            y = (int)(e.getPoint().getY());
+                            aim.collider().setCenter(x,y);
+                            aim.painter().setCenter(x,y);
+                        }
+                        break;
+                    case PRESSED:
+                        if(e.getPoint().getX()<aim.collider().right() && e.getPoint().getX()>aim.collider().left()
+                                && e.getPoint().getY()>aim.collider().top() && e.getPoint().getY()<aim.collider().bottom()){
+                            isControlled = true;
+                        }
+                        break;
+                    case RELEASED:
+                        isControlled = false;
+                        break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 

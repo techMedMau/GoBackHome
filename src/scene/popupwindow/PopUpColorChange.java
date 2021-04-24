@@ -73,19 +73,21 @@ public class PopUpColorChange extends PopUpTask {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
-            switch (state){
-                case CLICKED:
-                    if(button.state(e.getPoint())){
-                        click = true;
-                        return;
-                    }
-                    if(button2.state(e.getPoint())){
-                        click2 = true;
-                        return;
-                    }
-                    super.mouseListener().mouseTrig(e,state,trigTime);
-                    break;
+            if (!isDone()){
+                switch (state){
+                    case CLICKED:
+                        if(button.state(e.getPoint())){
+                            click = true;
+                            return;
+                        }
+                        if(button2.state(e.getPoint())){
+                            click2 = true;
+                            return;
+                        }
+                        break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 

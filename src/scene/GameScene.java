@@ -119,6 +119,13 @@ public class GameScene extends Scene {
 
         declare = new Button(855, 390, 92, 96, ImageController.getInstance().tryGet("/button/declare.png"));
         winPicture = new Delay(300);
+        WindowClose.setCloseAction(() -> {
+            if (aliens.size()!=0){
+                exit();
+            }
+            ClientClass.getInstance().disConnect();
+            System.exit(0);
+        });
     }
 
     //分職業
@@ -298,17 +305,22 @@ public class GameScene extends Scene {
                         return;
                     }
                     if (exitButton.state(e.getPoint())){
-                        ArrayList<String> str=new ArrayList<>();
-                        str.add(password);
-                        str.add(String.valueOf(aliens.get(0).getId()));
-                        ClientClass.getInstance().sent(Global.InternetCommand.EXIT,str);
-                        aliens.remove(0);
                         SceneController.getInstance().changeScene(new OpenScene());
                         return;
                     }
                     break;
             }
         };
+    }
+    public void exit(){
+        ArrayList<String> str = new ArrayList<>();
+        str.add(password);
+        str.add(String.valueOf(aliens.get(0).getId()));
+        if (aliens.get(0).getId() == homeOwner && aliens.size() > 1) {
+            homeOwner = aliens.get(1).getId();
+            str.add(String.valueOf(homeOwner));
+        }
+        ClientClass.getInstance().sent(Global.InternetCommand.EXIT, str);
     }
 
 
@@ -317,9 +329,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-//                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-//                    AudioResourceController.getInstance().play("/sound/walk.wav");
-//                }
+                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+                    AudioResourceController.getInstance().play("/sound/walk.wav");
+                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -545,10 +557,21 @@ public class GameScene extends Scene {
                             winPicture.play();
                             break;
                         case Global.InternetCommand.EXIT:
-                            for (int i=0;i<aliens.size();i++){
-                                if (Integer.parseInt(strs.get(1))==aliens.get(i).getId()){
-                                    aliens.remove(i);
-                                    break;
+                            if ( serialNum != ClientClass.getInstance().getID()) {
+                                for (int i = 1; i < aliens.size(); i++) {
+                                    if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
+                                        aliens.remove(i);
+                                        break;
+                                    }
+                                }
+                                if (strs.size()==3){
+                                    for (int i = 0; i < aliens.size(); i++) {
+                                        if (Integer.parseInt(strs.get(2)) == aliens.get(i).getId()) {
+                                            homeOwner=aliens.get(i).getId();
+                                            break;
+                                        }
+                                    }
+
                                 }
                             }
                             break;

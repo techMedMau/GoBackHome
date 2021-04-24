@@ -4,9 +4,9 @@ import controllers.ImageController;
 import utils.Global;
 
 import java.awt.*;
-import java.util.ArrayList;
+import gameobj.button.Button;
 
-public class Rock extends GameObject {
+public class Rock extends Button {
 
     public enum Picture{
         A("/rock/1.png"),
@@ -23,20 +23,21 @@ public class Rock extends GameObject {
     }
 
     private Image img;
-    private int x;
-    private int y;
     private Picture pic;
 
     public Rock() {
-        super(Global.random(0,960), Global.random(0,640), 32, 32);
-        x = Global.random(1,4);
-        pic = Picture.values()[Global.random(0,4)];
-        img = ImageController.getInstance().tryGet(pic.path);
+        super(250, Global.random(140,473), 32, 32,
+                ImageController.getInstance().tryGet(Picture.values()[Global.random(0,4)].path));
+
     }
 
     public void moveDir(){
-                this.translateX(1);
-                this.translateY(1);
+        this.translateX(1);
+        if (left()<450){
+            this.translateY(-1);
+        }else if (left()>500){
+            this.translateY(1);
+        }
     }
 
     public boolean isShow(){
@@ -49,13 +50,9 @@ public class Rock extends GameObject {
                 || this.painter().bottom()>473 || this.painter().top()<140;
     }
 
-    public boolean isClicked(Point point){
-        return point.getX() < 650 && point.getX() > 140 && point.getY() > 140 && point.getY() < 473;
-    }
-
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img, painter().left(),painter().top(),null);
+        super.paintComponent(g);
     }
 
     @Override

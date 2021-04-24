@@ -1,6 +1,7 @@
 import controllers.SceneController;
 import scene.OpenScene;
 
+import scene.Scene;
 import utils.CommandSolver;
 import utils.GameKernel;
 import utils.Global;
@@ -24,11 +25,13 @@ public class Main {
                         .add(KeyEvent.VK_CAPS_LOCK,Global.KeyCommand.CAPS_LOCK.getValue())
                         .next().keyCleanMode().trackChar().subscribe(sceneController)
         ).paint(sceneController).update(sceneController).gen();
-        jframe.setSize(Global.WINDOW_WIDTH,Global.WINDOW_HEIGHT+20);
+        jframe.setSize(Global.WINDOW_WIDTH+20,Global.WINDOW_HEIGHT+40);
         jframe.setTitle("Return Home");
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //設置關閉時結束程式
         jframe.add(gameKernel);
+        jframe.addWindowListener(new Scene.WindowClose());
         jframe.setVisible(true);
         gameKernel.run();
     }
+
 }

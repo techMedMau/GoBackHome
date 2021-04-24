@@ -61,42 +61,44 @@ public class PopUpFindDifferent extends PopUpTask{
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
-            switch (state){
-                case CLICKED:
-                    for(int i = 0; i < keyPairs.size(); i ++){
-                        keyPairs.get(i).card.changeState(e.getPoint());
-                    }
-                    for(int i = 0; i < keyPairs.size(); i ++){
-                        keyPairs.get(i).card1.changeState(e.getPoint());
-                    }
-                    for(int i = 0; i < keyPairs.size(); i++) {
-                        if (keyPairs.get(i).card1.state(e.getPoint())
-                                && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card1)){
-                            keyPairs.get(i).card1.setState(Card.State.SHOW);
-                            keyPairs.get(i).card.setState(Card.State.SHOW);
-                            tmp = null;
-                            break;
-                        }else if(keyPairs.get(i).card.state(e.getPoint())
-                                && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card)){
-                            keyPairs.get(i).card1.setState(Card.State.SHOW);
-                            keyPairs.get(i).card.setState(Card.State.SHOW);
-                            tmp = null;
-                            break;
+            if (!isDone()){
+                switch (state){
+                    case CLICKED:
+                        for(int i = 0; i < keyPairs.size(); i ++){
+                            keyPairs.get(i).card.changeState(e.getPoint());
                         }
-                    }
+                        for(int i = 0; i < keyPairs.size(); i ++){
+                            keyPairs.get(i).card1.changeState(e.getPoint());
+                        }
+                        for(int i = 0; i < keyPairs.size(); i++) {
+                            if (keyPairs.get(i).card1.state(e.getPoint())
+                                    && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card1)){
+                                keyPairs.get(i).card1.setState(Card.State.SHOW);
+                                keyPairs.get(i).card.setState(Card.State.SHOW);
+                                tmp = null;
+                                break;
+                            }else if(keyPairs.get(i).card.state(e.getPoint())
+                                    && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card)){
+                                keyPairs.get(i).card1.setState(Card.State.SHOW);
+                                keyPairs.get(i).card.setState(Card.State.SHOW);
+                                tmp = null;
+                                break;
+                            }
+                        }
 
-                    for(int i = 0; i< keyPairs.size(); i++){
-                        if (keyPairs.get(i).card1.state(e.getPoint())){
-                            tmp = keyPairs.get(i).getPartner(keyPairs.get(i).card1);
-                            break;
-                        }else if(keyPairs.get(i).card.state(e.getPoint())) {
-                            tmp = keyPairs.get(i).getPartner(keyPairs.get(i).card);
-                            break;
+                        for(int i = 0; i< keyPairs.size(); i++){
+                            if (keyPairs.get(i).card1.state(e.getPoint())){
+                                tmp = keyPairs.get(i).getPartner(keyPairs.get(i).card1);
+                                break;
+                            }else if(keyPairs.get(i).card.state(e.getPoint())) {
+                                tmp = keyPairs.get(i).getPartner(keyPairs.get(i).card);
+                                break;
+                            }
                         }
-                    }
-                    super.mouseListener().mouseTrig(e,state,trigTime);
-                    break;
+                        break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 

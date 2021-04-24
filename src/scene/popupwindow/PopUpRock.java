@@ -14,6 +14,7 @@ public class PopUpRock extends PopUpTask{
     private ArrayList<Rock> rocks;
     @Override
     public void sceneBegin(){
+        super.sceneBegin();
         this.background = ImageController.getInstance().tryGet("/rock/taskBackground.png");
         this.rocks = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -47,8 +48,8 @@ public class PopUpRock extends PopUpTask{
         for(int i = 0; i < rocks.size(); i++) {
             rocks.get(i).update();
             if(rocks.get(i).isOutside()){
-                int x = Global.random(250,650);
-                int y = Global.random(140,473);
+                int x = 250+32;
+                int y = Global.random(150,450);
                 rocks.get(i).painter().setCenter(x,y);
                 rocks.get(i).collider().setCenter(x,y);
             }
@@ -63,17 +64,19 @@ public class PopUpRock extends PopUpTask{
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
-            switch (state){
-                case CLICKED:
-                    for(int i = 0; i < rocks.size(); i++){
-                        if(rocks.get(i).isClicked(e.getPoint())){
-                            rocks.remove(i);
-                            break;
+            if (!isDone()){
+                switch (state){
+                    case CLICKED:
+                        for(int i = 0; i < rocks.size(); i++){
+                            if(rocks.get(i).state(e.getPoint())){
+                                rocks.remove(i);
+                                break;
+                            }
                         }
-                    }
-                    super.mouseListener().mouseTrig(e,state,trigTime);
-                    break;
+                        break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 

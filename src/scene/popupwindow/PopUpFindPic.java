@@ -73,18 +73,19 @@ public class PopUpFindPic extends PopUpTask{
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (e, state, trigTime) -> {
-            switch (state){
-                case CLICKED:
-                    for(int i = 0 ; i < buttons.size(); i ++){
-                        if(buttons.get(i).state(e.getPoint())){
-                            tmp = buttons.get(i);
-                            return;
+            if (!isDone()){
+                switch (state){
+                    case CLICKED:
+                        for(int i = 0 ; i < buttons.size(); i ++){
+                            if(buttons.get(i).state(e.getPoint())){
+                                tmp = buttons.get(i);
+                                return;
+                            }
                         }
-                    }
-                    super.mouseListener().mouseTrig(e,state,trigTime);
-                    break;
-
+                        break;
+                }
             }
+            super.mouseListener().mouseTrig(e,state,trigTime);
         };
     }
 
