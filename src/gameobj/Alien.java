@@ -358,7 +358,8 @@ public class Alien extends GameObject implements ClickState, Range {
    public enum AliveState {
         ALIVE,
        ZOMBIE,
-       DEATH
+       DEATH,
+       DEAD
    }
 
     public enum State {
@@ -662,6 +663,10 @@ public class Alien extends GameObject implements ClickState, Range {
         this.aliveState = aliveState;
         if(aliveState == AliveState.ZOMBIE){
             stateAnimator = getDeathAnimator(alienType);
+            stateAnimator.get(currentState).play();
+        }
+        if(aliveState == AliveState.DEAD){
+            stateAnimator = getDeadAnimator(alienType);
             stateAnimator.get(currentState).play();
         }
     }
