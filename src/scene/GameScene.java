@@ -425,7 +425,7 @@ public class GameScene extends Scene {
         for (int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
                 aliens.get(i).paint(g);
-                if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH&&aliens.get(0).getSwordsNum()>0){
+                if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH&&aliens.get(0).getSwordsNum()>0&&aliens.get(0).isTriggered(aliens.get(i))){
                     g.setColor(Color.RED);
                     if (aliens.get(0).getKillDelay().isPlaying()){
                         g.drawString(String.valueOf(aliens.get(0).getKillDelay().getCount()/60), aliens.get(i).painter().centerX() - 8, aliens.get(i).collider().top()-8);

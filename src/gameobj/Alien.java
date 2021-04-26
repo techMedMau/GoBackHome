@@ -30,12 +30,6 @@ public class Alien extends GameObject implements ClickState, Range {
         return x>painter().left() && x<painter().right()&&
                 y>painter().top() && y<painter().bottom();
     }
-    public void setTraitor(){
-        isTraitor=true;
-    }
-    public boolean isTraitor(){
-        return isTraitor;
-    }
 
     public enum AlienType {
         A,
@@ -396,7 +390,6 @@ public class Alien extends GameObject implements ClickState, Range {
     private AlienType alienType;
     private int ID;
     private int num;
-    private boolean isTraitor;
     private int swordsNum;
     private HashSet<TaskController.Task> tasks;
     private Image sword;
@@ -439,7 +432,6 @@ public class Alien extends GameObject implements ClickState, Range {
         stateAnimator.get(currentState).play();
         horizontalDir = verticalDir = Global.Direction.NO_DIR;
         this.num = num;
-        this.isTraitor = false;
         this.swordsNum = 0;
         this.tasks = new HashSet<>();
         this.sword = ImageController.getInstance().tryGet("/sword.png");
