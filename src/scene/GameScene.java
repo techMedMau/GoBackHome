@@ -116,6 +116,7 @@ public class GameScene extends Scene {
                 }
             }
             witchNum = (aliens.size() + deadBody.size()) / 2;
+            System.out.println(witchNum);
             assignRole();
         }
 
@@ -215,6 +216,7 @@ public class GameScene extends Scene {
     public void sceneEnd() {
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
         AudioResourceController.getInstance().stop("/sound/killppl.wav");
+        Global.setSPEED(2);
         aliens=null;
         deadBody=null;
         cam=null;

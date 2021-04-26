@@ -105,8 +105,8 @@ public class Global {
         return (int) (Math.random() * (max - min + 1) + min);
     }
 
-    public static void reduceSPEED(){
-        MOVE_SPEED = 1;
+    public static void setSPEED(int speed){
+        MOVE_SPEED = speed;
     }
 
 }

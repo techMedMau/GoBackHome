@@ -615,7 +615,7 @@ public class Alien extends GameObject implements ClickState, Range {
         currentState = State.STAND_RIGHT;
         stateAnimator = getDeathAnimator(alienType);
         stateAnimator.get(currentState).play();
-        Global.reduceSPEED();
+        Global.setSPEED(1);
         collider().setTop(top()+20);
     }
 
