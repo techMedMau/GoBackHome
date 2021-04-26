@@ -346,8 +346,8 @@ public class WaitingScene extends Scene {
                     }
                     break;
                 case Global.InternetCommand.EXIT:
-                    if (password.equals(strs.get(0)) && serialNum != ClientClass.getInstance().getID()) {
-                        for (int i = 1; i < aliens.size(); i++) {
+                    if (password.equals(strs.get(0))) {
+                        for (int i = 0; i < aliens.size(); i++) {
                             if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
                                 aliens.remove(i);
                                 currentPlay--;
