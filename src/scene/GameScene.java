@@ -293,7 +293,7 @@ public class GameScene extends Scene {
                         }
                     }
                     if (declare.state(e.getPoint())) {
-                        winPicture.play();
+                        Alien.Role winRole = null;
                         for (int i = 1; i < aliens.size(); i++) {
                             if (aliens.get(0).getRole() != aliens.get(i).getRole()) {
                                 winRole = aliens.get(i).getRole();
@@ -588,6 +588,8 @@ public class GameScene extends Scene {
                             }
                             winRole = Alien.Role.valueOf(strs.get(1));
                             winPicture.play();
+                            AudioResourceController.getInstance().stop("/sound/bgm.wav");
+                            AudioResourceController.getInstance().play("/sound/victory.wav");
                             break;
                         case Global.InternetCommand.EXIT:
                             if ( serialNum != ClientClass.getInstance().getID()) {
@@ -613,21 +615,22 @@ public class GameScene extends Scene {
             }
         });
         talkRoomScene.update();
-        int count = 0;
-        Alien tmp = null;
-        for (int i = 0; i < aliens.size(); i++) {
-            if (aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
-                count++;
-                tmp = aliens.get(i);
+        if (ClientClass.getInstance().getID()==homeOwner){
+            int count = 0;
+            Alien tmp = null;
+            for (int i = 0; i < aliens.size(); i++) {
+                if (aliens.get(i).getAliveState() != Alien.AliveState.DEATH) {
+                    count++;
+                    tmp = aliens.get(i);
+                }
+            }
+            if (count == 1 && tmp != null) {
+                ArrayList<String> str1=new ArrayList<>();
+                str1.add(password);
+                str1.add(tmp.getRole().name());
+                ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE,str1);
             }
         }
-        if (count == 1 && tmp != null) {
-            winRole = tmp.getRole();
-            winPicture.play();
-            AudioResourceController.getInstance().stop("/sound/bgm.wav");
-            AudioResourceController.getInstance().play("/sound/victory.wav");
-        }
-
     }
 
     public void createTaskBox() {

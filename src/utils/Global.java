@@ -21,6 +21,7 @@ public class Global {
         public static final int WITCH_DEAD = 13;
         public static final int WIN_ROLE = 14;
         public static final int EXIT = 15;
+        public static final int ANNOUNCE_WIN = 16;
     }
     public enum KeyCommand{
         SHIFT(5),
