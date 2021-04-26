@@ -473,10 +473,10 @@ public class Alien extends GameObject implements ClickState, Range {
         }
             switch (horizontalDir) {
                 case LEFT:
-                    if (verticalDir == Global.Direction.DOWN&&aliveState != AliveState.DEAD) {
+                    if (verticalDir == Global.Direction.DOWN&&aliveState != AliveState.ZOMBIE) {
                         translateX(-(int) (moveSpeed / (Math.sqrt(2))));
                         translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (verticalDir == Global.Direction.UP&&aliveState != AliveState.DEAD) {
+                    } else if (verticalDir == Global.Direction.UP&&aliveState != AliveState.ZOMBIE) {
                         translateX(-(int) (moveSpeed / (Math.sqrt(2))));
                         translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else {
@@ -484,10 +484,10 @@ public class Alien extends GameObject implements ClickState, Range {
                     }
                     break;
                 case RIGHT:
-                    if (verticalDir == Global.Direction.DOWN&&aliveState != AliveState.DEAD) {
+                    if (verticalDir == Global.Direction.DOWN&&aliveState != AliveState.ZOMBIE) {
                         translateX((int) (moveSpeed / (Math.sqrt(2))));
                         translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (verticalDir == Global.Direction.UP&&aliveState != AliveState.DEAD) {
+                    } else if (verticalDir == Global.Direction.UP&&aliveState != AliveState.ZOMBIE) {
                         translateX((int) (moveSpeed / (Math.sqrt(2))));
                         translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else {
@@ -497,10 +497,10 @@ public class Alien extends GameObject implements ClickState, Range {
             }
             switch (verticalDir) {
                 case UP:
-                    if (horizontalDir == Global.Direction.RIGHT&&aliveState != AliveState.DEAD) {
+                    if (horizontalDir == Global.Direction.RIGHT&&aliveState != AliveState.ZOMBIE) {
                         translateX((int) (moveSpeed / (Math.sqrt(2))));
                         translateY(-(int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (horizontalDir == Global.Direction.LEFT&&aliveState != AliveState.DEAD) {
+                    } else if (horizontalDir == Global.Direction.LEFT&&aliveState != AliveState.ZOMBIE) {
                         translateX(-(int) (moveSpeed / (Math.sqrt(2))));
                         translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else {
@@ -508,10 +508,10 @@ public class Alien extends GameObject implements ClickState, Range {
                     }
                     break;
                 case DOWN:
-                    if (horizontalDir == Global.Direction.RIGHT&&aliveState != AliveState.DEAD) {
+                    if (horizontalDir == Global.Direction.RIGHT&&aliveState != AliveState.ZOMBIE) {
                         translateX((int) (moveSpeed / (Math.sqrt(2))));
                         translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (horizontalDir == Global.Direction.LEFT&&aliveState != AliveState.DEAD) {
+                    } else if (horizontalDir == Global.Direction.LEFT&&aliveState != AliveState.ZOMBIE) {
                         translateX((int) (-moveSpeed / (Math.sqrt(2))));
                         translateY((int) (moveSpeed / (Math.sqrt(2))));
                     } else {
