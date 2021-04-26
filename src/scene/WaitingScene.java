@@ -177,6 +177,7 @@ public class WaitingScene extends Scene {
             homeOwner = aliens.get(1).getId();
             str.add(String.valueOf(homeOwner));
         }
+        currentPlay--;
         ClientClass.getInstance().sent(Global.InternetCommand.EXIT, str);
     }
 
