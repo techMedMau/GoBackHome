@@ -350,6 +350,7 @@ public class WaitingScene extends Scene {
                         for (int i = 1; i < aliens.size(); i++) {
                             if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
                                 aliens.remove(i);
+                                currentPlay--;
                                 break;
                             }
                         }
