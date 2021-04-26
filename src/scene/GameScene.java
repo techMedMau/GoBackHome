@@ -520,6 +520,7 @@ public class GameScene extends Scene {
         ClientClass.getInstance().consume(new CommandReceiver() {
             @Override
             public void receive(int serialNum, int commandCode, ArrayList<String> strs) {
+                if (strs.size()==0){return;}
                 if (strs.get(0).equals(password)) {
                     switch (commandCode) {
                         case Global.InternetCommand.MOVE:
