@@ -154,7 +154,7 @@ public class GameScene extends Scene {
                     deadBody.get(select).setRole();
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
-                    str.add(deadBody.get(select).toString());
+                    str.add(String.valueOf(deadBody.get(select).getNum()));
                     ClientClass.getInstance().sent(Global.InternetCommand.WITCH_DEAD, str);
                     break;
                 }
@@ -443,19 +443,19 @@ public class GameScene extends Scene {
         }
 
         //背景物品陰影
-        for (int i = 0; i < backgroundItem.size(); i++) {
-            if (cam.isCollision(backgroundItem.get(i))) {
-                paintShadow(g,backgroundItem.get(i));
-            }
-        }
+//        for (int i = 0; i < backgroundItem.size(); i++) {
+//            if (cam.isCollision(backgroundItem.get(i))) {
+//                paintShadow(g,backgroundItem.get(i));
+//            }
+//        }
         flowers.paint(g);
 
         g.setColor(Color.BLACK);
-        for (int i = 0; i < forGame.size(); i++) {
-            if (cam.isCollision(forGame.get(i))) {
-                paintShadow(g, forGame.get(i));
-            }
-        }
+//        for (int i = 0; i < forGame.size(); i++) {
+//            if (cam.isCollision(forGame.get(i))) {
+//                paintShadow(g, forGame.get(i));
+//            }
+//        }
 
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
@@ -571,8 +571,7 @@ public class GameScene extends Scene {
                             break;
                         case Global.InternetCommand.WITCH_DEAD:
                             for (int i = 0; i < deadBody.size(); i++) {
-                                System.out.println("deadBody");
-                                if (deadBody.get(i).toString() == strs.get(1)) {
+                                if (deadBody.get(i).getNum() == Integer.parseInt(strs.get(1))) {
                                     deadBody.get(i).setRole();
                                 }
                             }
