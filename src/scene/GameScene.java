@@ -34,7 +34,7 @@ public class GameScene extends Scene {
     private ArrayList<TaskItem> taskItems;
     private TaskController taskController;
     private int homeOwner;
-    private BackgroundItem backgroundItem;
+    private ArrayList<BackgroundItem> backgroundItem;
     private String password;
     private int playMax;
     private int witchNum;
@@ -73,16 +73,17 @@ public class GameScene extends Scene {
         talkRoomScene.setHeader(String.valueOf(aliens.get(0).getNum()));
         map = new Map();
         deadBody = new ArrayList<>();
-        backGround = ImageController.getInstance().tryGet("/map/background.png");
+        backGround = ImageController.getInstance().tryGet("/map/unknown.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.SCREEN_X, Global.SCREEN_Y).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
         createTaskBox();
         taskController = TaskController.getTaskController();
-        this.backgroundItem = new BackgroundItem("/arrowRight.png", 500, 500 + 32, 28, 8, 500, 500, 64, 64);
+        setBackGround();
         this.locationNum = Global.random(0, 9);
         aliens.get(0).painter().setCenter(location[locationNum][0], location[locationNum][1]);
         aliens.get(0).collider().setCenter(location[locationNum][0], location[locationNum][1]);
+        aliens.get(0).collider().setTop(aliens.get(0).top()+5);
         //-----做屍體
         if (aliens.get(0).getId() == homeOwner) {
             ArrayList<Integer> locations = new ArrayList<>();
@@ -159,6 +160,19 @@ public class GameScene extends Scene {
         }
     }
 
+    //setBackGround
+    public void setBackGround() {
+        backgroundItem = new ArrayList<>();
+        backgroundItem.add(new BackgroundItem("/arrowRight.png", 832, 928 + 32, 28, 8, 832, 928, 64, 64));
+        backgroundItem.add(new BackgroundItem("/Stone.png", 1636, 200, 100, 90, 1636, 200, 128, 128));
+        backgroundItem.add(new BackgroundItem("/Stone.png", 1636, 300, 100, 90, 1636, 300, 128, 128));
+        backgroundItem.add(new BackgroundItem("/box.png", 690, 325, 75, 23, 710, 300, 128, 71));
+        for (int i = 0; i < 6; i++) {
+            backgroundItem.add(new BackgroundItem("/flower.png", 850+ i * 40, 530, 32, 63, 850+ i * 40, 530, 32, 63));
+        }
+        backgroundItem.add(new BackgroundItem("/monster1.png", 564, 518, 100, 20, 564, 458, 150, 150));
+    }
+
     //做屍體
     public void createDeadBody(int z) {
         int n;
@@ -187,6 +201,7 @@ public class GameScene extends Scene {
         tmp.collider().setCenter(location[z][0], location[z][1]);
 //        tmp.setAliveState(Alien.AliveState.ZOMBIE);
         tmp.setAliveState(Alien.AliveState.DEAD);
+        tmp.painter().setTop(tmp.painter().top()+20);
         deadBody.add(tmp);
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
@@ -313,6 +328,7 @@ public class GameScene extends Scene {
             }
         };
     }
+
     public void exit(){
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
@@ -330,9 +346,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-                    AudioResourceController.getInstance().play("/sound/walk.wav");
-                }
+//                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+//                    AudioResourceController.getInstance().play("/sound/walk.wav");
+//                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -404,8 +420,8 @@ public class GameScene extends Scene {
         }
         if (aliens.get(0).getAliveState() == Alien.AliveState.ZOMBIE) {
             for (int i = 0; i < deadBody.size(); i++) {
-                g.setColor(Color.BLACK);
-                g.drawString(deadBody.get(i).getRole().name(), deadBody.get(i).painter().centerX() - 32, deadBody.get(i).painter().centerY());
+                    g.setColor(Color.BLACK);
+                    g.drawString(deadBody.get(i).getRole().name(), deadBody.get(i).painter().centerX() - 32, deadBody.get(i).painter().centerY() - 22);
             }
         }
         for (int i = 0; i < aliens.size(); i++) {
@@ -426,6 +442,13 @@ public class GameScene extends Scene {
             deadBody.get(i).paint(g);
         }
 
+        //背景物品陰影
+        for (int i = 0; i < backgroundItem.size(); i++) {
+            if (cam.isCollision(backgroundItem.get(i))) {
+                paintShadow(g,backgroundItem.get(i));
+            }
+        }
+
         g.setColor(Color.BLACK);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
@@ -440,9 +463,18 @@ public class GameScene extends Scene {
         }
 
         for (int i = 0; i < taskItems.size(); i++) {
-            taskItems.get(i).paint(g);
+            if (cam.isCollision(taskItems.get(i))) {
+                taskItems.get(i).paint(g);
+            }
         }
-        backgroundItem.paint(g);
+
+        for (int i = 0; i < backgroundItem.size(); i++) {
+            if (cam.isCollision(backgroundItem.get(i))) {
+                backgroundItem.get(i).paint(g);
+            }
+        }
+
+
 
         cam.paint(g);
         cam.end(g);
@@ -592,6 +624,8 @@ public class GameScene extends Scene {
 //        if (count == 1 && tmp != null) {
 //            winRole = tmp.getRole();
 //            winPicture.play();
+//            AudioResourceController.getInstance().stop("/sound/bgm.wav");
+//            AudioResourceController.getInstance().play("/sound/victory.wav");
 //        }
 
     }
@@ -601,7 +635,7 @@ public class GameScene extends Scene {
         taskItems.add(new TaskItem("/taskBox/greenBox.png", 32, 80, TaskController.Task.PUSH));
         taskItems.add(new TaskItem("/taskBox/redBox.png", 790, 1110, TaskController.Task.FIND_PIC));
         taskItems.add(new TaskItem("/taskBox/warningBox.png", 570, 985, TaskController.Task.LINE_UP));
-        taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 450, TaskController.Task.PASSWORD));
+        taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 525, TaskController.Task.PASSWORD));
         taskItems.add(new TaskItem("/taskBox/blueBox.png", 1755, 900, TaskController.Task.CENTER));
         taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
         taskItems.add(new TaskItem("/taskBox/blackBox.png", 880, 370, TaskController.Task.COLOR_CHANGE));
@@ -786,10 +820,12 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).leftIsCollision(backgroundItem)) {
-                    aliens.get(0).translateX(Global.MOVE_SPEED);
-                    break;
+                for (int i = 0; i < backgroundItem.size(); i++) {
+                    if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
+                            aliens.get(0).leftIsCollision(backgroundItem.get(i))) {
+                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        break;
+                    }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i))
@@ -807,10 +843,12 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).rightIsCollision(backgroundItem)) {
-                    aliens.get(0).translateX(-Global.MOVE_SPEED);
-                    break;
+                for (int i = 0; i < backgroundItem.size(); i++) {
+                    if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
+                            aliens.get(0).rightIsCollision(backgroundItem.get(i))) {
+                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        break;
+                    }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&
@@ -831,10 +869,12 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).bottomIsCollision(backgroundItem)) {
-                    aliens.get(0).translateY(-Global.MOVE_SPEED);
-                    break;
+                for (int i = 0; i < backgroundItem.size(); i++) {
+                    if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
+                            aliens.get(0).bottomIsCollision(backgroundItem.get(i))) {
+                        aliens.get(0).translateY(-Global.MOVE_SPEED);
+                        break;
+                    }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&
@@ -852,10 +892,12 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
-                if (aliens.get(0).isCollision(backgroundItem) &&
-                        aliens.get(0).topIsCollision(backgroundItem)) {
-                    aliens.get(0).translateY(Global.MOVE_SPEED);
-                    break;
+                for (int i = 0; i < backgroundItem.size(); i++) {
+                    if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
+                            aliens.get(0).topIsCollision(backgroundItem.get(i))) {
+                        aliens.get(0).translateY(Global.MOVE_SPEED);
+                        break;
+                    }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&

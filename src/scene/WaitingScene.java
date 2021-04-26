@@ -325,7 +325,8 @@ public class WaitingScene extends Scene {
                         if (String.valueOf(ClientClass.getInstance().getID()).equals(strs.get(2))) {
                             ArrayList<String> str = new ArrayList<>();
                             talkRoomScene.setHeader(strs.get(1));
-                            aliens.add(new Alien(400, 300, Integer.parseInt(strs.get(1))));
+                            Alien alien = new Alien(400, 300, Integer.parseInt(strs.get(1)));
+                            aliens.add(alien);
                             str.add(String.valueOf(400));
                             str.add(String.valueOf(300));
                             str.add(strs.get(1));
