@@ -38,6 +38,7 @@ public abstract class PopUpTask extends PopUpWindows{
         img=null;
         finish=null;
         isFinish=null;
+        this.isDone = false;
 
     }
 

@@ -13,7 +13,6 @@ public class PopUpLineUp extends PopUpTask {
 
     private ArrayList<KeyPair> keyPairs;
     private Button tmp;
-    private ArrayList<Image> lines;
     private boolean line1;
     private boolean line2;
     private boolean line3;
@@ -24,7 +23,6 @@ public class PopUpLineUp extends PopUpTask {
     public void sceneBegin(){
         super.sceneBegin();
         keyPairs = new ArrayList<>();
-        lines = new ArrayList<>();
         this.keyPairs.add(new KeyPair(new Button(300,100,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))
                 , new Button(600,300,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))));
         this.keyPairs.add(new KeyPair(new Button(300,200,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))
@@ -42,7 +40,6 @@ public class PopUpLineUp extends PopUpTask {
     public void sceneEnd(){
         keyPairs=null;
         tmp=null;
-        lines=null;
         super.sceneEnd();
     }
 

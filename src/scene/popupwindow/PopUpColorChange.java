@@ -39,6 +39,8 @@ public class PopUpColorChange extends PopUpTask {
         green=null;
         yellow=null;
         finish=null;
+        click=false;
+        click2=false;
         super.sceneEnd();
 
     }
