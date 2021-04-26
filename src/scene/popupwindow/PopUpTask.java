@@ -46,6 +46,7 @@ public abstract class PopUpTask extends PopUpWindows{
         return (e, state, trigTime) -> {
             switch (state){
                 case CLICKED:
+                    AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
                     if(!getShow()){
                         show();
                         break;
