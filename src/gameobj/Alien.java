@@ -471,54 +471,55 @@ public class Alien extends GameObject implements ClickState, Range {
         if (aliveState == AliveState.DEATH){
             return;
         }
-            switch (horizontalDir) {
-                case LEFT:
-                    if (verticalDir == Global.Direction.DOWN&&aliveState != AliveState.ZOMBIE) {
-                        translateX(-(int) (moveSpeed / (Math.sqrt(2))));
-                        translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (verticalDir == Global.Direction.UP&&aliveState != AliveState.ZOMBIE) {
-                        translateX(-(int) (moveSpeed / (Math.sqrt(2))));
-                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
-                    } else {
-                        translateX(-moveSpeed);
-                    }
-                    break;
-                case RIGHT:
-                    if (verticalDir == Global.Direction.DOWN&&aliveState != AliveState.ZOMBIE) {
-                        translateX((int) (moveSpeed / (Math.sqrt(2))));
-                        translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (verticalDir == Global.Direction.UP&&aliveState != AliveState.ZOMBIE) {
-                        translateX((int) (moveSpeed / (Math.sqrt(2))));
-                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
-                    } else {
-                        translateX(moveSpeed);
-                    }
-                    break;
-            }
-            switch (verticalDir) {
-                case UP:
-                    if (horizontalDir == Global.Direction.RIGHT&&aliveState != AliveState.ZOMBIE) {
-                        translateX((int) (moveSpeed / (Math.sqrt(2))));
-                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (horizontalDir == Global.Direction.LEFT&&aliveState != AliveState.ZOMBIE) {
-                        translateX(-(int) (moveSpeed / (Math.sqrt(2))));
-                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
-                    } else {
-                        translateY(-moveSpeed);
-                    }
-                    break;
-                case DOWN:
-                    if (horizontalDir == Global.Direction.RIGHT&&aliveState != AliveState.ZOMBIE) {
-                        translateX((int) (moveSpeed / (Math.sqrt(2))));
-                        translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else if (horizontalDir == Global.Direction.LEFT&&aliveState != AliveState.ZOMBIE) {
-                        translateX((int) (-moveSpeed / (Math.sqrt(2))));
-                        translateY((int) (moveSpeed / (Math.sqrt(2))));
-                    } else {
-                        translateY(moveSpeed);
-                    }
-                    break;
-            }
+
+        switch (horizontalDir) {
+            case LEFT:
+                if (verticalDir == Global.Direction.DOWN) {
+                    translateX(-(int) (moveSpeed / (Math.sqrt(2))));
+                    translateY((int) (moveSpeed / (Math.sqrt(2))));
+                } else if (verticalDir == Global.Direction.UP) {
+                    translateX(-(int) (moveSpeed / (Math.sqrt(2))));
+                    translateY(-(int) (moveSpeed / (Math.sqrt(2))));
+                } else {
+                    translateX(-moveSpeed);
+                }
+                break;
+            case RIGHT:
+                if (verticalDir == Global.Direction.DOWN) {
+                    translateX((int) (moveSpeed / (Math.sqrt(2))));
+                    translateY((int) (moveSpeed / (Math.sqrt(2))));
+                } else if (verticalDir == Global.Direction.UP) {
+                    translateX((int) (moveSpeed / (Math.sqrt(2))));
+                    translateY(-(int) (moveSpeed / (Math.sqrt(2))));
+                } else {
+                    translateX(moveSpeed);
+                }
+                break;
+        }
+        switch (verticalDir) {
+            case UP:
+                if (horizontalDir == Global.Direction.RIGHT) {
+                    translateX((int) (moveSpeed / (Math.sqrt(2))));
+                    translateY(-(int) (moveSpeed / (Math.sqrt(2))));
+                } else if (horizontalDir == Global.Direction.LEFT) {
+                    translateX(-(int) (moveSpeed / (Math.sqrt(2))));
+                    translateY(-(int) (moveSpeed / (Math.sqrt(2))));
+                } else {
+                    translateY(-moveSpeed);
+                }
+                break;
+            case DOWN:
+                if (horizontalDir == Global.Direction.RIGHT) {
+                    translateX((int) (moveSpeed / (Math.sqrt(2))));
+                    translateY((int) (moveSpeed / (Math.sqrt(2))));
+                } else if (horizontalDir == Global.Direction.LEFT) {
+                    translateX((int) (-moveSpeed / (Math.sqrt(2))));
+                    translateY((int) (moveSpeed / (Math.sqrt(2))));
+                } else {
+                    translateY(moveSpeed);
+                }
+                break;
+        }
         if(killDelay.count()){
             ableToKill = true;
         }
@@ -532,12 +533,18 @@ public class Alien extends GameObject implements ClickState, Range {
         if (aliveState == AliveState.DEATH){
             return;
         }
+        if (aliveState == AliveState.ZOMBIE&&horizontalDir!= Global.Direction.NO_DIR){
+            return;
+        }
         this.verticalDir = dir;
         setState();
     }
 
     public void setHorizontalDir(Global.Direction dir) {
         if (aliveState == AliveState.DEATH){
+            return;
+        }
+        if (aliveState == AliveState.ZOMBIE&&verticalDir!= Global.Direction.NO_DIR){
             return;
         }
         this.horizontalDir = dir;
