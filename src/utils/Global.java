@@ -73,7 +73,7 @@ public class Global {
     public static HashMap<String,WaitingScene> WAIT_SCENES=new HashMap<>();
 
     public static final boolean IS_DEBUG = false;
-    public static final String SERVE_IP="192.168.1.18";
+    public static final String SERVE_IP="192.168.1.44";
 
     public static final String FONT="Carlibri";
     public static void log(String str) {
@@ -99,14 +99,10 @@ public class Global {
     public static final int FRAME_LIMIT = 60;
     public static final int LIMIT_DELTA_TIME = 1000000000 / FRAME_LIMIT;
     //人物移動速度
-    public static int MOVE_SPEED = 2;
+
 
     public static int random(int min, int max) {
         return (int) (Math.random() * (max - min + 1) + min);
-    }
-
-    public static void setSPEED(int speed){
-        MOVE_SPEED = speed;
     }
 
 }

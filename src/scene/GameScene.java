@@ -216,7 +216,6 @@ public class GameScene extends Scene {
     public void sceneEnd() {
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
         AudioResourceController.getInstance().stop("/sound/killppl.wav");
-        Global.setSPEED(2);
         aliens=null;
         deadBody=null;
         cam=null;
@@ -347,9 +346,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-                    AudioResourceController.getInstance().play("/sound/walk.wav");
-                }
+//                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+//                    AudioResourceController.getInstance().play("/sound/walk.wav");
+//                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -572,6 +571,7 @@ public class GameScene extends Scene {
                             break;
                         case Global.InternetCommand.WITCH_DEAD:
                             for (int i = 0; i < deadBody.size(); i++) {
+                                System.out.println("deadBody");
                                 if (deadBody.get(i).toString() == strs.get(1)) {
                                     deadBody.get(i).setRole();
                                 }
@@ -819,27 +819,27 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i))
                             && aliens.get(0).leftIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        aliens.get(0).translateX(aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < backgroundItem.size(); i++) {
                     if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
                             aliens.get(0).leftIsCollision(backgroundItem.get(i))) {
-                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        aliens.get(0).translateX(aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i))
                             && aliens.get(0).leftIsCollision(taskItems.get(i))) {
-                        aliens.get(0).translateX(Global.MOVE_SPEED);
+                        aliens.get(0).translateX(aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 if (aliens.get(0).isCollision(flowers)
                         && aliens.get(0).leftIsCollision(flowers)) {
-                    aliens.get(0).translateX(Global.MOVE_SPEED);
+                    aliens.get(0).translateX(aliens.get(0).getSpeed());
                     break;
                 }
                 break;
@@ -847,27 +847,27 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).rightIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        aliens.get(0).translateX(-aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < backgroundItem.size(); i++) {
                     if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
                             aliens.get(0).rightIsCollision(backgroundItem.get(i))) {
-                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        aliens.get(0).translateX(-aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&
                             aliens.get(0).rightIsCollision(taskItems.get(i))) {
-                        aliens.get(0).translateX(-Global.MOVE_SPEED);
+                        aliens.get(0).translateX(-aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 if (aliens.get(0).isCollision(flowers)
                         && aliens.get(0).rightIsCollision(flowers)) {
-                    aliens.get(0).translateX(-Global.MOVE_SPEED);
+                    aliens.get(0).translateX(-aliens.get(0).getSpeed());
                     break;
                 }
                 break;
@@ -878,27 +878,27 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).bottomIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateY(-Global.MOVE_SPEED);
+                        aliens.get(0).translateY(-aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < backgroundItem.size(); i++) {
                     if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
                             aliens.get(0).bottomIsCollision(backgroundItem.get(i))) {
-                        aliens.get(0).translateY(-Global.MOVE_SPEED);
+                        aliens.get(0).translateY(-aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&
                             aliens.get(0).bottomIsCollision(taskItems.get(i))) {
-                        aliens.get(0).translateY(-Global.MOVE_SPEED);
+                        aliens.get(0).translateY(-aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 if (aliens.get(0).isCollision(flowers)
                         && aliens.get(0).bottomIsCollision(flowers)) {
-                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+                    aliens.get(0).translateY(-aliens.get(0).getSpeed());
                     break;
                 }
                 break;
@@ -906,27 +906,27 @@ public class GameScene extends Scene {
                 for (int i = 0; i < forGame.size(); i++) {
                     if (aliens.get(0).isCollision(forGame.get(i)) &&
                             aliens.get(0).topIsCollision(forGame.get(i))) {
-                        aliens.get(0).translateY(Global.MOVE_SPEED);
+                        aliens.get(0).translateY(aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < backgroundItem.size(); i++) {
                     if (aliens.get(0).isCollision(backgroundItem.get(i)) &&
                             aliens.get(0).topIsCollision(backgroundItem.get(i))) {
-                        aliens.get(0).translateY(Global.MOVE_SPEED);
+                        aliens.get(0).translateY(aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 for (int i = 0; i < taskItems.size(); i++) {
                     if (aliens.get(0).isCollision(taskItems.get(i)) &&
                             aliens.get(0).topIsCollision(taskItems.get(i))) {
-                        aliens.get(0).translateY(Global.MOVE_SPEED);
+                        aliens.get(0).translateY(aliens.get(0).getSpeed());
                         break;
                     }
                 }
                 if (aliens.get(0).isCollision(flowers)
                         && aliens.get(0).topIsCollision(flowers)) {
-                    aliens.get(0).translateY(Global.MOVE_SPEED);
+                    aliens.get(0).translateY(aliens.get(0).getSpeed());
                     break;
                 }
                 break;

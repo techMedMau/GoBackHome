@@ -404,6 +404,7 @@ public class Alien extends GameObject implements ClickState, Range {
     private AliveState aliveState;
     private Delay killDelay;
     private boolean ableToKill;
+    private int moveSpeed;
 
     public Alien(int x, int y, int num) {
         super(x, y, 54, 73);
@@ -446,6 +447,13 @@ public class Alien extends GameObject implements ClickState, Range {
         this.aliveState = AliveState.ALIVE;
         this.killDelay = new Delay(480);
         ableToKill = true;
+        moveSpeed = 2;
+    }
+    public void reduceSpeed(){
+        moveSpeed = 1;
+    }
+    public int getSpeed(){
+        return moveSpeed;
     }
 
     public void setRole() {
@@ -460,7 +468,6 @@ public class Alien extends GameObject implements ClickState, Range {
         swordsNum++;
         tasks.add(task);
     }
-//
     public boolean isDone(TaskController.Task task){
         return tasks.contains(task);
     }
@@ -478,48 +485,48 @@ public class Alien extends GameObject implements ClickState, Range {
             switch (horizontalDir) {
                 case LEFT:
                     if (verticalDir == Global.Direction.DOWN) {
-                        translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX(-(int) (moveSpeed / (Math.sqrt(2))));
+                        translateY((int) (moveSpeed / (Math.sqrt(2))));
                     } else if (verticalDir == Global.Direction.UP) {
-                        translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX(-(int) (moveSpeed / (Math.sqrt(2))));
+                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else {
-                        translateX(-Global.MOVE_SPEED);
+                        translateX(-moveSpeed);
                     }
                     break;
                 case RIGHT:
                     if (verticalDir == Global.Direction.DOWN) {
-                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX((int) (moveSpeed / (Math.sqrt(2))));
+                        translateY((int) (moveSpeed / (Math.sqrt(2))));
                     } else if (verticalDir == Global.Direction.UP) {
-                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX((int) (moveSpeed / (Math.sqrt(2))));
+                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else {
-                        translateX(Global.MOVE_SPEED);
+                        translateX(moveSpeed);
                     }
                     break;
             }
             switch (verticalDir) {
                 case UP:
                     if (horizontalDir == Global.Direction.RIGHT) {
-                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX((int) (moveSpeed / (Math.sqrt(2))));
+                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else if (horizontalDir == Global.Direction.LEFT) {
-                        translateX(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY(-(int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX(-(int) (moveSpeed / (Math.sqrt(2))));
+                        translateY(-(int) (moveSpeed / (Math.sqrt(2))));
                     } else {
-                        translateY(-Global.MOVE_SPEED);
+                        translateY(-moveSpeed);
                     }
                     break;
                 case DOWN:
                     if (horizontalDir == Global.Direction.RIGHT) {
-                        translateX((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX((int) (moveSpeed / (Math.sqrt(2))));
+                        translateY((int) (moveSpeed / (Math.sqrt(2))));
                     } else if (horizontalDir == Global.Direction.LEFT) {
-                        translateX((int) (-Global.MOVE_SPEED / (Math.sqrt(2))));
-                        translateY((int) (Global.MOVE_SPEED / (Math.sqrt(2))));
+                        translateX((int) (-moveSpeed / (Math.sqrt(2))));
+                        translateY((int) (moveSpeed / (Math.sqrt(2))));
                     } else {
-                        translateY(Global.MOVE_SPEED);
+                        translateY(moveSpeed);
                     }
                     break;
             }
@@ -615,7 +622,7 @@ public class Alien extends GameObject implements ClickState, Range {
         currentState = State.STAND_RIGHT;
         stateAnimator = getDeathAnimator(alienType);
         stateAnimator.get(currentState).play();
-        Global.setSPEED(1);
+        reduceSpeed();
         collider().setTop(top()+20);
     }
 
