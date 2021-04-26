@@ -116,7 +116,6 @@ public class GameScene extends Scene {
                 }
             }
             witchNum = (aliens.size() + deadBody.size()) / 2;
-            System.out.println(witchNum);
             assignRole();
         }
 
@@ -199,7 +198,6 @@ public class GameScene extends Scene {
         Alien tmp = new Alien(location[z][0], location[z][1], n);
         tmp.painter().setCenter(location[z][0], location[z][1]);
         tmp.collider().setCenter(location[z][0], location[z][1]);
-//        tmp.setAliveState(Alien.AliveState.ZOMBIE);
         tmp.setAliveState(Alien.AliveState.DEAD);
         tmp.painter().setTop(tmp.painter().top()+20);
         deadBody.add(tmp);
@@ -443,19 +441,19 @@ public class GameScene extends Scene {
         }
 
         //背景物品陰影
-//        for (int i = 0; i < backgroundItem.size(); i++) {
-//            if (cam.isCollision(backgroundItem.get(i))) {
-//                paintShadow(g,backgroundItem.get(i));
-//            }
-//        }
+        for (int i = 0; i < backgroundItem.size(); i++) {
+            if (cam.isCollision(backgroundItem.get(i))) {
+                paintShadow(g,backgroundItem.get(i));
+            }
+        }
         flowers.paint(g);
 
         g.setColor(Color.BLACK);
-//        for (int i = 0; i < forGame.size(); i++) {
-//            if (cam.isCollision(forGame.get(i))) {
-//                paintShadow(g, forGame.get(i));
-//            }
-//        }
+        for (int i = 0; i < forGame.size(); i++) {
+            if (cam.isCollision(forGame.get(i))) {
+                paintShadow(g, forGame.get(i));
+            }
+        }
 
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
