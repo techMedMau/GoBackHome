@@ -44,6 +44,7 @@ public class GameScene extends Scene {
     private Button exitButton;
     private Image tutorialImg;
     public Button tutorialClose;
+    private BackgroundItem flowers;
 
     private static int[][] location = new int[][]{
             {1025, 1120}, {1728, 100}, {180, 150}, {64, 640}, {288, 1003}
@@ -164,13 +165,11 @@ public class GameScene extends Scene {
     public void setBackGround() {
         backgroundItem = new ArrayList<>();
         backgroundItem.add(new BackgroundItem("/arrowRight.png", 832, 928 + 32, 28, 8, 832, 928, 64, 64));
-        backgroundItem.add(new BackgroundItem("/Stone.png", 1636, 200, 100, 90, 1636, 200, 128, 128));
-        backgroundItem.add(new BackgroundItem("/Stone.png", 1636, 300, 100, 90, 1636, 300, 128, 128));
+        flowers = new BackgroundItem("/flowers.png", 1636,275, 150, 250, 1636,275, 150, 250);
         backgroundItem.add(new BackgroundItem("/box.png", 690, 325, 75, 23, 710, 300, 128, 71));
         for (int i = 0; i < 6; i++) {
             backgroundItem.add(new BackgroundItem("/flower.png", 850+ i * 40, 530, 32, 63, 850+ i * 40, 530, 32, 63));
         }
-        backgroundItem.add(new BackgroundItem("/monster1.png", 564, 518, 100, 20, 564, 458, 150, 150));
     }
 
     //做屍體
@@ -448,6 +447,7 @@ public class GameScene extends Scene {
                 paintShadow(g,backgroundItem.get(i));
             }
         }
+        flowers.paint(g);
 
         g.setColor(Color.BLACK);
         for (int i = 0; i < forGame.size(); i++) {
@@ -637,7 +637,7 @@ public class GameScene extends Scene {
         taskItems.add(new TaskItem("/taskBox/warningBox.png", 570, 985, TaskController.Task.LINE_UP));
         taskItems.add(new TaskItem("/taskBox/woodBox.png", 700, 525, TaskController.Task.PASSWORD));
         taskItems.add(new TaskItem("/taskBox/blueBox.png", 1755, 900, TaskController.Task.CENTER));
-        taskItems.add(new TaskItem("/taskBox/warningWood.png", 1600, 400, TaskController.Task.ROCK));
+        taskItems.add(new TaskItem("/taskBox/warningWood.png", 1536, 400, TaskController.Task.ROCK));
         taskItems.add(new TaskItem("/taskBox/blackBox.png", 880, 370, TaskController.Task.COLOR_CHANGE));
     }
 
@@ -834,6 +834,11 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
+                if (aliens.get(0).isCollision(flowers)
+                        && aliens.get(0).leftIsCollision(flowers)) {
+                    aliens.get(0).translateX(Global.MOVE_SPEED);
+                    break;
+                }
                 break;
             case RIGHT:
                 for (int i = 0; i < forGame.size(); i++) {
@@ -856,6 +861,11 @@ public class GameScene extends Scene {
                         aliens.get(0).translateX(-Global.MOVE_SPEED);
                         break;
                     }
+                }
+                if (aliens.get(0).isCollision(flowers)
+                        && aliens.get(0).rightIsCollision(flowers)) {
+                    aliens.get(0).translateX(-Global.MOVE_SPEED);
+                    break;
                 }
                 break;
         }
@@ -883,6 +893,11 @@ public class GameScene extends Scene {
                         break;
                     }
                 }
+                if (aliens.get(0).isCollision(flowers)
+                        && aliens.get(0).bottomIsCollision(flowers)) {
+                    aliens.get(0).translateY(-Global.MOVE_SPEED);
+                    break;
+                }
                 break;
             case UP:
                 for (int i = 0; i < forGame.size(); i++) {
@@ -905,6 +920,11 @@ public class GameScene extends Scene {
                         aliens.get(0).translateY(Global.MOVE_SPEED);
                         break;
                     }
+                }
+                if (aliens.get(0).isCollision(flowers)
+                        && aliens.get(0).topIsCollision(flowers)) {
+                    aliens.get(0).translateY(Global.MOVE_SPEED);
+                    break;
                 }
                 break;
         }
