@@ -231,6 +231,7 @@ public class WaitingScene extends Scene {
             strr.add(password);
             ClientClass.getInstance().sent(Global.InternetCommand.MOVE, strr);
         }
+        talkRoomScene.update();
         ClientClass.getInstance().consume((serialNum, internetcommand, strs) -> {
             switch (internetcommand) {
                 case Global.InternetCommand.CONNECT:
@@ -364,7 +365,7 @@ public class WaitingScene extends Scene {
                     break;
             }
         });
-        talkRoomScene.update();
+
     }
 
     public MapLoader MapWaitGen() {
