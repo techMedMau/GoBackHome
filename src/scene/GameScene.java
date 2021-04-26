@@ -185,7 +185,8 @@ public class GameScene extends Scene {
         Alien tmp = new Alien(location[z][0], location[z][1], n);
         tmp.painter().setCenter(location[z][0], location[z][1]);
         tmp.collider().setCenter(location[z][0], location[z][1]);
-        tmp.setAliveState(Alien.AliveState.ZOMBIE);
+//        tmp.setAliveState(Alien.AliveState.ZOMBIE);
+        tmp.setAliveState(Alien.AliveState.DEAD);
         deadBody.add(tmp);
         ArrayList<String> str = new ArrayList<>();
         str.add(password);
