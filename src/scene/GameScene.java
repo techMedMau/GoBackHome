@@ -346,9 +346,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-//                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-//                    AudioResourceController.getInstance().play("/sound/walk.wav");
-//                }
+                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+                    AudioResourceController.getInstance().play("/sound/walk.wav");
+                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -622,12 +622,12 @@ public class GameScene extends Scene {
                 tmp = aliens.get(i);
             }
         }
-//        if (count == 1 && tmp != null) {
-//            winRole = tmp.getRole();
-//            winPicture.play();
-//            AudioResourceController.getInstance().stop("/sound/bgm.wav");
-//            AudioResourceController.getInstance().play("/sound/victory.wav");
-//        }
+        if (count == 1 && tmp != null) {
+            winRole = tmp.getRole();
+            winPicture.play();
+            AudioResourceController.getInstance().stop("/sound/bgm.wav");
+            AudioResourceController.getInstance().play("/sound/victory.wav");
+        }
 
     }
 

@@ -153,7 +153,7 @@ public class WaitingScene extends Scene {
             }
             if (state == CommandSolver.MouseState.CLICKED) {
                 AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
-                if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())) {
+                if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())&&currentPlay==playMax) {
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.START, str);
