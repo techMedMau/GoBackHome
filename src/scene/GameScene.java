@@ -645,12 +645,12 @@ public class GameScene extends Scene {
                     tmp = aliens.get(i);
                 }
             }
-//            if (count == 1 && tmp != null) {
-//                ArrayList<String> str1=new ArrayList<>();
-//                str1.add(password);
-//                str1.add(tmp.getRole().name());
-//                ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE,str1);
-//            }
+            if (count == 1 && tmp != null) {
+                ArrayList<String> str1=new ArrayList<>();
+                str1.add(password);
+                str1.add(tmp.getRole().name());
+                ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE,str1);
+            }
         }
     }
 
