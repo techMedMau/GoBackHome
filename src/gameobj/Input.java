@@ -36,7 +36,7 @@ public class Input extends GameObject  {
         g.setFont(fn);
         g.setColor(Color.BLACK);
         if (g.getFontMetrics().stringWidth(num)>=stringLimit){
-            if (!canNewline||strings.size()>8){
+            if (!canNewline||strings.size()>7){
                 if (num.length()==0){
                     if (strings.size()==0){return;}
                     num=strings.get(strings.size()-1);
