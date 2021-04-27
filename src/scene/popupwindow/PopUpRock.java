@@ -12,6 +12,7 @@ import utils.Global;
 public class PopUpRock extends PopUpTask{
     private Image background;
     private ArrayList<Rock> rocks;
+    private Image hint;
     @Override
     public void sceneBegin(){
         super.sceneBegin();
@@ -20,6 +21,7 @@ public class PopUpRock extends PopUpTask{
         for (int i = 0; i < 5; i++) {
             rocks.add(new Rock());
         }
+        this.hint = ImageController.getInstance().tryGet("/rock/rock.png");
     }
     @Override
     public void sceneEnd(){
@@ -31,7 +33,9 @@ public class PopUpRock extends PopUpTask{
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
         g.drawImage(background, 250,140, null);
+        g.drawImage(hint,350,100,null);
         for(int i = 0; i < rocks.size(); i++) {
             if(rocks.get(i).isShow()) {
                 rocks.get(i).paint(g);

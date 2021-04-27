@@ -16,6 +16,7 @@ public class PopUpPassword extends PopUpTask {
     private boolean isShow;
     private ArrayList<Button> code;
     private ArrayList<Button> input;
+    private Image hint;
 
     @Override
     public void sceneBegin(){
@@ -38,6 +39,7 @@ public class PopUpPassword extends PopUpTask {
         code.add(buttons.get(1));
         code.add(buttons.get(3));
         code.add(buttons.get(6));
+        hint = ImageController.getInstance().tryGet("/password/password.png");
     }
     @Override
     public void sceneEnd(){
@@ -51,6 +53,7 @@ public class PopUpPassword extends PopUpTask {
 
     public void paint(Graphics g){
         super.paint(g);
+        g.drawImage(hint, 360, 100, null);
         if(isShow){
             g.drawImage(password, 390,275,null);
         }

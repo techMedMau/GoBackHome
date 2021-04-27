@@ -16,6 +16,7 @@ public class PopUpColorChange extends PopUpTask {
     private boolean click;
     private boolean click2;
     private Image finish;
+    private Image hint;
 
     @Override
     public void sceneBegin() {
@@ -29,6 +30,7 @@ public class PopUpColorChange extends PopUpTask {
                 , ImageController.getInstance().tryGet("/colorChange/greenTrans.png"));
         this.button2 = new Button(400,400, 80,80
                 , ImageController.getInstance().tryGet("/colorChange/yellowTrans.png"));
+        hint = ImageController.getInstance().tryGet("/colorChange/color.png");
     }
     @Override
     public void sceneEnd(){
@@ -48,7 +50,8 @@ public class PopUpColorChange extends PopUpTask {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawImage(img, 500,200, null); //紫
+        g.drawImage(hint,350,100,null);
+        g.drawImage(img, 490,220, null); //紫
         g.drawImage(img2, 600,300, null); //紅
         button.paint(g);
         button2.paint(g);
