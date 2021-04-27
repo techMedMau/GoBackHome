@@ -51,16 +51,16 @@ public class PopUpLineUp extends PopUpTask {
         super.paint(g);
         g.drawImage(hint, 280,100, null);
         if(line1) {
-            g.drawLine(324, 124, 624, 324);
+            g.drawLine(299, 249, 599, 369);
         }
         if(line2){
-            g.drawLine(324,224,624,124);
+            g.drawLine(299,309,599,429);
         }
         if(line3){
-            g.drawLine(324,324,624,424);
+            g.drawLine(299,369,599,309);
         }
         if(line4){
-            g.drawLine(324,424,624,224);
+            g.drawLine(299,429,599,249);
         }
         for(int i = 0; i < keyPairs.size(); i ++){
             keyPairs.get(i).button.paint(g);
