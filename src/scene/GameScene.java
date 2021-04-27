@@ -76,7 +76,7 @@ public class GameScene extends Scene {
         talkRoomScene.setHeader(String.valueOf(aliens.get(0).getNum()));
         map = new Map();
         deadBody = new ArrayList<>();
-        backGround = ImageController.getInstance().tryGet("/map/unknown.png");
+        backGround = ImageController.getInstance().tryGet("/map/1.png");
         mapLoader = MapGameGen();
         cam = new Camera.Builder(Global.SCREEN_X, Global.SCREEN_Y).setChaseObj(aliens.get(0)).gen();
         taskItems = new ArrayList<>();
@@ -375,9 +375,9 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-                if(AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-                    AudioResourceController.getInstance().stop("/sound/walk.wav");
-                }
+//                if(AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+//                    AudioResourceController.getInstance().stop("/sound/walk.wav");
+//                }
                 talkRoomScene.keyListener().keyReleased(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;

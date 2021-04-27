@@ -10,13 +10,15 @@ import gameobj.button.Button;
 public class PopUpPush extends PopUpTask {
     private Image img;
     private Button dot;
+    private Image hint;
 
     @Override
     public void sceneBegin() {
         super.sceneBegin();
         this.img = ImageController.getInstance().tryGet("/push/push.png");
-        this.dot = new Button(465, 350, 80, 80
+        this.dot = new Button(460, 370, 80, 80
                 , ImageController.getInstance().tryGet("/push/yellow.png"));
+        hint = ImageController.getInstance().tryGet("/push/pushHint.png");
     }
 
     @Override
@@ -29,7 +31,8 @@ public class PopUpPush extends PopUpTask {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawImage(img, 310, 140, null);
+        g.drawImage(hint, 360, 100, null);
+        g.drawImage(img, 305, 200, null);
         dot.paint(g);
         if (isDone()) {
             g.drawImage(finish, 350, 125, null);
@@ -39,8 +42,8 @@ public class PopUpPush extends PopUpTask {
     @Override
     public void update() {
         super.update();
-        if (510 >= dot.centerX() && dot.centerX() >= 500
-                && 235 >= dot.centerY() && dot.centerY() >= 225) {
+        if (460 <= dot.centerX() && dot.centerX() <= 540
+                && 305 >= dot.centerY() && dot.centerY() >= 285) {
             setDone(true);
         }
     }
@@ -52,7 +55,7 @@ public class PopUpPush extends PopUpTask {
             if (!isDone()){
                 switch (state) {
                     case DRAGGED:
-                        if (dot.state(e.getPoint()) && 400 >= e.getY() && e.getY() >= 170) {
+                        if (dot.state(e.getPoint()) && 440 >= e.getY() && e.getY() >= 260) {
                             dot.painter().setCenter(dot.centerX(), e.getY());
                             dot.collider().setCenter(dot.centerX(), e.getY());
                         }

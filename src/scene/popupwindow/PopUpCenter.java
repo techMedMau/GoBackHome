@@ -13,11 +13,14 @@ public class PopUpCenter extends PopUpTask{
     private int x;
     private int y;
     private boolean isControlled;
+    private Image hint;
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
         g.drawImage(img, 260, 100, null);
+        g.drawImage(hint,350,70,null);
         aim.paint(g);
         if(isDone()){
             g.drawImage(finish, 350,125,null);
@@ -38,7 +41,7 @@ public class PopUpCenter extends PopUpTask{
         super.sceneBegin();
         this.img = ImageController.getInstance().tryGet("/center/paper.png");
         this.x = 300;
-        this.y = 200;
+        this.y = 300;
         this.aim = new GameObject(x,y,50,50,x,y,200,200) {
             @Override
             public void paintComponent(Graphics g) {
@@ -51,6 +54,7 @@ public class PopUpCenter extends PopUpTask{
             }
         };
         isControlled = false;
+        this.hint = ImageController.getInstance().tryGet("/center/center.png");
     }
 
     @Override

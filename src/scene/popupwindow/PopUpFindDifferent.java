@@ -12,42 +12,44 @@ public class PopUpFindDifferent extends PopUpTask{
     private ArrayList<KeyPair> keyPairs;
     private Card tmp;
     private Image img;
+    private Image hint;
 
     @Override
     public void sceneBegin() {
         super.sceneBegin();
         this.img = ImageController.getInstance().tryGet("/findDifferent/back.png");
         this.keyPairs = new ArrayList<>();
-        this.keyPairs.add(new KeyPair(new Card(270, 200,32,38
+        this.keyPairs.add(new KeyPair(new Card(270, 300,32,38
                         ,ImageController.getInstance().tryGet("/findDifferent/cloud.png"))
                 ,new Card(480,400,32,38
                         ,ImageController.getInstance().tryGet("/findDifferent/cloud.png"))));
 
-        this.keyPairs.add(new KeyPair(new Card(340, 200,32,38
+        this.keyPairs.add(new KeyPair(new Card(340, 300,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/bulb.png")),
                 new Card(270, 400,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/bulb.png"))));
 
-        this.keyPairs.add(new KeyPair(new Card(410, 200,32,38
+        this.keyPairs.add(new KeyPair(new Card(410, 300,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/drop.png")),
                 new Card(620, 400,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/drop.png"))));
 
-        this.keyPairs.add(new KeyPair(new Card(480, 200,32,38
+        this.keyPairs.add(new KeyPair(new Card(480, 300,32,38
                 , ImageController.getInstance().tryGet("/findDifferent/haha.png")),
                 new Card(410, 400,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/haha.png"))));
 
-        this.keyPairs.add(new KeyPair(new Card(550, 200,32,38
+        this.keyPairs.add(new KeyPair(new Card(550, 300,32,38
                 , ImageController.getInstance().tryGet("/findDifferent/heart.png")),
                 new Card(340, 400,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/heart.png"))));
 
-        this.keyPairs.add(new KeyPair(new Card(620, 200,32,38
+        this.keyPairs.add(new KeyPair(new Card(620, 300,32,38
                 , ImageController.getInstance().tryGet("/findDifferent/star.png")),
                 new Card(550, 400,32,38
                         , ImageController.getInstance().tryGet("/findDifferent/star.png"))));
         tmp = null;
+        hint =  ImageController.getInstance().tryGet("/findDifferent/pairs.png");
     }
 
     @Override
@@ -110,7 +112,9 @@ public class PopUpFindDifferent extends PopUpTask{
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
         g.drawImage(img, 205,100,null);
+        g.drawImage(hint, 330,150, null);
         for(int i = 0; i <keyPairs.size(); i++){
             keyPairs.get(i).card.paint(g);
         }

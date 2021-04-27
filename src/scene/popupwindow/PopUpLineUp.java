@@ -17,24 +17,26 @@ public class PopUpLineUp extends PopUpTask {
     private boolean line2;
     private boolean line3;
     private boolean line4;
+    private Image hint;
 
 
     @Override
     public void sceneBegin(){
         super.sceneBegin();
         keyPairs = new ArrayList<>();
-        this.keyPairs.add(new KeyPair(new Button(300,100,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))
-                , new Button(600,300,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))));
-        this.keyPairs.add(new KeyPair(new Button(300,200,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))
-                , new Button(600,100,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))));
-        this.keyPairs.add(new KeyPair(new Button(300,300,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"))
-                , new Button(600,400,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"))));
-        this.keyPairs.add(new KeyPair(new Button(300,400,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))
-                , new Button(600,200,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))));
+        this.keyPairs.add(new KeyPair(new Button(275,225,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))
+                , new Button(575,345,48,48,ImageController.getInstance().tryGet("/lineUp/gold.png"))));
+        this.keyPairs.add(new KeyPair(new Button(275,285,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))
+                , new Button(575,405,48,48,ImageController.getInstance().tryGet("/lineUp/diamond.png"))));
+        this.keyPairs.add(new KeyPair(new Button(275,345,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"))
+                , new Button(575,285,48,48,ImageController.getInstance().tryGet("/lineUp/iron.png"))));
+        this.keyPairs.add(new KeyPair(new Button(275,405,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))
+                , new Button(575,225,48,48,ImageController.getInstance().tryGet("/lineUp/ruby.png"))));
         this.line1 = false;
         this.line2 = false;
         this.line3 = false;
         this.line4 = false;
+        hint = ImageController.getInstance().tryGet("/findDifferent/finddif.png");
     }
     @Override
     public void sceneEnd(){
@@ -47,6 +49,7 @@ public class PopUpLineUp extends PopUpTask {
     @Override
     public void paint(Graphics g){
         super.paint(g);
+        g.drawImage(hint, 280,100, null);
         if(line1) {
             g.drawLine(324, 124, 624, 324);
         }
