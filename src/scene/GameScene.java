@@ -45,6 +45,8 @@ public class GameScene extends Scene {
     private Image tutorialImg;
     public Button tutorialClose;
     private BackgroundItem flowers;
+    private boolean disco;
+    private Delay discoDelay;
 
     private static int[][] location = new int[][]{
             {1025, 1120}, {1728, 100}, {180, 150}, {64, 640}, {288, 1003}
@@ -128,6 +130,8 @@ public class GameScene extends Scene {
             ClientClass.getInstance().disConnect();
             System.exit(0);
         });
+        disco=false;
+        discoDelay=new Delay(300);
     }
 
     //分職業
@@ -233,6 +237,7 @@ public class GameScene extends Scene {
         talkRoomScene=null;
         declare=null;
         winPicture=null;
+        discoDelay=null;
 
     }
 
@@ -264,7 +269,7 @@ public class GameScene extends Scene {
                     for (int i = 0; i < aliens.size(); i++) {
                         if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-                            aliens.get(i).kill();
+                            //aliens.get(i).kill();
                             AudioResourceController.getInstance().shot("/sound/killppl.wav");
                             aliens.get(0).setSwordNum();
                             aliens.get(0).useSword();
@@ -280,7 +285,7 @@ public class GameScene extends Scene {
                     for (int i = 1; i < aliens.size(); i++) {
                         if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
                                 && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-                            aliens.get(i).death();
+                            //aliens.get(i).death();
                             AudioResourceController.getInstance().shot("/sound/killppl.wav");
                             aliens.get(0).setSwordNum();
                             aliens.get(0).useSword();
@@ -443,6 +448,9 @@ public class GameScene extends Scene {
         //背景物品陰影
         for (int i = 0; i < backgroundItem.size(); i++) {
             if (cam.isCollision(backgroundItem.get(i))) {
+                if (disco){
+                    g.setColor(discoColor());
+                }
                 paintShadow(g,backgroundItem.get(i));
             }
         }
@@ -451,6 +459,9 @@ public class GameScene extends Scene {
         g.setColor(Color.BLACK);
         for (int i = 0; i < forGame.size(); i++) {
             if (cam.isCollision(forGame.get(i))) {
+                if (disco){
+                    g.setColor(discoColor());
+                }
                 paintShadow(g, forGame.get(i));
             }
         }
@@ -515,6 +526,12 @@ public class GameScene extends Scene {
         if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
             taskController.getCurrentPopUp().update();
         }
+        if (discoDelay.count()){
+            disco=false;
+        }
+        if (disco){
+            cam.translate(Global.random(-5,5),Global.random(-8,8));
+        }
         cam.update();
         ClientClass.getInstance().consume(new CommandReceiver() {
             @Override
@@ -539,6 +556,8 @@ public class GameScene extends Scene {
                         case Global.InternetCommand.DEATH:
                             for (int i = 0; i < aliens.size(); i++) {
                                 if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {
+                                    disco=true;
+                                    discoDelay.play();
                                     aliens.get(i).death();
                                     break;
                                 }
@@ -547,6 +566,8 @@ public class GameScene extends Scene {
                         case Global.InternetCommand.ZOMBIE:
                             for (int i = 0; i < aliens.size(); i++) {
                                 if (aliens.get(i).getId() == Integer.parseInt(strs.get(1))) {
+                                    disco=true;
+                                    discoDelay.play();
                                     aliens.get(i).kill();
                                     break;
                                 }
@@ -624,12 +645,12 @@ public class GameScene extends Scene {
                     tmp = aliens.get(i);
                 }
             }
-            if (count == 1 && tmp != null) {
-                ArrayList<String> str1=new ArrayList<>();
-                str1.add(password);
-                str1.add(tmp.getRole().name());
-                ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE,str1);
-            }
+//            if (count == 1 && tmp != null) {
+//                ArrayList<String> str1=new ArrayList<>();
+//                str1.add(password);
+//                str1.add(tmp.getRole().name());
+//                ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE,str1);
+//            }
         }
     }
 
@@ -1055,5 +1076,7 @@ public class GameScene extends Scene {
         }
 
     }
-
+    public Color discoColor(){
+        return new Color(Global.random(100,255),Global.random(100,255),Global.random(100,255));
+    }
 }
