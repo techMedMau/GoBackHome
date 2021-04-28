@@ -620,22 +620,21 @@ public class GameScene extends Scene {
                             AudioResourceController.getInstance().play("/sound/victory.wav");
                             break;
                         case Global.InternetCommand.EXIT:
-                            if ( serialNum != ClientClass.getInstance().getID()) {
-                                for (int i = 1; i < aliens.size(); i++) {
-                                    if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
-                                        aliens.remove(i);
+                            for (int i = 0; i < aliens.size(); i++) {
+                                if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
+                                    aliens.remove(i);
+                                    System.out.println("aliens"+i);
+                                    break;
+                                }
+                            }
+                            if (strs.size()==3){
+                                for (int i = 0; i < aliens.size(); i++) {
+                                    if (Integer.parseInt(strs.get(2)) == aliens.get(i).getId()) {
+                                        homeOwner=aliens.get(i).getId();
                                         break;
                                     }
                                 }
-                                if (strs.size()==3){
-                                    for (int i = 0; i < aliens.size(); i++) {
-                                        if (Integer.parseInt(strs.get(2)) == aliens.get(i).getId()) {
-                                            homeOwner=aliens.get(i).getId();
-                                            break;
-                                        }
-                                    }
 
-                                }
                             }
                             break;
                     }
