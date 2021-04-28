@@ -58,6 +58,7 @@ public class PopUpConnect extends PopUpWindows {
                                SceneController.getInstance().changeScene(tmp);
                                sceneEnd();
                            }
+
                        }
                        break;
                     }

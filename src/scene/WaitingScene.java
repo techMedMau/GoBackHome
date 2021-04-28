@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WaitingScene extends Scene {
+    private int currentPlay;
     private int playMax;
     private String password;
     private Button startButton;
@@ -32,6 +33,7 @@ public class WaitingScene extends Scene {
         this.password = password;
         this.playMax = playMax;
         this.homeOwner = homeOwner;
+        this.currentPlay = 1;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class WaitingScene extends Scene {
     }
 
     public boolean canEnter() {
-        return aliens.size() < playMax;
+        return currentPlay < playMax;
     }
 
     @Override
@@ -151,7 +153,7 @@ public class WaitingScene extends Scene {
             }
             if (state == CommandSolver.MouseState.CLICKED) {
                 AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
-                if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())&&aliens.size()==playMax) {
+                if (ClientClass.getInstance().getID() == homeOwner && startButton.state(e.getPoint())&&currentPlay==playMax) {
                     ArrayList<String> str = new ArrayList<>();
                     str.add(password);
                     ClientClass.getInstance().sent(Global.InternetCommand.START, str);
@@ -175,6 +177,7 @@ public class WaitingScene extends Scene {
             homeOwner = aliens.get(1).getId();
             str.add(String.valueOf(homeOwner));
         }
+        currentPlay--;
         ClientClass.getInstance().sent(Global.InternetCommand.EXIT, str);
     }
 
@@ -197,7 +200,7 @@ public class WaitingScene extends Scene {
         Font numFont = new Font(Global.FONT, Font.PLAIN, 20);
         g.setFont(numFont);
         g.setColor(Color.WHITE);
-        g.drawString(aliens.size() + "/" + playMax, 445, 580);
+        g.drawString(currentPlay + "/" + playMax, 445, 580);
         talkRoomScene.paint(g);
         exitButton.paint(g);
     }
@@ -249,6 +252,7 @@ public class WaitingScene extends Scene {
                         str.add(aliens.get(0).painter().centerY() + "");
                         str.add(aliens.get(0).getNum() + "");
                         str.add(password);
+                        currentPlay++;
                         ClientClass.getInstance().sent(Global.InternetCommand.CONNECT, str);
                     }
                     break;
@@ -347,6 +351,7 @@ public class WaitingScene extends Scene {
                         for (int i = 0; i < aliens.size(); i++) {
                             if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
                                 aliens.remove(i);
+                                currentPlay--;
                                 break;
                             }
                         }
