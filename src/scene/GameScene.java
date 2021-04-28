@@ -325,6 +325,7 @@ public class GameScene extends Scene {
                         return;
                     }
                     if (exitButton.state(e.getPoint())){
+                        exit();
                         SceneController.getInstance().changeScene(new OpenScene());
                         return;
                     }
@@ -623,7 +624,6 @@ public class GameScene extends Scene {
                             for (int i = 0; i < aliens.size(); i++) {
                                 if (Integer.parseInt(strs.get(1)) == aliens.get(i).getId()) {
                                     aliens.remove(i);
-                                    System.out.println("aliens"+i);
                                     break;
                                 }
                             }
