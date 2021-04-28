@@ -156,10 +156,10 @@ public class PopUpFindDifferent extends PopUpTask{
         }
 
         public Card getPartner(Card card){
-            if(card == card){
-                return card1;
-            }else if(card == card1){
-                return card;
+            if(this.card == card){
+                return this.card1;
+            }else if(card == this.card1){
+                return this.card;
             }
             return null;
         }
