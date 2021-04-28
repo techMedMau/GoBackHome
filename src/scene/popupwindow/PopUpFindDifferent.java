@@ -74,13 +74,13 @@ public class PopUpFindDifferent extends PopUpTask{
                         }
                         for(int i = 0; i < keyPairs.size(); i++) {
                             if (keyPairs.get(i).card1.state(e.getPoint())
-                                    && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card1)){
+                                    && tmp == keyPairs.get(i).card1){
                                 keyPairs.get(i).card1.setState(Card.State.SHOW);
                                 keyPairs.get(i).card.setState(Card.State.SHOW);
                                 tmp = null;
                                 break;
                             }else if(keyPairs.get(i).card.state(e.getPoint())
-                                    && tmp == keyPairs.get(i).getPartner(keyPairs.get(i).card)){
+                                    && tmp == keyPairs.get(i).card){
                                 keyPairs.get(i).card1.setState(Card.State.SHOW);
                                 keyPairs.get(i).card.setState(Card.State.SHOW);
                                 tmp = null;
