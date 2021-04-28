@@ -618,14 +618,13 @@ public class Alien extends GameObject implements ClickState, Range {
         currentState = State.STAND_RIGHT;
         stateAnimator = getDeathAnimator(alienType);
         stateAnimator.get(currentState).play();
-//        collider().setTop(top()+20);
     }
 
     public void death(){
         aliveState = AliveState.DEATH;
+        TaskController.getTaskController().getCurrentPopUp().sceneEnd();
     }
 
-    //寫錯了
 
 
     public boolean isAbleToKill() {

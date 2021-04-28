@@ -244,7 +244,7 @@ public class GameScene extends Scene {
     @Override
     public CommandSolver.MouseListener mouseListener() {
         return (MouseEvent e, CommandSolver.MouseState state, long trigTime) -> {
-            if (state == null || aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
+            if (state == null) {
                 return;
             }
             if (taskController.getCurrentPopUp() != null && taskController.getCurrentPopUp().isShow()) {
@@ -253,68 +253,69 @@ public class GameScene extends Scene {
             }
             switch (state) {
                 case CLICKED:
-                    for (int i = 0; i < taskItems.size(); i++) {
-                        if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-                            final TaskController.Task task = taskItems.get(i).getTask();
-                            if (aliens.get(0).isDone(task)) {
+                    if (aliens.get(0).getAliveState() != Alien.AliveState.DEATH){
+                        for (int i = 0; i < taskItems.size(); i++) {
+                            if (taskItems.get(i).getState() && taskItems.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                                final TaskController.Task task = taskItems.get(i).getTask();
+                                if (aliens.get(0).isDone(task)) {
+                                    return;
+                                }
+                                AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
+                                taskController.changePopUp(taskItems.get(i).getTask());
+                                taskController.getCurrentPopUp().setFinish(() -> aliens.get(0).setDone(task));
                                 return;
                             }
-                            AudioResourceController.getInstance().shot("/sound/buttonzz.wav");
-                            taskController.changePopUp(taskItems.get(i).getTask());
-                            taskController.getCurrentPopUp().setFinish(() -> aliens.get(0).setDone(task));
-                            return;
                         }
-                    }
-                    //殺活人
-                    for (int i = 0; i < aliens.size(); i++) {
-                        if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
-                                && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-                            //aliens.get(i).kill();
-                            AudioResourceController.getInstance().shot("/sound/killppl.wav");
-                            aliens.get(0).setSwordNum();
-                            aliens.get(0).useSword();
-                            ArrayList<String> str = new ArrayList<>();
-                            str.add(password);
-                            str.add(aliens.get(i).getId() + "");
-                            //sent 是你要告訴別人
-                            ClientClass.getInstance().sent(Global.InternetCommand.ZOMBIE, str);
-                            return;
-                        }
-                    }
-                    //殺zombie
-                    for (int i = 1; i < aliens.size(); i++) {
-                        if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
-                                && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
-                            //aliens.get(i).death();
-                            AudioResourceController.getInstance().shot("/sound/killppl.wav");
-                            aliens.get(0).setSwordNum();
-                            aliens.get(0).useSword();
-                            ArrayList<String> str = new ArrayList<>();
-                            str.add(password);
-                            str.add(aliens.get(i).getId() + "");
-                            //sent 是你要告訴別人
-                            ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
-                            return;
-                        }
-                    }
-                    if (declare.state(e.getPoint())) {
-                        Alien.Role winRole = null;
-                        for (int i = 1; i < aliens.size(); i++) {
-                            if (aliens.get(0).getRole() != aliens.get(i).getRole()&&aliens.get(i).getAliveState()!= Alien.AliveState.DEATH) {
-                                winRole = aliens.get(i).getRole();
-                                break;
+                        //殺活人
+                        for (int i = 0; i < aliens.size(); i++) {
+                            if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
+                                    && aliens.get(i).getAliveState() == Alien.AliveState.ALIVE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                                //aliens.get(i).kill();
+                                AudioResourceController.getInstance().shot("/sound/killppl.wav");
+                                aliens.get(0).setSwordNum();
+                                aliens.get(0).useSword();
+                                ArrayList<String> str = new ArrayList<>();
+                                str.add(password);
+                                str.add(aliens.get(i).getId() + "");
+                                //sent 是你要告訴別人
+                                ClientClass.getInstance().sent(Global.InternetCommand.ZOMBIE, str);
+                                return;
                             }
                         }
-                        if (winRole == null) {
-                            winRole = aliens.get(0).getRole();
+                        //殺zombie
+                        for (int i = 1; i < aliens.size(); i++) {
+                            if (aliens.get(0).getSwordsNum()>0&&aliens.get(0).getAliveState() != Alien.AliveState.DEATH && aliens.get(0).isAbleToKill() && aliens.get(0).isTriggered(aliens.get(i))
+                                    && aliens.get(i).getAliveState() == Alien.AliveState.ZOMBIE && aliens.get(i).state(e.getX() + cam.painter().left(), e.getY() + cam.painter().top())) {
+                                AudioResourceController.getInstance().shot("/sound/killppl.wav");
+                                aliens.get(0).setSwordNum();
+                                aliens.get(0).useSword();
+                                ArrayList<String> str = new ArrayList<>();
+                                str.add(password);
+                                str.add(aliens.get(i).getId() + "");
+                                //sent 是你要告訴別人
+                                ClientClass.getInstance().sent(Global.InternetCommand.DEATH, str);
+                                return;
+                            }
                         }
-                        ArrayList<String> str = new ArrayList<>();
-                        str.add(password);
-                        str.add(winRole.name());
-                        ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE, str);
-                        return;
-                    }
+                        if (declare.state(e.getPoint())) {
+                            Alien.Role winRole = null;
+                            for (int i = 1; i < aliens.size(); i++) {
+                                if (aliens.get(0).getRole() != aliens.get(i).getRole()&&aliens.get(i).getAliveState()!= Alien.AliveState.DEATH) {
+                                    winRole = aliens.get(i).getRole();
+                                    break;
+                                }
+                            }
+                            if (winRole == null) {
+                                winRole = aliens.get(0).getRole();
+                            }
+                            ArrayList<String> str = new ArrayList<>();
+                            str.add(password);
+                            str.add(winRole.name());
+                            ClientClass.getInstance().sent(Global.InternetCommand.WIN_ROLE, str);
+                            return;
+                        }
 
+                    }
                     if (ruleButton.state(e.getPoint())) {
                         tutorial = true;
                         return;
@@ -349,9 +350,9 @@ public class GameScene extends Scene {
         return new CommandSolver.KeyListener() {
             @Override
             public void keyPressed(int commandCode, long trigTime) {
-//                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-//                    AudioResourceController.getInstance().play("/sound/walk.wav");
-//                }
+                if(!AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+                    AudioResourceController.getInstance().play("/sound/walk.wav");
+                }
                 talkRoomScene.keyListener().keyPressed(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
@@ -375,9 +376,9 @@ public class GameScene extends Scene {
 
             @Override
             public void keyReleased(int commandCode, long trigTime) {
-//                if(AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
-//                    AudioResourceController.getInstance().stop("/sound/walk.wav");
-//                }
+                if(AudioResourceController.getInstance().isPlaying("/sound/walk.wav")) {
+                    AudioResourceController.getInstance().stop("/sound/walk.wav");
+                }
                 talkRoomScene.keyListener().keyReleased(commandCode, trigTime);
                 if (aliens.get(0).getAliveState() == Alien.AliveState.DEATH) {
                     return;
