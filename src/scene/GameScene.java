@@ -300,7 +300,7 @@ public class GameScene extends Scene {
                     if (declare.state(e.getPoint())) {
                         Alien.Role winRole = null;
                         for (int i = 1; i < aliens.size(); i++) {
-                            if (aliens.get(0).getRole() != aliens.get(i).getRole()) {
+                            if (aliens.get(0).getRole() != aliens.get(i).getRole()&&aliens.get(i).getAliveState()!= Alien.AliveState.DEATH) {
                                 winRole = aliens.get(i).getRole();
                                 break;
                             }
@@ -527,6 +527,7 @@ public class GameScene extends Scene {
             taskController.getCurrentPopUp().update();
         }
         if (discoDelay.count()){
+            AudioResourceController.getInstance().stop("/sound/disco.wav");
             disco=false;
         }
         if (disco){
@@ -559,6 +560,7 @@ public class GameScene extends Scene {
                                     disco=true;
                                     discoDelay.play();
                                     aliens.get(i).death();
+                                    AudioResourceController.getInstance().play("/sound/disco.wav");
                                     break;
                                 }
                             }
@@ -569,6 +571,7 @@ public class GameScene extends Scene {
                                     disco=true;
                                     discoDelay.play();
                                     aliens.get(i).kill();
+                                    AudioResourceController.getInstance().play("/sound/disco.wav");
                                     break;
                                 }
                             }
