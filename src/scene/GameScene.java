@@ -216,6 +216,7 @@ public class GameScene extends Scene {
 
     @Override
     public void sceneEnd() {
+        AudioResourceController.getInstance().stop("/sound/disco.wav");
         AudioResourceController.getInstance().stop("/sound/buttonzz.wav");
         AudioResourceController.getInstance().stop("/sound/killppl.wav");
         aliens=null;
@@ -1065,14 +1066,16 @@ public class GameScene extends Scene {
     }
 
     public void paintVictory(Graphics g, Alien.Role role) {
+        AudioResourceController.getInstance().stop("/sound/disco.wav");
         role.getVictoryBG(g);
         int[][] tmp = {{399, 290}, {299, 270}, {499, 270}, {199, 250}, {599, 250}, {99, 230}};
+        int count=0;
         for (int i = 0; i < aliens.size(); i++) {
             if (aliens.get(i).getRole() == winRole) {
-                aliens.get(i).painter().setTop(tmp[i][1]);
-                aliens.get(i).painter().setLeft(tmp[i][0]);
-                aliens.get(i).painter().setRight(tmp[i][0] + 162);
-                aliens.get(i).painter().setBottom(tmp[i][1] + 219);
+                aliens.get(i).painter().setTop(tmp[count][1]);
+                aliens.get(i).painter().setLeft(tmp[count][0]);
+                aliens.get(i).painter().setRight(tmp[count][0] + 162);
+                aliens.get(i).painter().setBottom(tmp[count++][1] + 219);
             }
         }
         for (int i = aliens.size() - 1; i >= 0; i--) {
