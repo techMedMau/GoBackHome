@@ -43,4 +43,7 @@ public class TaskController {
             return popUpTask;
         }
     }
+    public void taskEnd(){
+        currentPopUp=null;
+    }
 }

@@ -86,7 +86,6 @@ public class GameScene extends Scene {
         this.locationNum = Global.random(0, 9);
         aliens.get(0).painter().setCenter(location[locationNum][0], location[locationNum][1]);
         aliens.get(0).collider().setCenter(location[locationNum][0], location[locationNum][1]);
-        aliens.get(0).collider().setTop(aliens.get(0).top()+5);
         //-----做屍體
         if (aliens.get(0).getId() == homeOwner) {
             ArrayList<Integer> locations = new ArrayList<>();
@@ -239,7 +238,7 @@ public class GameScene extends Scene {
         declare=null;
         winPicture=null;
         discoDelay=null;
-
+        TaskController.getTaskController().taskEnd();
     }
 
     @Override
