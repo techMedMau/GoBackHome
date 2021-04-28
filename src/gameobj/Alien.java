@@ -622,7 +622,6 @@ public class Alien extends GameObject implements ClickState, Range {
 
     public void death(){
         aliveState = AliveState.DEATH;
-        TaskController.getTaskController().getCurrentPopUp().sceneEnd();
     }
 
 

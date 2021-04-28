@@ -562,6 +562,9 @@ public class GameScene extends Scene {
                                     discoDelay.play();
                                     aliens.get(i).death();
                                     AudioResourceController.getInstance().play("/sound/disco.wav");
+                                    if(i==0&& TaskController.getTaskController().getCurrentPopUp().isShow()){
+                                        TaskController.getTaskController().getCurrentPopUp().sceneEnd();
+                                    }
                                     break;
                                 }
                             }
