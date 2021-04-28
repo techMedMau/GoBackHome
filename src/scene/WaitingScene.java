@@ -33,7 +33,6 @@ public class WaitingScene extends Scene {
         this.password = password;
         this.playMax = playMax;
         this.homeOwner = homeOwner;
-        this.currentPlay = 1;
     }
 
     @Override
@@ -58,6 +57,7 @@ public class WaitingScene extends Scene {
             ClientClass.getInstance().disConnect();
             System.exit(0);
         });
+        this.currentPlay = 1;
 
     }
 
